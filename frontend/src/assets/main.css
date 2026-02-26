@@ -720,7 +720,7 @@ img {
    STATS / WARDS BAND
    ===================== */
 .stats-band {
-  background: linear-gradient(135deg, #0e3c75 0%, #095cad 60%, #0f78c2 100%);
+  background: linear-gradient(135deg, #16750e 0%, #000 50%, #15c20f 100%);
   padding: 3.5rem 0 4rem;
   position: relative;
   overflow: hidden;
@@ -749,7 +749,7 @@ img {
 }
 
 .stats-card {
-  background: linear-gradient(135deg, #0b3c73 0%, #0b5ea7 60%, #1278c5 100%);
+  background: linear-gradient(135deg, #1d730b 0%, #428822 60%, #0b6e08 100%);
   border-radius: 14px;
   padding: 1.5rem 1.75rem;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
