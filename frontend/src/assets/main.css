@@ -13,9 +13,9 @@
   /* slightly deeper green */
   --primary-light: #32b56d;
   /* brighter green */
-  --accent: #003b7ae0;
+  --accent: #e5d1ab;
   /* accent adjusted to deep blue */
-  --accent-dark: #002f62;
+  --accent-dark: #e5d1ab;
   --white: #ffffff;
   --off-white: #f4f6f9;
   --light-border: #dce3ec;
@@ -81,7 +81,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 1030;
-  box-shadow: 0 2px 12px rgba(0, 59, 122, 0.1);
+  box-shadow: 0 2px 12px rgba(255,193,24, 0.1);
 }
 
 .main-navbar .navbar-brand img {
@@ -118,7 +118,7 @@ img {
   border: none;
   border-top: 3px solid var(--accent);
   border-radius: 0 0 0.5rem 0.5rem;
-  box-shadow: 0 8px 24px rgba(0, 59, 122, 0.12);
+  box-shadow: 0 8px 24px rgba(255,193,24, 0.12);
 }
 
 .main-navbar .dropdown-item {
@@ -159,7 +159,7 @@ img {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 59, 122, 0.35) 0%, rgba(0, 59, 122, 0.6) 100%);
+  background: linear-gradient(to bottom, rgba(255,193,24, 0.35) 0%, rgba(255,193,24, 0.6) 100%);
 }
 
 .hero-content {
@@ -334,7 +334,7 @@ img {
   width: 100%;
   max-width: 380px;
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 59, 122, 0.18);
+  box-shadow: 0 8px 32px rgba(255,193,24, 0.18);
   border-top: 5px solid var(--accent);
 }
 
@@ -459,13 +459,13 @@ img {
 .tourism-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 59, 122, 0.35), rgba(0, 59, 122, 0.6));
+  background: linear-gradient(180deg, rgba(255,193,24, 0.35), rgba(255,193,24, 0.6));
 }
 
 .tourism-panel {
   position: relative;
   z-index: 1;
-  background: rgba(0, 59, 122, 0.95);
+  background: rgba(255,193,24, 0.95);
   border-radius: 12px;
   padding: 2.5rem;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
@@ -556,7 +556,7 @@ img {
 }
 
 .doc-card:hover {
-  box-shadow: 0 4px 20px rgba(0, 59, 122, 0.1);
+  box-shadow: 0 4px 20px rgba(255,193,24, 0.1);
   transform: translateY(-2px);
 }
 
@@ -1017,7 +1017,7 @@ img {
 .auth-card {
   background: var(--white);
   border-radius: 8px;
-  box-shadow: 0 4px 32px rgba(0, 59, 122, 0.12);
+  box-shadow: 0 4px 32px rgba(255,193,24, 0.12);
   overflow: hidden;
   max-width: 460px;
   width: 100%;

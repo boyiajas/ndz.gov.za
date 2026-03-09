@@ -83,12 +83,12 @@
         <div class="col-lg-5 text-center">
           <div style="position:relative;display:inline-block;">
             <img
-              src="/mayor.png"
+              src="/mayor.jpg"
               alt="NDZ Mayor"
               style="width:100%;max-width:340px;border-radius:8px;border-top:5px solid var(--accent);box-shadow:0 12px 40px rgba(0,59,122,0.25);display:block;margin:0 auto;"
             />
             <div style="position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:0.4rem 1.5rem;border-radius:999px;font-size:0.78rem;font-weight:700;white-space:nowrap;">
-              NDZ Mayor
+              Mayor Cllr Sindisiwe P Msomi
             </div>
           </div>
         </div>
