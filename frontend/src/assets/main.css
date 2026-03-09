@@ -13,9 +13,9 @@
   /* slightly deeper green */
   --primary-light: #32b56d;
   /* brighter green */
-  --accent: #e5d1ab;
+  --accent: #fcbf1b;
   /* accent adjusted to deep blue */
-  --accent-dark: #e5d1ab;
+  --accent-dark: #fcbf1b;
   --white: #ffffff;
   --off-white: #f4f6f9;
   --light-border: #dce3ec;
@@ -159,7 +159,7 @@ img {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(255,193,24, 0.35) 0%, rgba(255,193,24, 0.6) 100%);
+  background: linear-gradient(to bottom, rgba(255,193,24, 0.35) 0%, rgba(6, 189, 15, 0.329) 100%);
 }
 
 .hero-content {
@@ -749,7 +749,7 @@ img {
 }
 
 .stats-card {
-  background: linear-gradient(135deg, #1d730b 0%, #428822 60%, #0b6e08 100%);
+  background: linear-gradient(135deg, #1f9c58 0%, #1f9c58 60%, #1f9c58 100%);
   border-radius: 14px;
   padding: 1.5rem 1.75rem;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
