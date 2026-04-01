@@ -9,11 +9,24 @@
 </template>
 
 <script>
+import { watch, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
 
 export default {
   name: 'App',
   components: { AppNavbar, AppFooter },
+  setup() {
+    const route = useRoute()
+    watch(
+      () => route.path,
+      () => {
+        nextTick(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' })
+        })
+      }
+    )
+  }
 }
 </script>

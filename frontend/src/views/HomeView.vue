@@ -1,35 +1,18 @@
 <template>
+  <div class="home-view-wrapper">
   <!-- ====================================================
        HERO SECTION with full-screen slider + quick-links
        ==================================================== -->
   <section class="hero-section">
-    <!-- Slides -->
-    <div
-      v-for="(slide, i) in slides"
-      :key="i"
-      class="hero-slide"
-      :class="{ active: currentSlide === i }"
-      :style="{ backgroundImage: slide.bg }"
-    ></div>
+    <video autoplay loop muted playsinline class="hero-video" src="/hero-video/hero-video.mp4"></video>
     <div class="hero-overlay"></div>
 
     <!-- Hero Content -->
     <div class="hero-content">
       <div class="container">
-        <h1>{{ slides[currentSlide].title }}</h1>
-        <p class="mt-2">{{ slides[currentSlide].sub }}</p>
+        <h1>Serving Our Communities with Dedication</h1>
+        <p class="mt-2">NDZ Local Municipality — Quality services for every resident</p>
       </div>
-    </div>
-
-    <!-- Slide dots -->
-    <div class="hero-dots">
-      <button
-        v-for="(slide, i) in slides"
-        :key="i"
-        class="hero-dot"
-        :class="{ active: currentSlide === i }"
-        @click="currentSlide = i"
-      ></button>
     </div>
 
     <!-- Quick-link tiles -->
@@ -42,12 +25,20 @@
           </router-link>
           <a class="quicklink-tile" href="#">
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
-            Tenders
+            Tenders & Quotations
           </a>
-          <a class="quicklink-tile" href="#">
+           <a class="quicklink-tile" href="#">
+            <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+            Events
+          </a>
+           <a class="quicklink-tile" href="#">
+            <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+            Tourism
+          </a>
+         <!--  <a class="quicklink-tile" href="#">
             <div class="ql-icon"><i class="bi bi-receipt-cutoff"></i></div>
             Quotations
-          </a>
+          </a> -->
           <a class="quicklink-tile" href="#">
             <div class="ql-icon"><i class="bi bi-megaphone-fill"></i></div>
             Notices
@@ -65,18 +56,13 @@
       <div class="row align-items-center g-5">
         <div class="col-lg-7">
           <div class="section-label">Mayor's Office</div>
-          <h2 class="section-title">His Worship the Mayor</h2>
+          <h2 class="section-title">Meet The Mayor Cllr. Sindisiwe P. Msomi</h2>
           <div class="section-divider"></div>
           <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem;">
-            The Mayor of the NDZ Local Municipality has pledged an unwavering commitment to
-            serving all residents with dignity, transparency, and excellence. Having grown up
-            in the local area, the Mayor is deeply invested in ensuring that all citizens
-            have access to quality services, economic opportunity, and a safe environment.
+            Councillor Sindisiwe P. “MaJobe” Msomi was elected as the Mayor of Dr Nkosazana Dlamini-Zuma Local Municipality on 22 November 2021. She becomes the second democratically elected Mayor of Harry Gwala District’s second-biggest local municipality since the formation of municipalities in August 2016.She did her primary education in Donnybrook and her secondary education at Nokweja High School, This effectively moulded her budding character around the ideals of liberation and the struggle for freedom and equality for all South Africans.
           </p>
           <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
-            With a background in Public Administration and municipal governance, the Mayor
-            brings a data-driven and people-focused approach to leadership — championing
-            infrastructure delivery, fiscal discipline, and inclusive community development.
+            A teacher by profession having obtained Secondary Teachers Diploma from Eshowe College of Education a Higher Diploma in Education from the University of Natal in 1999. The Mayor holds a Bachelor’s Degree in Public Administration obtained from the Management College of South Africa i​n 2018.Mayor Msomi holds an academic qualification in Local Government, as a former ward councillor she has served her community.​
           </p>
           <a href="#" class="btn-gov mt-4 d-inline-block">Read More</a>
         </div>
@@ -131,11 +117,7 @@
           <h2 class="section-title">Office of the Municipal Manager</h2>
           <div class="section-divider"></div>
           <p style="color:rgba(255,255,255,0.78);line-height:1.85;font-size:0.95rem;">
-            Headed by the Municipal Manager, the Office of the Municipal Manager is at the heart of
-            our municipality's operations, ensuring the effective and efficient management of its
-            affairs. As the Accounting Officer, the Municipal Manager oversees core functions of our
-            municipality, guiding its strategic direction, managing resources, and ensuring that we
-            meet our commitments to our community.
+            NKOSIYEZWE CYPRIAN VEZINkosiyezwe Cyprian Vezi joined Ingwe Local Municipality in January 2013. He has an experience of 20 years in local government, starting from the local government transitional period in 1996.He started off in local government as an ANC Councillor in the UGU Regional Council and worked as a member of the Vulamehlo Standing Committee. He was part of the Change Management Committee that established the Sisonke District Municipality in the run up to the 2000 local government elections.He was a PR Councillor representing the ANC in the Ubuhlebezwe Municipality from 2004 to 2006. In 2006 he was elected ward Councillor for Ubuhlebezwe Municipality and subsequently its Deputy Mayor till 2011.In 2011 he was elected Councillor at the then Sisonke District Municipality, now called Harry Gwala District Municipality. He was appointed Whip and member of the Finance Committee.
           </p>
           <a href="#" class="btn-gov mt-4 d-inline-block" style="background:var(--accent);border-color:var(--accent);color:#fff;">Read More</a>
         </div>
@@ -152,9 +134,9 @@
       <div class="tourism-panel">
         <div class="row g-4">
           <div class="col-lg-5">
-            <h2 class="tourism-title">uMngeni Tourism</h2>
+            <h2 class="tourism-title">NDZ Tourism</h2>
             <p class="tourism-copy">
-              uMngeni Tourism is about celebrating and promoting the KwaZulu-Natal Midlands, and uplifting the local
+              Ndz Tourism is about celebrating and promoting the KwaZulu-Natal Midlands, and uplifting the local
               community. We aim to unite and empower local businesses and create unique experiences for visitors to
               enjoy.
             </p>
@@ -300,6 +282,7 @@
       </div>
     </div>
   </section>
+  </div>
 </template>
 
 <script>
@@ -307,25 +290,6 @@ export default {
   name: 'HomeView',
   data() {
     return {
-      currentSlide: 0,
-      sliderInterval: null,
-      slides: [
-        {
-          bg: 'linear-gradient(120deg, rgba(0,59,122,0.55), rgba(0,118,204,0.3)), url("https://picsum.photos/id/1044/1920/600")',
-          title: 'Serving Our Communities with Dedication',
-          sub: 'NDZ Local Municipality — Quality services for every resident',
-        },
-        {
-          bg: 'linear-gradient(120deg, rgba(20,90,50,0.55), rgba(39,174,96,0.35)), url("https://picsum.photos/id/1040/1920/600")',
-          title: 'Building a Greener, Safer Environment',
-          sub: 'Infrastructure · Waste · Environment · Sustainable Development',
-        },
-        {
-          bg: 'linear-gradient(120deg, rgba(26,35,50,0.6), rgba(0,91,170,0.35)), url("https://picsum.photos/seed/ndz-hero3/1600/800")',
-          title: 'Transparent and Responsive Government',
-          sub: 'Open records, accountability, and citizen-first governance',
-        },
-      ],
       managerImage: '/manager.jpg',
       bandCards: [
         {
@@ -368,7 +332,7 @@ export default {
         {
           id: 2,
           readTime: 3,
-          title: 'His Worship the Mayor to table the 2025/2026 Annual Budget',
+          title: 'Her Worship the Mayor to table the 2025/2026 Annual Budget',
           date: 'May 27, 2025',
           excerpt: 'Council prepares for the annual budget address and public engagement sessions.',
           image: 'https://picsum.photos/seed/ndz-news-2/800/500',
@@ -388,27 +352,19 @@ export default {
         { value: '1,567', label: 'Area Size in Square km' },
         { value: '109K+', label: 'Residents Population' },
       ],
-      tourismBackground: 'https://picsum.photos/seed/ndz-hills/1920/900',
+      tourismBackground: '/tourism-1.jpg',
       tourismGallery: [
-        'https://picsum.photos/seed/ndz-tour-01/600/360',
-        'https://picsum.photos/seed/ndz-tour-02/600/360',
-        'https://picsum.photos/seed/ndz-tour-03/600/360',
-        'https://picsum.photos/seed/ndz-tour-04/600/360',
-        'https://picsum.photos/seed/ndz-tour-05/600/360',
-        'https://picsum.photos/seed/ndz-tour-06/600/360',
-        'https://picsum.photos/seed/ndz-tour-07/600/360',
-        'https://picsum.photos/seed/ndz-tour-08/600/360',
-        'https://picsum.photos/seed/ndz-tour-09/600/360',
+        '/tourism-1.jpg',
+        '/tourism-2.jpg',
+        '/tourism-3.jpg',
+        '/tourism-4.jpg',
+        '/tourism-5.jpg',
+        '/tourism-1.jpg',
+        '/tourism-2.jpg',
+        '/tourism-3.jpg',
+        '/tourism-4.jpg',
       ],
     }
-  },
-  mounted() {
-    this.sliderInterval = setInterval(() => {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length
-    }, 5000)
-  },
-  beforeUnmount() {
-    clearInterval(this.sliderInterval)
   },
 }
 </script>
