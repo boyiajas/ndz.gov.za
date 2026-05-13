@@ -3,13 +3,13 @@
   <div class="top-bar">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center gap-3">
-        <span>📞 +27 (0) 11 000 0000</span>
+        <span>📞 039 833 1038</span>
         <span class="separator">|</span>
         <span>🕐 Mon – Fri: 08:00 – 16:00</span>
         <span class="separator">|</span>
         <a href="mailto:helpdesk@ndz.gov.za">✉ helpdesk@ndz.gov.za</a>
         <span class="separator">|</span>
-        <span>📍 123 Government Ave, Pretoria</span>
+        <span>📍 Main Street, Creighton, 3263</span>
         <div class="ms-auto d-flex gap-2">
           <a href="#" title="Facebook">FB</a>
           <a href="#" title="Twitter">TW</a>
@@ -38,7 +38,7 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About NDZ</a>
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About Us</a>
             <ul class="dropdown-menu">
               <li><router-link class="dropdown-item" to="/mayors-office">Mayor's Office</router-link></li>
               <li><router-link class="dropdown-item" to="/municipal-manager">Municipal Manager</router-link></li>
@@ -50,16 +50,16 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Department</a>
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Departments</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Corporate Services</a></li>
-              <li><a class="dropdown-item" href="#">Community Services</a></li>
+              <li><router-link class="dropdown-item" to="/corporate-services">Corporate Services</router-link></li>
+              <li><router-link class="dropdown-item" to="/community-services">Community Services</router-link></li>
               <li><a class="dropdown-item" href="#">Communications</a></li>
               <li><a class="dropdown-item" href="#">Supply Chain</a></li>
               <li><a class="dropdown-item" href="#">Financial Services</a></li>
               <li><router-link class="dropdown-item" to="/tourism">Tourism</router-link></li>
-              <li><a class="dropdown-item" href="#">Budget & Treasury</a></li>
-              <li><a class="dropdown-item" href="#">Public Works & Basic Services</a></li>
+              <li><router-link class="dropdown-item" to="/budget-treasury">Budget & Treasury</router-link></li>
+              <li><router-link class="dropdown-item" to="/public-works">Public Works & Basic Services</router-link></li>
             </ul>
           </li>
 
@@ -69,19 +69,21 @@
               <li class="dropdown-submenu">
                 <a class="dropdown-item dropdown-toggle" href="#">TENDERS</a>
                 <ul class="dropdown-menu">
-                  <li><h6 class="dropdown-header text-success">OPEN TENDERS</h6></li>
-                  <li><a class="dropdown-item" href="#">Tenders 2025-2026</a></li>
+                  <li><router-link class="dropdown-item" to="/open-tenders">Open Tenders</router-link></li>
+                  <li><router-link class="dropdown-item" to="/closed-tenders">Closed Tenders</router-link></li>
+                  <!-- <li><a class="dropdown-item" href="#">Tenders 2025-2026</a></li>
                   <li><a class="dropdown-item" href="#">Tenders 2024-2025</a></li>
-                  <li><a class="dropdown-item" href="#">Tenders 2023-2024</a></li>
+                  <li><a class="dropdown-item" href="#">Tenders 2023-2024</a></li> -->
                 </ul>
               </li>
               <li class="dropdown-submenu">
-                <a class="dropdown-item dropdown-toggle" href="#">QUOTES</a>
+                <a class="dropdown-item dropdown-toggle" href="#">QUOTATIONS</a>
                 <ul class="dropdown-menu">
-                  <li><h6 class="dropdown-header text-success">OPEN QUOTES</h6></li>
-                  <li><a class="dropdown-item" href="#">Quotes 2025-2026</a></li>
+                  <li><router-link class="dropdown-item" to="/open-quotes">Open Quotes</router-link></li>
+                   <li><router-link class="dropdown-item" to="/closed-quotes">Closed Quotes</router-link></li>
+                 <!--  <li><a class="dropdown-item" href="#">Quotes 2025-2026</a></li>
                   <li><a class="dropdown-item" href="#">Quotes 2024-2025</a></li>
-                  <li><a class="dropdown-item" href="#">Quotes 2023-2024</a></li>
+                  <li><a class="dropdown-item" href="#">Quotes 2023-2024</a></li> -->
                 </ul>
               </li>
               <li><a class="dropdown-item" href="#">BID DOCUMENTS</a></li>
@@ -111,7 +113,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Documents</a>
+            <router-link class="nav-link" to="/documents">Documents</router-link>
           </li>
 
           <li class="nav-item dropdown">
@@ -120,6 +122,17 @@
               <li><router-link class="dropdown-item" to="/news">NDZ News</router-link></li>
               <li><router-link class="dropdown-item" to="/gallery">Event Gallery</router-link></li>
             </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Career Centre</a>
+            <ul class="dropdown-menu">
+              <li><router-link class="dropdown-item" to="#">Internships</router-link></li>
+              <li><router-link class="dropdown-item" to="#">Vacancies</router-link></li>
+              <li><router-link class="dropdown-item" to="#">Youth Opportunities</router-link></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="#Q">Our Partners</router-link>
           </li>
 
           <li class="nav-item">

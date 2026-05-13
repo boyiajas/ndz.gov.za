@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb" style="margin-top: 1.5rem; display: flex; justify-content: flex-start;">
           <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 50px;">
             <li class="breadcrumb-item"><router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link></li>
-            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About NDZ</span></li>
+            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About Us</span></li>
             <li class="breadcrumb-item active" aria-current="page" style="color: #fff; font-weight: 600;">Municipal Manager</li>
           </ol>
         </nav>
@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="col-lg-7">
-            <div class="section-label" style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 0.5rem;">Chief Accounting Officer</div>
+            <div class="section-label" style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 0.5rem;">Accounting Officer</div>
             <h2 class="section-title" style="font-weight: 800; color: var(--text-dark); margin-bottom: 1.5rem;">Office of the Municipal Manager</h2>
             <div class="section-divider" style="width: 50px; height: 3px; background: var(--accent); margin-bottom: 1.5rem;"></div>
             <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem;">

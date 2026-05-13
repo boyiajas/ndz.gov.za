@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb" style="margin-top: 1.5rem; display: flex; justify-content: flex-start;">
           <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 50px;">
             <li class="breadcrumb-item"><router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link></li>
-            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About NDZ</span></li>
+            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About Us</span></li>
             <li class="breadcrumb-item active" aria-current="page" style="color: #fff; font-weight: 600;">Meet The Speaker</li>
           </ol>
         </nav>
@@ -24,7 +24,7 @@
           <div class="col-lg-5 text-center">
             <div style="position:relative;display:inline-block;">
               <img
-                src="https://via.placeholder.com/340x450?text=Cllr.+Sfiso+Phoswa"
+                src="/speaker.jpg"
                 alt="Meet The Speaker"
                 style="width:100%;max-width:340px;border-radius:8px;border-top:5px solid var(--accent);box-shadow:0 12px 40px rgba(0,59,122,0.25);display:block;margin:0 auto;object-fit:cover;aspect-ratio:3/4;"
               />

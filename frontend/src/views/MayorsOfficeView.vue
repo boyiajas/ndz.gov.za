@@ -10,12 +10,13 @@
         <nav aria-label="breadcrumb" style="margin-top: 1.5rem; display: flex; justify-content: flex-start;">
           <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 50px;">
             <li class="breadcrumb-item"><router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link></li>
-            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About NDZ</span></li>
+            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About Us</span></li>
             <li class="breadcrumb-item active" aria-current="page" style="color: #fff; font-weight: 600;">Mayor's Office</li>
           </ol>
         </nav>
       </div>
     </div>
+    
 
     <!-- Mayor Content -->
     <section class="mayor-section" style="padding: 5rem 0;">

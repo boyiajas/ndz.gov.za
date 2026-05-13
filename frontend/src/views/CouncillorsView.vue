@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb" style="margin-top: 1.5rem; display: flex; justify-content: flex-start;">
           <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 50px;">
             <li class="breadcrumb-item"><router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link></li>
-            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About NDZ</span></li>
+            <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">About Us</span></li>
             <li class="breadcrumb-item active" aria-current="page" style="color: #fff; font-weight: 600;">Councillors</li>
           </ol>
         </nav>
@@ -29,14 +29,14 @@
               </div>
               <div class="card-body p-4 text-start">
                 <h5 class="card-title fw-bold text-dark mb-1">{{ councillor.name }}</h5>
-                <p class="card-subtitle text-primary mb-3" style="font-size: 0.85rem; font-weight: 500;">{{ councillor.role }}</p>
+                <p class="card-subtitle mb-3" style="font-size: 0.85rem; font-weight: 500;">{{ councillor.role }}</p>
                 
                 <div class="contact-info mt-4">
                   <div class="contact-item">
                     <i class="bi bi-envelope"></i> {{ councillor.email }}
                   </div>
                   <div class="contact-item">
-                    <i class="bi bi-telephone"></i> +27 (0) 11 000 0000
+                    <i class="bi bi-telephone"></i> 039 833 1038
                   </div>
                 </div>
               </div>

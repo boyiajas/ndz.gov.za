@@ -10,8 +10,18 @@ import MunicipalManagerView from '../views/MunicipalManagerView.vue'
 import MeetSpeakerView from '../views/MeetSpeakerView.vue'
 import CouncillorsView from '../views/CouncillorsView.vue'
 import TourismView from '../views/TourismView.vue'
+import CorporateServicesView from '../views/CorporateServicesView.vue'
+import CommunityServicesView from '../views/CommunityServicesView.vue'
+import BudgetTreasuryView from '../views/BudgetTreasuryView.vue'
+import PublicWorksView from '../views/PublicWorksView.vue'
+import NdzNewsView from '../views/NdzNewsView.vue'
+import OpenTendersView from '../views/OpenTendersView.vue'
+import ClosedTendersView from '../views/ClosedTendersView.vue'
+import OpenQuotesView from '../views/OpenQuotesView.vue'
+import ClosedQuotesView from '../views/ClosedQuotesView.vue'
 import ContactView from '../views/ContactView.vue'
 import EventGalleryView from '../views/EventGalleryView.vue'
+import DocumentsView from '../views/DocumentsView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 const routes = [
@@ -24,8 +34,18 @@ const routes = [
     { path: '/meet-speaker', name: 'meet-speaker', component: MeetSpeakerView },
     { path: '/councillors', name: 'councillors', component: CouncillorsView },
     { path: '/tourism', name: 'tourism', component: TourismView },
+    { path: '/corporate-services', name: 'corporate-services', component: CorporateServicesView },
+    { path: '/community-services', name: 'community-services', component: CommunityServicesView },
+    { path: '/budget-treasury', name: 'budget-treasury', component: BudgetTreasuryView },
+    { path: '/public-works', name: 'public-works', component: PublicWorksView },
+    { path: '/news', name: 'news', component: NdzNewsView },
+    { path: '/open-tenders', name: 'open-tenders', component: OpenTendersView },
+    { path: '/closed-tenders', name: 'closed-tenders', component: ClosedTendersView },
+    { path: '/open-quotes', name: 'open-quotes', component: OpenQuotesView },
+    { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
     { path: '/contact', name: 'contact', component: ContactView },
     { path: '/gallery', name: 'gallery', component: EventGalleryView },
+    { path: '/documents', name: 'documents', component: DocumentsView },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundView },
 ]
 
