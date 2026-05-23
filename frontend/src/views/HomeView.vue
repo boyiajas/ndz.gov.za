@@ -51,8 +51,9 @@
   <!-- ====================================================
        MAYOR'S OFFICE
        ==================================================== -->
-  <section class="mayor-section">
-    <div class="container">
+  <section class="mayor-section position-relative overflow-hidden">
+    <div class="mayor-bg-overlay"></div>
+    <div class="container position-relative z-1">
       <div class="row align-items-center g-5">
         <div class="col-lg-7">
           <div class="section-label">Mayor's Office</div>
@@ -134,26 +135,39 @@
     <div class="tourism-overlay"></div>
     <div class="container">
       <div class="tourism-panel">
-        <div class="row g-4">
-          <div class="col-lg-5">
-            <h2 class="tourism-title">Events</h2>
-            <p class="tourism-copy">
-              <!-- Ndz Tourism is about celebrating and promoting the KwaZulu-Natal Midlands, and uplifting the local
-              community. We aim to unite and empower local businesses and create unique experiences for visitors to
-              enjoy. -->
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-4">
+            <div class="section-label text-white-50" style="margin-bottom: 0.5rem;">Discover</div>
+            <h2 class="tourism-title">Events & Gallery</h2>
+            <div class="section-divider bg-white" style="opacity: 0.5; margin-left: 0;"></div>
+            <p class="tourism-copy mt-4">
+              Explore the rich cultural heritage and vibrant community events of the Dr Nkosazana Dlamini-Zuma Local Municipality. Click on any image to view it in full screen and experience our beautiful region.
             </p>
           </div>
-          <div class="col-lg-7">
-            <div class="tourism-grid">
+          <div class="col-lg-8">
+            <div class="events-modern-grid">
               <div
                 v-for="(item, idx) in tourismGallery"
                 :key="idx"
-                class="tourism-thumb"
-                :style="{ backgroundImage: `url(${item})` }"
-              ></div>
+                class="event-grid-item"
+                @click="openEventModal(item)"
+              >
+                <div class="event-grid-bg" :style="{ backgroundImage: `url(${item})` }"></div>
+                <div class="event-hover-overlay">
+                  <i class="bi bi-arrows-fullscreen event-zoom-icon"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Event Image Modal -->
+    <div v-if="isEventModalOpen" class="event-modal-overlay" @click="closeEventModal">
+      <div class="event-modal-content" @click.stop>
+        <button class="event-modal-close" @click="closeEventModal">&times;</button>
+        <img :src="selectedEventImage" class="event-modal-img" alt="Event Preview" />
       </div>
     </div>
   </section>
@@ -312,9 +326,9 @@
   <!-- ====================================================
        WEATHER SECTION (PREMIUM DESIGN)
        ==================================================== -->
-  <section class="weather-section-premium position-relative overflow-hidden py-5" :style="{ backgroundImage: `url(${tourismBackground})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }">
-    <div class="weather-bg-overlay"></div>
-    <div class="container position-relative z-1">
+  <section class="weather-section-premium position-relative overflow-hidden pt-5 pb-0">
+    <div class="weather-bg-gradient"></div>
+    <div class="container position-relative z-1 mb-5">
       <div class="row justify-content-center">
         <div class="col-xl-12">
           <div class="weather-glass-card">
@@ -386,6 +400,23 @@
         </div>
       </div>
     </div>
+
+    <!-- Weather Marquee -->
+    <div class="weather-marquee-container position-relative z-1" v-if="nearbyWeather.length > 0">
+      <div class="marquee-content">
+        <div class="marquee-item" v-for="(item, idx) in nearbyWeather" :key="idx">
+          <span class="marquee-city">{{ item.city }}</span>
+          <i :class="item.iconClass" class="marquee-icon"></i>
+          <span class="marquee-temp">{{ item.temperature }}°C</span>
+        </div>
+        <!-- Duplicate for seamless scroll -->
+        <div class="marquee-item" v-for="(item, idx) in nearbyWeather" :key="'dup-'+idx">
+          <span class="marquee-city">{{ item.city }}</span>
+          <i :class="item.iconClass" class="marquee-icon"></i>
+          <span class="marquee-temp">{{ item.temperature }}°C</span>
+        </div>
+      </div>
+    </div>
   </section>
   </div>
 </template>
@@ -405,6 +436,7 @@ export default {
         low: null,
         wind: null
       },
+      nearbyWeather: [],
       managerImage: '/manager.jpg',
       bandCards: [
         {
@@ -487,25 +519,18 @@ export default {
         '/tourism-3.jpg',
         '/tourism-4.jpg',
       ],
+      isEventModalOpen: false,
+      selectedEventImage: null,
     }
   },
   computed: {
     weatherIconClass() {
-      const code = this.weatherData.iconCode;
-      if (code === 0 || code === 1) return 'bi bi-sun';
-      if (code === 2) return 'bi bi-cloud-sun';
-      if (code === 3) return 'bi bi-clouds';
-      if (code >= 45 && code <= 48) return 'bi bi-cloud-fog';
-      if (code >= 51 && code <= 55) return 'bi bi-cloud-drizzle';
-      if (code >= 61 && code <= 65) return 'bi bi-cloud-rain';
-      if (code >= 71 && code <= 77) return 'bi bi-cloud-snow';
-      if (code >= 80 && code <= 82) return 'bi bi-cloud-rain-heavy';
-      if (code >= 95 && code <= 99) return 'bi bi-cloud-lightning-rain';
-      return 'bi bi-cloud';
+      return this.getWeatherIcon(this.weatherData.iconCode);
     }
   },
   mounted() {
     this.fetchWeather();
+    this.fetchNearbyWeather();
   },
   methods: {
     async fetchWeather() {
@@ -545,6 +570,49 @@ export default {
       } finally {
         this.weatherLoading = false;
       }
+    },
+    async fetchNearbyWeather() {
+      try {
+        const lats = '-29.95,-29.8,-29.7833,-29.75,-30.15';
+        const lons = '29.8667,29.7667,29.5,29.5167,30.0667';
+        const cities = ['Donnybrook', 'Bulwer', 'Underberg', 'Himeville', 'Ixopo'];
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current_weather=true&timezone=Africa%2FJohannesburg`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Nearby Weather API failed');
+        const dataList = await res.json();
+        
+        this.nearbyWeather = dataList.map((data, idx) => {
+          return {
+            city: cities[idx],
+            temperature: data.current_weather.temperature,
+            iconClass: this.getWeatherIcon(data.current_weather.weathercode)
+          };
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    openEventModal(imgSrc) {
+      this.selectedEventImage = imgSrc;
+      this.isEventModalOpen = true;
+      document.body.style.overflow = 'hidden';
+    },
+    closeEventModal() {
+      this.isEventModalOpen = false;
+      this.selectedEventImage = null;
+      document.body.style.overflow = '';
+    },
+    getWeatherIcon(code) {
+      if (code === 0 || code === 1) return 'bi bi-sun';
+      if (code === 2) return 'bi bi-cloud-sun';
+      if (code === 3) return 'bi bi-clouds';
+      if (code >= 45 && code <= 48) return 'bi bi-cloud-fog';
+      if (code >= 51 && code <= 55) return 'bi bi-cloud-drizzle';
+      if (code >= 61 && code <= 65) return 'bi bi-cloud-rain';
+      if (code >= 71 && code <= 77) return 'bi bi-cloud-snow';
+      if (code >= 80 && code <= 82) return 'bi bi-cloud-rain-heavy';
+      if (code >= 95 && code <= 99) return 'bi bi-cloud-lightning-rain';
+      return 'bi bi-cloud';
     }
   }
 }
@@ -553,16 +621,18 @@ export default {
 <style scoped>
 /* Weather Section Premium Styles */
 .weather-section-premium {
+  background-color: #f8f9fa;
   border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-.weather-bg-overlay {
+.weather-bg-gradient {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.5);
+  top: -50%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,166,81,0.08) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
   z-index: 0;
 }
 
@@ -686,5 +756,237 @@ export default {
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-top: 0.25rem;
+}
+
+/* Weather Marquee */
+.weather-marquee-container {
+  background: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 0.75rem 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.marquee-content {
+  display: inline-flex;
+  gap: 4rem;
+  padding-left: 4rem;
+  animation: scroll-marquee 20s linear infinite;
+  white-space: nowrap;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--primary);
+}
+
+.marquee-city {
+  color: var(--text-mid);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.marquee-icon {
+  color: var(--accent);
+  font-size: 1.25rem;
+}
+
+@keyframes scroll-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Events Section */
+.tourism-feature {
+  position: relative;
+  padding: 6rem 0;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.tourism-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 59, 122, 0.9) 0%, rgba(0, 166, 81, 0.8) 100%);
+}
+.tourism-panel {
+  position: relative;
+  z-index: 2;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+.tourism-title {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+.tourism-copy {
+  color: rgba(255,255,255,0.8);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Modern Events Grid */
+.events-modern-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: 150px;
+  gap: 1rem;
+}
+
+.event-grid-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+/* Make every 3rd item span 2 rows and columns */
+.event-grid-item:nth-child(3n) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.event-grid-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.event-grid-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+.event-grid-item:hover .event-grid-bg {
+  transform: scale(1.1);
+}
+
+.event-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,166,81,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.event-grid-item:hover .event-hover-overlay {
+  opacity: 1;
+}
+
+.event-zoom-icon {
+  color: white;
+  font-size: 2rem;
+  transform: scale(0.5);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.event-grid-item:hover .event-zoom-icon {
+  transform: scale(1);
+}
+
+/* Modal */
+.event-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
+}
+.event-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+.event-modal-img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.event-modal-close {
+  position: absolute;
+  top: -2.5rem;
+  right: -2.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.event-modal-close:hover {
+  color: var(--accent);
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .tourism-panel {
+    padding: 1.5rem;
+  }
+  .events-modern-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .event-grid-item:nth-child(3n) {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .event-modal-close {
+    top: -3rem;
+    right: 0;
+  }
+}
+
+/* Mayor Section Faded Background Pattern */
+.mayor-section {
+  padding: 6rem 0;
+  background-color: #fff;
+}
+.mayor-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url('/tourism-2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.06;
+  z-index: 0;
 }
 </style>
