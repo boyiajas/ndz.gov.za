@@ -23,26 +23,26 @@
             <div class="ql-icon"><i class="bi bi-people-fill"></i></div>
             Careers
           </router-link>
-          <a class="quicklink-tile" href="#">
+          <router-link class="quicklink-tile" to="/open-tenders">
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Tenders & Quotations
-          </a>
-           <a class="quicklink-tile" href="#">
+          </router-link>
+           <router-link class="quicklink-tile" to="/gallery">
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Events
-          </a>
-           <a class="quicklink-tile" href="#">
+          </router-link>
+           <router-link class="quicklink-tile" to="/tourism">
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Tourism
-          </a>
+          </router-link>
          <!--  <a class="quicklink-tile" href="#">
             <div class="ql-icon"><i class="bi bi-receipt-cutoff"></i></div>
             Quotations
           </a> -->
-          <a class="quicklink-tile" href="#">
+          <router-link class="quicklink-tile" to="/news">
             <div class="ql-icon"><i class="bi bi-megaphone-fill"></i></div>
             Notices
-          </a>
+          </router-link>
         </div>
       </div>
     </div>

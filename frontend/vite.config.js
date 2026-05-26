@@ -5,11 +5,19 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    // Output built assets directly into Laravel's public directory
-    outDir: '../public',
+    // Keep built JS/CSS where the Laravel blade shell expects them.
+    outDir: '../public/assets',
+    assetsDir: '.',
     emptyOutDir: false, // Don't wipe Laravel's index.php, .htaccess etc.
   },
   server: {
     port: 5173,
+    watch: {
+      // This repo carries a large static media set under frontend/public and a
+      // growing dist folder. Ignore both to avoid exhausting file watchers.
+      ignored: ['**/dist/**', '**/public/**'],
+      usePolling: true,
+      interval: 1000,
+    },
   },
 })
