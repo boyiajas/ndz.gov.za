@@ -54,10 +54,10 @@
             <ul class="dropdown-menu">
               <li><router-link class="dropdown-item" to="/corporate-services">Corporate Services</router-link></li>
               <li><router-link class="dropdown-item" to="/community-services">Community Services</router-link></li>
-              <li><a class="dropdown-item" href="#">Communications</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Communications</a></li>
               <li><a class="dropdown-item" href="#">Supply Chain</a></li>
               <li><a class="dropdown-item" href="#">Financial Services</a></li>
-              <li><router-link class="dropdown-item" to="/tourism">Tourism</router-link></li>
+              <li><router-link class="dropdown-item" to="/tourism">Tourism</router-link></li> -->
               <li><router-link class="dropdown-item" to="/budget-treasury">Budget & Treasury</router-link></li>
               <li><router-link class="dropdown-item" to="/public-works">Public Works & Basic Services</router-link></li>
             </ul>
