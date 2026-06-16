@@ -70,6 +70,11 @@
                 <a class="dropdown-item dropdown-toggle" href="#">TENDERS</a>
                 <ul class="dropdown-menu">
                   <li><router-link class="dropdown-item" to="/open-tenders">Open Tenders</router-link></li>
+                  <li><router-link class="dropdown-item" to="/bid-documents">Bid Documents</router-link></li>
+                  <li><router-link class="dropdown-item" to="/briefing-link">Briefing Link</router-link></li>
+                  <li><router-link class="dropdown-item" to="/bid-documents">Erratum and Addendums</router-link></li>
+                  <li><router-link class="dropdown-item" to="/bid-documents">Validity Extension</router-link></li>
+                  <li><router-link class="dropdown-item" to="/closed-register">Closed Register</router-link></li>
                   <li><router-link class="dropdown-item" to="/closed-tenders">Closed Tenders</router-link></li>
                   <!-- <li><a class="dropdown-item" href="#">Tenders 2025-2026</a></li>
                   <li><a class="dropdown-item" href="#">Tenders 2024-2025</a></li>
@@ -77,38 +82,42 @@
                 </ul>
               </li>
               <li class="dropdown-submenu">
-                <a class="dropdown-item dropdown-toggle" href="#">QUOTATIONS</a>
+                <a class="dropdown-item dropdown-toggle" href="#">FORMAL QUOTE</a>
                 <ul class="dropdown-menu">
                   <li><router-link class="dropdown-item" to="/open-quotes">Open Quotes</router-link></li>
+                  <li><router-link class="dropdown-item" to="/open-documents">Open Documents</router-link></li>
+                   <li><router-link class="dropdown-item" to="/briefing-link">Briefing Link</router-link></li>
+                    <li><router-link class="dropdown-item" to="/bid-documents">Erratum and Addendums</router-link></li>
+                  <li><router-link class="dropdown-item" to="/bid-documents">Validity Extension</router-link></li>
                    <li><router-link class="dropdown-item" to="/closed-quotes">Closed Quotes</router-link></li>
                  <!--  <li><a class="dropdown-item" href="#">Quotes 2025-2026</a></li>
                   <li><a class="dropdown-item" href="#">Quotes 2024-2025</a></li>
                   <li><a class="dropdown-item" href="#">Quotes 2023-2024</a></li> -->
                 </ul>
               </li>
-              <li><a class="dropdown-item" href="#">BID DOCUMENTS</a></li>
-              <li><a class="dropdown-item" href="#">QUOTE DOCUMENTS</a></li>
+              
+              <!-- <li><a class="dropdown-item" href="#">QUOTE DOCUMENTS</a></li> -->
               <li><a class="dropdown-item" href="#">INTENTION TO AWARD</a></li>
-              <li><a class="dropdown-item" href="#">ONLINE SUBMISSION</a></li>
-              <li class="dropdown-submenu">
+              <li><router-link class="dropdown-item" to="/contract-reporting">CONTRACT REPORTING</router-link></li>
+              <!-- <li class="dropdown-submenu">
                 <a class="dropdown-item dropdown-toggle" href="#">OPENING/CLOSING REGISTER</a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="#">Opening-closing Register 2025-2026</a></li>
                   <li><a class="dropdown-item" href="#">Opening-closing Register 2024-2025</a></li>
                   <li><a class="dropdown-item" href="#">Opening-closing Register 2023-2024</a></li>
                 </ul>
-              </li>
-              <li class="dropdown-submenu">
+              </li> -->
+              <!-- <li class="dropdown-submenu">
                 <a class="dropdown-item dropdown-toggle" href="#">OTHER SCM DOCUMENTS</a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="#">Led Database</a></li>
                   <li><a class="dropdown-item" href="#">Annexures & Mbd</a></li>
                   <li><a class="dropdown-item" href="#">Briefing Link</a></li>
-                  <li><a class="dropdown-item" href="#">Erratum and Addendum</a></li>
+                  <li><a class="dropdown-item" href="#">Erratum and Addendum</a></li> --
                   <li><a class="dropdown-item" href="#">Contracts</a></li>
                   <li><a class="dropdown-item" href="#">Scm Database Forms</a></li>
                 </ul>
-              </li>
+              </li> -->
             </ul>
           </li>
 

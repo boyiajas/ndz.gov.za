@@ -27,6 +27,10 @@
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Tenders & Quotations
           </router-link>
+          <router-link class="quicklink-tile" to="/scm-database-forms">
+            <div class="ql-icon"><i class="bi bi-receipt-cutoff"></i></div>
+            Scm Database Forms
+          </router-link>
            <router-link class="quicklink-tile" to="/gallery">
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Events
@@ -35,10 +39,7 @@
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Tourism
           </router-link>
-         <!--  <a class="quicklink-tile" href="#">
-            <div class="ql-icon"><i class="bi bi-receipt-cutoff"></i></div>
-            Quotations
-          </a> -->
+          
           <router-link class="quicklink-tile" to="/news">
             <div class="ql-icon"><i class="bi bi-megaphone-fill"></i></div>
             Notices

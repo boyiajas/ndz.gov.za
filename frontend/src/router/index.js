@@ -19,6 +19,7 @@ import OpenTendersView from '../views/OpenTendersView.vue'
 import ClosedTendersView from '../views/ClosedTendersView.vue'
 import OpenQuotesView from '../views/OpenQuotesView.vue'
 import ClosedQuotesView from '../views/ClosedQuotesView.vue'
+import ContractReportingView from '../views/ContractReportingView.vue'
 import ContactView from '../views/ContactView.vue'
 import EventGalleryView from '../views/EventGalleryView.vue'
 import DocumentsView from '../views/DocumentsView.vue'
@@ -43,6 +44,7 @@ const routes = [
     { path: '/closed-tenders', name: 'closed-tenders', component: ClosedTendersView },
     { path: '/open-quotes', name: 'open-quotes', component: OpenQuotesView },
     { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
+    { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
     { path: '/contact', name: 'contact', component: ContactView },
     { path: '/gallery', name: 'gallery', component: EventGalleryView },
     { path: '/documents', name: 'documents', component: DocumentsView },
