@@ -28,11 +28,11 @@
               <!-- Manager Profile Card -->
               <div class="card border-0 shadow-sm text-center mb-4 manager-card overflow-hidden">
                 <div class="card-img-wrapper bg-light">
-                  <img src="/img/departments/mr-j-sondezi.jpg" alt="Mr J Sondezi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
+                  <img :src="profileImageSrc" alt="Mr S.J. Sondezi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
                 </div>
                 <div class="card-body p-4 bg-white">
-                  <h4 class="card-title fw-bold text-dark mb-1">Mr J Sondezi</h4>
-                  <p class="text-primary fw-medium small mb-0 text-uppercase">Corporate and Support Services Manager</p>
+                  <h4 class="card-title fw-bold text-dark mb-1">Mr S.J. Sondezi</h4>
+                  <p class="text-primary fw-medium small mb-0 text-uppercase">Senior Manager: Corporate Support Services</p>
                 </div>
               </div>
             </div>
@@ -41,13 +41,21 @@
           <!-- Text Column -->
           <div class="col-lg-8">
             <div class="content-card p-4 p-md-5 bg-white shadow-sm rounded">
-              <h3 class="fw-bold mb-4 text-dark" style="font-size: 1.75rem;">Corporate Services Department</h3>
+              <h3 class="fw-bold mb-4 text-dark" style="font-size: 1.75rem;">Senior Manager: Corporate Support Services</h3>
               <p class="lead text-dark fw-normal mb-4" style="line-height: 1.8;">
-                The Corporate Services Department is a key support division within the Dr. Nkosazana Dlamini-Zuma Municipality, responsible for driving the internal operations that enable efficient and responsive municipal governance.
+                Mr S.J. Sondezi currently serves as the Senior Manager: Corporate Support Services at Dr Nkosazana Dlamini Zuma Local Municipality, bringing a wealth of expertise cultivated over 21 years of dedicated service in the field.
               </p>
-              
+
               <p class="mb-4" style="line-height: 1.8;">
-                This department is led by Mr. SJ Sondezi, who oversees two critical sub-units:
+                His career trajectory reflects sustained professional growth, comprising 13 years of experience at Senior Management level and a further 5 years at Middle Management level, underpinned by a solid foundation built prior to his advancement into leadership roles.
+              </p>
+
+              <p class="mb-4" style="line-height: 1.8;">
+                Mr Sondezi holds a Master's Degree in Public Administration (MPA), an academic achievement that significantly strengthens his ability to lead within the local government sphere. This qualification has equipped him with an advanced understanding of public sector governance, policy formulation and implementation, strategic planning, and the legislative and regulatory frameworks that govern municipal operations.
+              </p>
+
+              <p class="mb-4" style="line-height: 1.8;">
+                In his current capacity, Mr Sondezi provides oversight and direction to four distinct operational units, each led by a Manager reporting directly to him:
               </p>
 
               <ul class="list-unstyled focus-areas-list mb-5">
@@ -56,25 +64,90 @@
                     <i class="bi bi-person-lines-fill fs-4"></i>
                   </div>
                   <div>
-                    <h5 class="fw-bold text-dark mb-1">Human Resources (HR)</h5>
-                    <p class="text-secondary mb-0">Manages recruitment, staff development, performance management, and ensures compliance with labour legislation and employment equity policies.</p>
+                    <h5 class="fw-bold text-dark mb-1">Human Resources Management</h5>
+                    <p class="text-secondary mb-0">Provides leadership on workforce planning, employee development, organisational structure, and human capital administration.</p>
                   </div>
                 </li>
-                
+
                 <li class="d-flex mb-4">
                   <div class="icon-box me-3 mt-1 text-primary">
                     <i class="bi bi-pc-display-horizontal fs-4"></i>
                   </div>
                   <div>
-                    <h5 class="fw-bold text-dark mb-1">Information Technology (IT)</h5>
-                    <p class="text-secondary mb-0">Supports the municipality’s digital infrastructure, data security, and the implementation of technology solutions that improve service delivery and internal efficiency.</p>
+                    <h5 class="fw-bold text-dark mb-1">Information and Communication Technology (ICT)</h5>
+                    <p class="text-secondary mb-0">Guides the municipality's technology environment, systems support, information management, and digital enablement.</p>
+                  </div>
+                </li>
+
+                <li class="d-flex mb-4">
+                  <div class="icon-box me-3 mt-1 text-primary">
+                    <i class="bi bi-building-gear fs-4"></i>
+                  </div>
+                  <div>
+                    <h5 class="fw-bold text-dark mb-1">Auxiliary Services</h5>
+                    <p class="text-secondary mb-0">Oversees the support functions that sustain day-to-day municipal operations and administrative effectiveness.</p>
+                  </div>
+                </li>
+
+                <li class="d-flex mb-0">
+                  <div class="icon-box me-3 mt-1 text-primary">
+                    <i class="bi bi-people-fill fs-4"></i>
+                  </div>
+                  <div>
+                    <h5 class="fw-bold text-dark mb-1">Labour Relations</h5>
+                    <p class="text-secondary mb-0">Supports fair labour practices, employee relations, collective engagement, and compliance with labour governance requirements.</p>
                   </div>
                 </li>
               </ul>
 
+              <p class="mb-5" style="line-height: 1.8;">
+                Mr Sondezi's passion for his work and steadfast commitment to excellence, reinforced by his academic grounding in public administration, have had a demonstrably positive impact on departmental efficiency, contributing meaningfully to the overall operational effectiveness of the Organisation.
+              </p>
+
+              <div class="mt-4">
+                <h4 class="fw-bold mb-4 text-dark">Core Functions of the Role</h4>
+                <ul class="list-unstyled focus-areas-list mb-0">
+                  <li class="d-flex mb-4">
+                    <div class="icon-box me-3 mt-1 text-primary">
+                      <i class="bi bi-diagram-3-fill fs-4"></i>
+                    </div>
+                    <div>
+                      <p class="text-secondary mb-0">Providing strategic and operational leadership across the full spectrum of Corporate Services functions, including Human Resources, Labour Relations, Information and Communication Technology, Records Management, Security, and other related functional areas, in order to support the Organisation in achieving its strategic objectives and service delivery mandate.</p>
+                    </div>
+                  </li>
+
+                  <li class="d-flex mb-4">
+                    <div class="icon-box me-3 mt-1 text-primary">
+                      <i class="bi bi-people fs-4"></i>
+                    </div>
+                    <div>
+                      <p class="text-secondary mb-0">Overseeing and managing key Council committees, including the ICT Steering Committee and the Local Labour Forum, ensuring these structures function effectively in support of good governance.</p>
+                    </div>
+                  </li>
+
+                  <li class="d-flex mb-4">
+                    <div class="icon-box me-3 mt-1 text-primary">
+                      <i class="bi bi-cash-stack fs-4"></i>
+                    </div>
+                    <div>
+                      <p class="text-secondary mb-0">Managing the Department's budget and expenditure, ensuring sound financial management and the effective execution of Corporate Services projects.</p>
+                    </div>
+                  </li>
+
+                  <li class="d-flex mb-0">
+                    <div class="icon-box me-3 mt-1 text-primary">
+                      <i class="bi bi-shield-check fs-4"></i>
+                    </div>
+                    <div>
+                      <p class="text-secondary mb-0">Overseeing Risk Management and Performance Management functions within the Department, thereby contributing to organisational accountability and continuous improvement.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
               <div class="alert mt-4 border-start border-4 border-primary bg-light p-4 shadow-sm" style="border-radius: 0 4px 4px 0;">
                 <p class="mb-0 text-dark fw-medium" style="line-height: 1.7;">
-                  Corporate Services plays a vital role in ensuring that the municipality functions smoothly, providing the backbone for administrative, technical, and personnel-related processes.
+                  A defining milestone in Mr Sondezi's career was his appointment as Acting Municipal Manager, a distinction that affirmed his professional competence, unwavering work ethic, and genuine commitment to serving both the community and the institution. This appointment stands as a testament to the trust and confidence placed in his leadership capabilities by the Municipality.
                 </p>
               </div>
 
@@ -116,9 +189,14 @@
 <script>
 export default {
   name: 'CorporateServicesView',
+  data() {
+    return {
+      profileImageSrc: '/img/departments/S.J.Sondezi.png',
+    }
+  },
   methods: {
     handleImageError(event) {
-      event.target.src = 'https://ui-avatars.com/api/?name=J+Sondezi&background=00a651&color=fff&size=300';
+      event.target.src = 'https://ui-avatars.com/api/?name=S+J+Sondezi&background=00a651&color=fff&size=300';
     }
   }
 }

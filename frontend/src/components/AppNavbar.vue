@@ -40,12 +40,12 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About Us</a>
             <ul class="dropdown-menu">
-              <li><router-link class="dropdown-item" to="/mayors-office">Mayor's Office</router-link></li>
+              <li><router-link class="dropdown-item" to="/mayors-office">Meet The Mayor</router-link></li>
               <li><router-link class="dropdown-item" to="/municipal-manager">Municipal Manager</router-link></li>
               <li><router-link class="dropdown-item" to="/meet-speaker">Meet The Speaker</router-link></li>
               <li><router-link class="dropdown-item" to="/councillors">Councillors</router-link></li>
-              <li><a class="dropdown-item" href="#">Organogram</a></li>
-              <li><a class="dropdown-item" href="#">5 Key Priorities</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Organogram</a></li>
+              <li><a class="dropdown-item" href="#">5 Key Priorities</a></li> -->
             </ul>
           </li>
 
