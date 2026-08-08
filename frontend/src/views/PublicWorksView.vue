@@ -28,7 +28,7 @@
               <!-- Manager Profile Card -->
               <div class="card border-0 shadow-sm text-center mb-4 manager-card overflow-hidden">
                 <div class="card-img-wrapper bg-light">
-                  <img src="/img/departments/mr-v-mngadi.jpg" alt="Mr V Mngadi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
+                  <img :src="profileImageSrc" alt="Mr V Mngadi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
                 </div>
                 <div class="card-body p-4 bg-white">
                   <h4 class="card-title fw-bold text-dark mb-1">Mr V Mngadi</h4>
@@ -144,6 +144,11 @@
 <script>
 export default {
   name: 'PublicWorksView',
+  data() {
+    return {
+      profileImageSrc: '/img/departments/WhatsApp%20Image%202026-08-08%20at%207.41.43%20PM.jpeg',
+    }
+  },
   methods: {
     handleImageError(event) {
       event.target.src = 'https://ui-avatars.com/api/?name=V+Mngadi&background=00a651&color=fff&size=300';
