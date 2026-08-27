@@ -20,15 +20,14 @@
     <!-- Main Content Section -->
     <section class="department-section py-5">
       <div class="container pb-5">
-        <div class="row g-5 align-items-start">
-          
-          <!-- Manager Sidebar Column -->
-          <div class="col-lg-4">
-            <div class="position-sticky" style="top: 2rem;">
-              <!-- Manager Profile Card -->
-              <div class="card border-0 shadow-sm text-center mb-4 manager-card overflow-hidden">
+        <div class="row align-items-start g-5">
+          <div class="col-12">
+            
+            <!-- Floated Image Container -->
+            <div class="float-lg-start me-lg-5 mb-4" style="max-width: 340px;">
+              <div class="card border-0 shadow-sm text-center manager-card overflow-hidden">
                 <div class="card-img-wrapper bg-light">
-                  <img :src="profileImageSrc" alt="Mr V Mngadi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
+                  <img :src="profileImageSrc" alt="Mr Siyabonga Valentine Mngadi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
                 </div>
                 <div class="card-body p-4 bg-white">
                   <h4 class="card-title fw-bold text-dark mb-1">Mr V Mngadi</h4>
@@ -36,75 +35,48 @@
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Text Column -->
-          <div class="col-lg-8">
-            <div class="content-card p-4 p-md-5 bg-white shadow-sm rounded">
-              <h3 class="fw-bold mb-4 text-dark" style="font-size: 1.75rem;">Public Works Department</h3>
-              <p class="lead text-dark fw-normal mb-4" style="line-height: 1.8;">
-                The Public Works Department is responsible for the planning, construction, and maintenance of municipal infrastructure and facilities across the Dr. Nkosazana Dlamini-Zuma Municipality.
-              </p>
-              
-              <p class="fw-bold mb-4 text-dark" style="font-size: 1.25rem;">This department plays a crucial role in improving the quality of life for residents through:</p>
+            <!-- Text Content -->
+            <div class="section-label" style="color: var(--accent, #ffb300); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 0.5rem;">Senior Management</div>
+            <h2 class="section-title" style="font-weight: 800; color: var(--text-dark, #1f2937); margin-bottom: 1.5rem;">Public Works Department & Basic Service</h2>
+            <div class="section-divider" style="width: 50px; height: 3px; background: var(--accent, #ffb300); margin-bottom: 1.5rem;"></div>
+            
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;">
+              <strong>Siyabonga Valentine Mngadi</strong> is an experienced municipal technical services professional with extensive experience in infrastructure development, project management, engineering, and local government administration. He has held senior management positions within local government and has developed strong expertise in the planning, implementation, monitoring, and management of municipal infrastructure and basic services. His experience includes leadership of multidisciplinary teams, stakeholder engagement, capital budget planning, project management, and the delivery of sustainable services to communities.
+            </p>
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
+              Mr Mngadi holds a National Diploma in Civil Engineering from Mangosuthu University of Technology and a Bachelor of Technology in Civil Engineering from Durban University of Technology. His academic background has provided him with a strong foundation in civil engineering, infrastructure development, construction management, and technical services. He has also pursued further professional development and is registered as a Candidate Engineering Technologist with ECSA and is registered with IMESA.
+            </p>
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
+              He has extensive work experience spanning the engineering, construction, higher education, and local government sectors. He began his career in construction and engineering roles, gaining practical experience in roads, stormwater, water and sewer reticulation, concrete works, housing construction, transportation engineering, site supervision, and quality control. He subsequently worked as a Project Manager at Mabophe Energy Solution, a Junior Lecturer at Mangosuthu University of Technology, and a Director of Technical Services at Ezinqoleni Municipality.
+            </p>
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
+              From November 2014 to January 2019, he served as General Manager: Technical Services at Umdoni Municipality, where he was responsible for managing technical services, project implementation, capital budget planning, stakeholder engagement, and departmental performance. Since March 2019, he has served as Senior Manager: Public Works and Basic Services at Dr Nkosazana Dlamini Zuma Municipality, where he provides strategic and operational leadership in the delivery of public works and basic services. His responsibilities include project and capital programme management, infrastructure planning, budget implementation, community and stakeholder engagement, development of municipal sector plans, and ensuring compliance with applicable local government legislation and performance management requirements.
+            </p>
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
+              Mr. Mngadi oversees and provides strategic direction to distinct operational units, each headed by a manager who reports directly to him:
+            </p>
+            <ul style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem; margin-top:0.5rem; padding-left: 1.2rem; margin-bottom: 2rem;">
+              <li>Refuse removal</li>
+              <li>Electrification</li>
+              <li>Municipal environmental management services</li>
+              <li>Municipal roads and storm water drainage</li>
+              <li>Street lighting</li>
+              <li>Construction of community facilities</li>
+            </ul>
 
-              <ul class="list-unstyled focus-areas-list mb-5">
-                <li class="d-flex mb-4">
-                  <div class="icon-box me-3 mt-1 text-primary">
-                    <i class="bi bi-cone-striped fs-4"></i>
-                  </div>
-                  <div>
-                    <h5 class="fw-bold text-dark mb-1">Infrastructure Development</h5>
-                    <p class="text-secondary mb-0">Planning and implementing capital projects including roads, municipal buildings, stormwater systems, and public amenities.</p>
-                  </div>
-                </li>
-                
-                <li class="d-flex mb-4">
-                  <div class="icon-box me-3 mt-1 text-primary">
-                    <i class="bi bi-tools fs-4"></i>
-                  </div>
-                  <div>
-                    <h5 class="fw-bold text-dark mb-1">Maintenance of Public Assets</h5>
-                    <p class="text-secondary mb-0">Ensuring ongoing upkeep and repair of existing municipal infrastructure to maintain safety and service standards.</p>
-                  </div>
-                </li>
+            <div class="clearfix"></div>
 
-                <li class="d-flex mb-4">
-                  <div class="icon-box me-3 mt-1 text-primary">
-                    <i class="bi bi-map-fill fs-4"></i>
-                  </div>
-                  <div>
-                    <h5 class="fw-bold text-dark mb-1">Project Management</h5>
-                    <p class="text-secondary mb-0">Overseeing construction projects to ensure they are delivered on time, within budget, and to the required standards.</p>
-                  </div>
-                </li>
-
-                <li class="d-flex mb-4">
-                  <div class="icon-box me-3 mt-1 text-primary">
-                    <i class="bi bi-people-fill fs-4"></i>
-                  </div>
-                  <div>
-                    <h5 class="fw-bold text-dark mb-1">Job Creation and Local Empowerment</h5>
-                    <p class="text-secondary mb-0">Promoting local labour and SMME involvement in municipal projects through Expanded Public Works Programmes (EPWP).</p>
-                  </div>
-                </li>
-
-                <li class="d-flex mb-4">
-                  <div class="icon-box me-3 mt-1 text-primary">
-                    <i class="bi bi-droplet-half fs-4"></i>
-                  </div>
-                  <div>
-                    <h5 class="fw-bold text-dark mb-1">Service Delivery Support</h5>
-                    <p class="text-secondary mb-0">Working with other departments to provide infrastructure that supports water, sanitation, waste, and other community services.</p>
-                  </div>
-                </li>
+            <div style="background: #fff; padding: 2rem; border-radius: 8px; border-left: 4px solid var(--primary, #00a651); box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); margin-top: 2rem;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark, #1f2937); margin-bottom: 1rem;">Core Functions of the Role</h3>
+              <ul style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem; margin-bottom: 0; padding-left: 1.2rem;">
+                <li style="margin-bottom: 0.5rem;"><strong>Infrastructure Development:</strong> Planning and implementing capital projects including roads, municipal buildings, stormwater systems, and public amenities.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Maintenance of Public Assets:</strong> Ensuring ongoing upkeep and repair of existing municipal infrastructure to maintain safety and service standards.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Project Management:</strong> Overseeing construction projects to ensure they are delivered on time, within budget, and to the required standards.</li>
+                <li style="margin-bottom: 0.5rem;"><strong>Job Creation and Local Empowerment:</strong> Promoting local labour and SMME involvement in municipal projects through Expanded Public Works Programmes (EPWP).</li>
+                <li><strong>Service Delivery Support:</strong> Working with other departments to provide infrastructure that supports water, sanitation, waste, and other community services.</li>
               </ul>
-
-              <div class="alert mt-4 border-start border-4 border-primary bg-light p-4 shadow-sm" style="border-radius: 0 4px 4px 0;">
-                <p class="mb-0 text-dark fw-medium" style="line-height: 1.7;">
-                  The department is committed to sustainable infrastructure development that meets the growing needs of communities and contributes to long-term socio-economic development.
-                </p>
-              </div>
+            </div>
 
               <!-- Attachments Section -->
               <div class="mt-5 border-top pt-4">
@@ -134,9 +106,7 @@
               </div>
             </div>
           </div>
-
         </div>
-      </div>
     </section>
   </div>
 </template>

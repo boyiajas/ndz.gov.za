@@ -11,7 +11,9 @@ export default defineConfig({
     emptyOutDir: false, // Don't wipe Laravel's index.php, .htaccess etc.
   },
   server: {
-    port: 5173,
+    port: 5199,
+    strictPort: true,
+    cors: true,
     watch: {
       // This repo carries a large static media set under frontend/public and a
       // growing dist folder. Ignore both to avoid exhausting file watchers.

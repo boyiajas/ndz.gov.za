@@ -20,46 +20,49 @@
     <!-- Speaker Content -->
     <section class="mayor-section" style="padding: 5rem 0;">
       <div class="container">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-5 text-center">
-            <div style="position:relative;display:inline-block;">
-              <img
-                src="/speaker.jpg"
-                alt="Meet The Speaker"
-                style="width:100%;max-width:340px;border-radius:8px;border-top:5px solid var(--accent);box-shadow:0 12px 40px rgba(0,59,122,0.25);display:block;margin:0 auto;object-fit:cover;aspect-ratio:3/4;"
-              />
-              <div style="position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:0.4rem 1.5rem;border-radius:999px;font-size:0.78rem;font-weight:700;white-space:nowrap;">
-                Speaker Cllr Sifiso S. Phoswa
+        <div class="row align-items-start g-5">
+          <div class="col-12">
+            
+            <!-- Floated Image Container -->
+            <div class="float-lg-start me-lg-5 mb-4" style="max-width: 340px;">
+              <div class="card border-0 shadow-sm text-center manager-card overflow-hidden">
+                <div class="card-img-wrapper bg-light">
+                  <img :src="profileImageSrc" alt="Speaker Cllr. Sfiso Phoswa" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
+                </div>
+                <div class="card-body p-4 bg-white">
+                  <h4 class="card-title fw-bold text-dark mb-1">Cllr. Sfiso Phoswa</h4>
+                  <p class="text-primary fw-medium small mb-0 text-uppercase">The Speaker</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-lg-7">
-            <div class="section-label" style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 0.5rem;">Office of the Speaker</div>
-            <h2 class="section-title" style="font-weight: 800; color: var(--text-dark); margin-bottom: 1.5rem;">Meet The Speaker – Cllr. Sfiso Phoswa</h2>
-            <div class="section-divider" style="width: 50px; height: 3px; background: var(--accent); margin-bottom: 1.5rem;"></div>
-            <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem;">
+
+            <!-- Text Content -->
+            <div class="section-label" style="color: var(--accent, #ffb300); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 0.5rem;">Office of the Speaker</div>
+            <h2 class="section-title" style="font-weight: 800; color: var(--text-dark, #1f2937); margin-bottom: 1.5rem;">Meet The Speaker – Cllr. Sfiso Phoswa</h2>
+            <div class="section-divider" style="width: 50px; height: 3px; background: var(--accent, #ffb300); margin-bottom: 1.5rem;"></div>
+            
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;">
               The Constitution and Municipal Structures Act requires that every Council elects a Chairperson, who is called The Speaker.
             </p>
-            <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
               The aim of the Office of the Speaker is to structure the two functions of a Municipal Council, i.e. its legislative function and its executive function. The Speaker presides at meetings of the Council and performs the duties and exercises the powers delegated to the Speaker.
             </p>
-            <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
               A resident of Gqumeni in ward 7 of Dr Nkosazana Dlamini-Zuma Municipality since birth, Cllr Sifiso Sydney Phoswa believes in using his position to influence positive social change by improving the livelihoods of the people of this municipality. His involvement in politics and youth development.
             </p>
-          </div>
-        </div>
 
-        <div class="row" style="margin-top: 5rem;">
-          <div class="col-12">
-            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; border-left: 4px solid var(--accent);">
-              <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem;">These duties include:</h3>
-              <p style="color:var(--text-mid);line-height:1.85;font-size:0.95rem; margin-bottom: 0.5rem;">Ensuring that Council meets at least quarterly:</p>
-              <ul style="color:var(--text-mid);line-height:1.85;font-size:0.95rem; margin-bottom: 0; padding-left: 1.2rem;">
+            <div class="clearfix"></div>
+
+            <div style="background: #fff; padding: 2rem; border-radius: 8px; border-left: 4px solid var(--primary, #00a651); box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); margin-top: 2rem;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark, #1f2937); margin-bottom: 1rem;">These duties include:</h3>
+              <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem; margin-bottom: 0.5rem;">Ensuring that Council meets at least quarterly:</p>
+              <ul style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem; margin-bottom: 0; padding-left: 1.2rem;">
                 <li style="margin-bottom: 0.5rem;">Maintaining order during meetings</li>
                 <li style="margin-bottom: 0.5rem;">Ensuring compliance in the Council and Council committees with the Code of Conduct of Councillors</li>
                 <li>Ensuring that Council meetings are conducted in accordance with the rules and orders of the Council.</li>
               </ul>
             </div>
+            
           </div>
         </div>
 
@@ -70,10 +73,31 @@
 
 <script>
 export default {
-  name: 'MeetSpeakerView'
+  name: 'MeetSpeakerView',
+  data() {
+    return {
+      profileImageSrc: '/speaker.jpg',
+    }
+  },
+  methods: {
+    handleImageError(event) {
+      event.target.src = 'https://ui-avatars.com/api/?name=S+Phoswa&background=00a651&color=fff&size=300';
+    }
+  }
 }
 </script>
 
 <style scoped>
-/* Scoped styles */
+.text-primary {
+  color: #00a651 !important;
+}
+
+.manager-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.manager-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.15)!important;
+}
 </style>
