@@ -25,7 +25,7 @@
           <div class="col-12">
             
             <!-- Floated Image Container -->
-            <div class="float-lg-start me-lg-5 mb-4" style="max-width: 340px;">
+            <div class="float-lg-start me-lg-5 mb-4" style="width: 100%; max-width: 340px;">
               <div class="card border-0 shadow-sm text-center manager-card overflow-hidden">
                 <div class="card-img-wrapper bg-light">
                   <img :src="profileImageSrc" alt="Mayor Cllr. Sindisiwe P. Msomi" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
