@@ -73,7 +73,7 @@
             </div>
 
             <!-- Attachments Section -->
-            <div class="mt-5 border-top pt-4">
+           <!--  <div class="mt-5 border-top pt-4">
               <h5 class="fw-bold mb-3"><i class="bi bi-paperclip me-2 text-primary"></i>Print or Download File Attachments</h5>
               <div class="table-responsive">
                 <table class="table table-hover align-middle border">
@@ -97,7 +97,7 @@
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> -->
 
           </div>
         </div>

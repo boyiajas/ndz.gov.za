@@ -24,7 +24,7 @@
           <div class="col-12">
             
             <!-- Floated Image Container -->
-            <div class="float-lg-start me-lg-5 mb-4" style="max-width: 340px;">
+            <div class="float-lg-start me-lg-5 mb-2" style="max-width: 340px;">
               <div class="card border-0 shadow-sm text-center manager-card overflow-hidden">
                 <div class="card-img-wrapper bg-light">
                   <img :src="profileImageSrc" alt="Mr P Mntungwa" class="card-img-top w-100" style="object-fit: cover; height: 320px; object-position: top center;" @error="handleImageError" />
@@ -48,7 +48,11 @@
               Over the years, he has held several progressively responsible positions, including Senior Accountant at Kwa Sani Municipality and Deputy Chief Financial Officer at Dr Nkosazana Dlamini Zuma Local Municipality since its establishment. Mr. Mtungwa began his career as a trainee accountant in the private sector before joining local government in 2009. Since then, he has occupied various middle- and senior-management positions within the local government sector.
             </p>
             <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
-              Mr. Mtungwa has a strong academic and professional background in accounting, governance, public administration and municipal finance. He holds a Bachelor of Commerce in Accounting from the University of Zululand, a National Diploma from the University of South Africa (UNISA), and a Municipal Financial Management Certificate from KMS College. These qualifications have strengthened his practical knowledge and expertise in municipal financial management. He is currently completing a Postgraduate Diploma in Public Finance Management at Stellenbosch University.
+              Mr. Mtungwa has a strong academic and professional background in accounting, governance, public administration and municipal finance. He holds a Bachelor of Commerce in Accounting from the University of Zululand, a National Diploma from the University of South Africa (UNISA), and a Municipal Financial Management Certificate from KMS College. 
+            </p>
+            
+            <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:0rem;">
+              These qualifications have strengthened his practical knowledge and expertise in municipal financial management. He is currently completing a Postgraduate Diploma in Public Finance Management at Stellenbosch University.
             </p>
             <p style="color:var(--text-mid, #4b5563);line-height:1.85;font-size:0.95rem;margin-top:1rem;">
               The Budget and Treasury Office is a critical department within Dr Nkosazana Dlamini Zuma Local Municipality. It is mandated to promote the sound, responsible and sustainable management of the municipality’s financial resources. Its primary responsibility is to oversee the effective administration of municipal finances in accordance with applicable legislation, financial regulations and good-governance principles.
