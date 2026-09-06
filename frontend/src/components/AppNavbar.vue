@@ -41,6 +41,7 @@
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About Us</a>
             <ul class="dropdown-menu">
               <li><router-link class="dropdown-item" to="/mayors-office">Meet The Mayor</router-link></li>
+              <li><router-link class="dropdown-item" to="/deputy-mayor">Meet The Deputy Mayor</router-link></li>
               <li><router-link class="dropdown-item" to="/meet-speaker">Meet The Speaker</router-link></li>
               <li><router-link class="dropdown-item" to="/councillors">Councillors</router-link></li>
               <!-- <li><a class="dropdown-item" href="#">Organogram</a></li>

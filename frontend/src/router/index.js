@@ -6,6 +6,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import MayorsOfficeView from '../views/MayorsOfficeView.vue'
+import DeputyMayorView from '../views/DeputyMayorView.vue'
 import MunicipalManagerView from '../views/MunicipalManagerView.vue'
 import MeetSpeakerView from '../views/MeetSpeakerView.vue'
 import CouncillorsView from '../views/CouncillorsView.vue'
@@ -30,6 +31,7 @@ const routes = [
     { path: '/register', name: 'register', component: RegisterView, meta: { guestOnly: true } },
     { path: '/dashboard', name: 'dashboard', component: DashboardView, meta: { requiresAuth: true } },
     { path: '/mayors-office', name: 'mayors-office', component: MayorsOfficeView },
+    { path: '/deputy-mayor', name: 'deputy-mayor', component: DeputyMayorView },
     { path: '/municipal-manager', name: 'municipal-manager', component: MunicipalManagerView },
     { path: '/meet-speaker', name: 'meet-speaker', component: MeetSpeakerView },
     { path: '/councillors', name: 'councillors', component: CouncillorsView },

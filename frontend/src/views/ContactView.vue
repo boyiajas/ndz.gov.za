@@ -19,6 +19,7 @@
     <!-- Contact Info Cards -->
     <section class="contact-info-section" style="padding: 5rem 0;">
       <div class="container">
+        <!--
         <div class="row align-items-center mb-5 pb-5 border-bottom">
           <div class="col-lg-3">
             <h2 style="font-weight: 700; color: var(--primary, #2c3e50); font-size: 1.8rem; line-height: 1.2;">Departmental<br/>Contact Info</h2>
@@ -48,14 +49,14 @@
                 </div>
               </div>
             </div>
-            <!-- dots indicator placeholder -->
+            <!-- dots indicator placeholder --
             <div class="text-center mt-4">
               <span style="display:inline-block; width:6px; height:6px; background:#ccc; border-radius:50%; margin:0 3px;"></span>
               <span style="display:inline-block; width:6px; height:6px; background:#ccc; border-radius:50%; margin:0 3px;"></span>
               <span style="display:inline-block; width:15px; height:6px; background:var(--primary); border-radius:3px; margin:0 3px;"></span>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="row pt-2">
           <!-- Left Col -->
@@ -70,14 +71,14 @@
                 <i class="bi bi-geo-alt-fill" style="color: var(--primary); font-size: 1.2rem; margin-right: 1rem; margin-top: 0.1rem;"></i>
                 <div>
                   <strong style="color: var(--text-dark);">Address:</strong>
-                  <span style="color: var(--text-mid); display: block; margin-top: 0.2rem; font-size: 0.95rem;">123 Government Ave, Pretoria, South Africa.</span>
+                  <span style="color: var(--text-mid); display: block; margin-top: 0.2rem; font-size: 0.95rem;">Main Street, Creighton, 3263 South Africa.</span>
                 </div>
               </div>
               <div style="margin-bottom: 1.2rem; display: flex; align-items:flex-start;">
                 <i class="bi bi-telephone-fill" style="color: var(--primary); font-size: 1.2rem; margin-right: 1rem; margin-top: 0.1rem;"></i>
                 <div>
                   <strong style="color: var(--text-dark);">Call:</strong>
-                  <span style="color: var(--text-mid); display: block; margin-top: 0.2rem; font-size: 0.95rem;">+27 (0) 11 000 0000 / +27 (0) 79 000 0000 <span style="opacity:0.7;">(WhatsApp Only)</span></span>
+                  <span style="color: var(--text-mid); display: block; margin-top: 0.2rem; font-size: 0.95rem;">+27 (0) 39 833 1038 </span>
                 </div>
               </div>
               <div style="margin-bottom: 1.2rem; display: flex; align-items:flex-start;">

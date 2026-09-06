@@ -452,7 +452,7 @@ export default {
         },
         {
           title: 'Mission',
-          desc: 'Through people-focused development, we will improve skills capacity to deliver quality services and inclusive socio-economic growth.',
+          desc: 'Dr. Nkosazana Dlamini Zuma Local Municipality will provide quality sustainable basic services, promote tourism& agriculture, good governance, community involvement, economic investment and protect the environment in its affairs.',
           image: '/band-mission.jpg',
         },
       ],
