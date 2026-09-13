@@ -25,6 +25,23 @@
             </button>
           </form>
 
+          <div class="seeded-accounts">
+            <div class="seeded-heading">
+              <strong>Seeded login accounts</strong>
+              <span>Password: Password123!</span>
+            </div>
+            <button
+              v-for="account in seededAccounts"
+              :key="account.email"
+              type="button"
+              class="seeded-account"
+              @click="useSeededAccount(account)"
+            >
+              <span>{{ account.role }}</span>
+              <strong>{{ account.email }}</strong>
+            </button>
+          </div>
+
           <div class="auth-divider my-4"><span>Don't have an account?</span></div>
 
           <router-link to="/register" class="btn-gov-outline w-100 py-2 text-center" style="display:block;text-align:center;">
@@ -47,8 +64,22 @@ export default {
     const route  = useRoute()
     return { auth, router, route }
   },
-  data() { return { form: { email: '', password: '' } } },
+  data() {
+    return {
+      form: { email: '', password: '' },
+      seededAccounts: [
+        { role: 'Administrator', email: 'admin@ndz.gov.za' },
+        { role: 'Municipal Manager', email: 'manager@ndz.gov.za' },
+        { role: 'Content Editor', email: 'editor@ndz.gov.za' },
+        { role: 'Citizen', email: 'citizen@ndz.gov.za' },
+      ],
+    }
+  },
   methods: {
+    useSeededAccount(account) {
+      this.form.email = account.email
+      this.form.password = 'Password123!'
+    },
     async handleSubmit() {
       const ok = await this.auth.login(this.form.email, this.form.password)
       if (ok) this.router.push(this.route.query.redirect || '/dashboard')
@@ -56,3 +87,59 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.seeded-accounts {
+  margin-top: 1rem;
+  border: 1px solid var(--light-border);
+  border-radius: 14px;
+  padding: 0.9rem;
+  background: #f8fbf9;
+}
+
+.seeded-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.78rem;
+}
+
+.seeded-heading strong {
+  color: var(--text-dark);
+}
+
+.seeded-heading span {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.seeded-account {
+  width: 100%;
+  border: 1px solid #e2ebe6;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: 0.45rem;
+  text-align: left;
+}
+
+.seeded-account:hover {
+  border-color: var(--primary);
+}
+
+.seeded-account span {
+  color: var(--text-light);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.seeded-account strong {
+  color: var(--text-dark);
+  font-size: 0.78rem;
+}
+</style>

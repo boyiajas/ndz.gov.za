@@ -11,6 +11,23 @@ export const useAuthStore = defineStore('auth', {
 
     getters: {
         isAuthenticated: (state) => !!state.token,
+        role: (state) => state.user?.role || 'citizen',
+        roleLabel: (state) => {
+            const labels = {
+                admin: 'Administrator',
+                manager: 'Municipal Manager',
+                editor: 'Content Editor',
+                citizen: 'Citizen',
+            }
+
+            return labels[state.user?.role] || 'Citizen'
+        },
+        canManageDocuments: (state) => ['admin', 'manager', 'editor'].includes(state.user?.role),
+        canManageContent: (state) => ['admin', 'manager', 'editor'].includes(state.user?.role),
+        canManageProcurement: (state) => ['admin', 'manager'].includes(state.user?.role),
+        canManageUsers: (state) => state.user?.role === 'admin',
+        canManageSettings: (state) => state.user?.role === 'admin',
+        isAdmin: (state) => state.user?.role === 'admin',
     },
 
     actions: {
@@ -27,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
                 this._persist(data)
                 return true
             } catch (err) {
-                this.error = err.response?.data?.message || 'Registration failed.'
+                this.error = this._formatAuthError(err, 'Registration failed.')
                 return false
             } finally {
                 this.loading = false
@@ -42,7 +59,7 @@ export const useAuthStore = defineStore('auth', {
                 this._persist(data)
                 return true
             } catch (err) {
-                this.error = err.response?.data?.message || 'Login failed.'
+                this.error = this._formatAuthError(err, 'Login failed.')
                 return false
             } finally {
                 this.loading = false
@@ -69,6 +86,20 @@ export const useAuthStore = defineStore('auth', {
             this.token = null
             localStorage.removeItem('auth_user')
             localStorage.removeItem('auth_token')
+        },
+
+        _formatAuthError(err, fallback) {
+            const errors = err.response?.data?.errors
+
+            if (errors) {
+                return Object.values(errors).flat()[0]
+            }
+
+            if (!err.response) {
+                return 'Could not reach the API. Check that the Laravel server URL matches the browser URL.'
+            }
+
+            return err.response?.data?.message || fallback
         },
     },
 })

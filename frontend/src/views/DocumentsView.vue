@@ -1,12 +1,10 @@
 <template>
   <div class="page-wrapper bg-light documents-view">
-    <!-- Page Header -->
     <div class="page-header" style="background: var(--primary, #004d40); color: #fff; padding: 4rem 0; text-align: left;">
       <div class="container">
         <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">Documents</h1>
         <p style="margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.8;">NDZ Local Municipality</p>
 
-        <!-- Breadcrumbs -->
         <nav aria-label="breadcrumb" style="margin-top: 1.5rem; display: flex; justify-content: flex-start;">
           <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 50px;">
             <li class="breadcrumb-item"><router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link></li>
@@ -18,213 +16,240 @@
 
     <div class="document-ribbon" aria-hidden="true"></div>
 
-    <!-- Documents Grid -->
     <section class="py-5">
       <div class="container pb-5">
+        <div v-if="loading" class="document-state">Loading document catalogue...</div>
+        <div v-if="error" class="document-state error">{{ error }}</div>
+
         <div class="row g-4">
           <div class="col-md-6 col-lg-4" v-for="category in documentCategories" :key="category.id">
             <div class="doc-card h-100">
-              <div class="doc-card-top">
-                <span class="doc-card-index">{{ category.id }}</span>
-                <h5 class="doc-card-title">{{ category.title }}</h5>
+              <div class="doc-card-accent" aria-hidden="true"></div>
+
+              <div class="doc-card-body">
+                <h5 class="doc-card-title">
+                  <router-link
+                    v-if="category.slug"
+                    :to="{ name: 'document-category', params: { categorySlug: category.slug } }"
+                  >
+                    {{ category.title }}
+                  </router-link>
+                  <span v-else>{{ category.title }}</span>
+                </h5>
+                <p class="doc-card-summary">
+                  {{ category.subtitle || textSummary(category.description) || 'Browse official municipal documents and public records.' }}
+                </p>
               </div>
-              <ul class="doc-card-list">
-                <li v-for="(item, idx) in category.items" :key="idx">
-                  <a v-if="item.link" class="doc-card-link" :href="item.link">{{ item.label }}</a>
-                  <span v-else class="doc-card-text">{{ item.label }}</span>
-                </li>
-              </ul>
+
+              <div class="doc-card-meta">
+                <span>{{ category.items.length }} sub {{ category.items.length === 1 ? 'section' : 'sections' }}</span>
+                <span>{{ documentTotal(category) }} {{ documentTotal(category) === 1 ? 'document' : 'documents' }}</span>
+              </div>
+
+              <div class="doc-chip-list">
+                <template v-for="(item, idx) in visibleItems(category)" :key="item.slug || item.label">
+                  <router-link
+                    v-if="category.slug && item.slug"
+                    class="doc-chip"
+                    :to="{ name: 'document-listing', params: { categorySlug: category.slug, subcategorySlug: item.slug } }"
+                  >
+                    {{ item.label }}
+                    <span v-if="Number.isInteger(item.documents_count)">{{ item.documents_count }}</span>
+                  </router-link>
+                  <span v-else class="doc-chip">{{ item.label }}</span>
+                </template>
+                <span v-if="hiddenItemCount(category)" class="doc-chip more">
+                  +{{ hiddenItemCount(category) }} more
+                </span>
+              </div>
+
+              <router-link
+                v-if="category.slug"
+                class="doc-card-action"
+                :to="{ name: 'document-category', params: { categorySlug: category.slug } }"
+              >
+                View category
+                <span>→</span>
+              </router-link>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-   
   </div>
 </template>
 
 <script>
+import api from '../api/axios'
+import { stripRichText } from '../utils/richText'
+
+const fallbackCategories = [
+  {
+    id: '01',
+    slug: 'municipal-documents',
+    title: 'Municipal Documents',
+    items: [
+      { label: 'Executive Office', slug: 'executive-office' },
+      { label: 'Financial Services', slug: 'financial-services' },
+      { label: 'Economic Development', slug: 'economic-development' },
+      { label: 'Infrastructure', slug: 'infrastructure' },
+      { label: 'Community Services', slug: 'community-services' },
+      { label: 'Council Reports', slug: 'council-reports' },
+    ],
+  },
+  {
+    id: '02',
+    slug: 'policies',
+    title: 'Policies',
+    items: [
+      { label: 'Financial Policies', slug: 'financial-policies' },
+      { label: 'Administrative Policies', slug: 'administrative-policies' },
+      { label: 'Community Policies', slug: 'community-policies' },
+      { label: 'Infrastructure Policies', slug: 'infrastructure-policies' },
+      { label: 'Municipal Policies', slug: 'municipal-policies' },
+      { label: 'Economic Development and Planning Policies', slug: 'economic-development-and-planning-policies' },
+      { label: 'Incentives Policies', slug: 'incentives-policies' },
+      { label: 'By-Laws', slug: 'by-laws' },
+    ],
+  },
+  {
+    id: '03',
+    slug: 'led',
+    title: 'LED',
+    items: [
+      { label: 'LED Strategy', slug: 'led-strategy' },
+      { label: 'Incentives Policy', slug: 'incentives-policy' },
+    ],
+  },
+  {
+    id: '04',
+    slug: 'economic-development-planning-human-settlement',
+    title: 'Economic Development Planning & Human Settlement',
+    items: [{ label: 'Town Planning', slug: 'town-planning' }],
+  },
+  {
+    id: '05',
+    slug: 'performance-management',
+    title: 'Performance Management',
+    items: [{ label: 'Performance Report', slug: 'performance-report' }],
+  },
+  {
+    id: '06',
+    slug: 'public-notices',
+    title: 'Public Notices',
+    items: [{ label: 'Notices', slug: 'notices' }],
+  },
+  {
+    id: '07',
+    slug: 'tariffs',
+    title: 'Tariffs',
+    items: [{ label: '2024-2025', slug: '2024-2025' }],
+  },
+  {
+    id: '09',
+    slug: 'idp',
+    title: 'IDP',
+    items: ['2026-2027', '2025-2026', '2024-2025', '2023-2024', '2022-2023', '2021-2022'].map((year) => ({ label: year, slug: year })),
+  },
+  {
+    id: '10',
+    slug: 'budget',
+    title: 'Budget',
+    items: ['2026-2027', '2025-2026', '2024-2025', '2023-2024', '2022-2023', '2021-2022'].map((year) => ({ label: year, slug: year })),
+  },
+  {
+    id: '11',
+    slug: 'annual-report',
+    title: 'Annual Report',
+    items: ['2025-2026', '2024-2025', '2023-2024', '2022-2023', '2021-2022'].map((year) => ({ label: year, slug: year })),
+  },
+  {
+    id: '12',
+    slug: 'newsletter',
+    title: 'Newsletter',
+    items: [{ label: 'Latest editions', slug: 'latest-editions' }],
+  },
+  {
+    id: '13',
+    slug: 'building-control',
+    title: 'Building Control',
+    items: [{ label: 'Building Control Forms', slug: 'building-control-forms' }],
+  },
+  {
+    id: '14',
+    slug: 'all-service-agreements',
+    title: 'All Service Agreements',
+    items: [{ label: 'Service Level Agreements', slug: 'service-level-agreements' }],
+  },
+  {
+    id: '15',
+    slug: 'long-term-borrowings-contracts',
+    title: 'Long-Term Borrowings Contracts',
+    items: [{ label: 'Borrowings Contracts', slug: 'borrowings-contracts' }],
+  },
+  {
+    id: '16',
+    slug: 'edp-hs',
+    title: 'EDP & HS',
+    items: [{ label: 'Environmental Management', slug: 'environmental-management' }],
+  },
+  {
+    id: '17',
+    slug: 'economic-development-and-planning',
+    title: 'Economic Development and Planning',
+    items: [{ label: 'Spatial Development Framework', slug: 'spatial-development-framework' }],
+  },
+]
+
 export default {
   name: 'DocumentsView',
   data() {
     return {
-      documentCategories: [
-        {
-          id: '01',
-          title: 'Municipal Documents',
-          items: [
-            { label: 'Executive Office', link: '#' },
-            { label: 'Financial Services', link: '#' },
-            { label: 'Economic Development', link: '#' },
-            { label: 'Infrastructure', link: '#' },
-            { label: 'Community Services', link: '#' },
-            { label: 'Council Reports', link: '#' },
-          ],
-        },
-        {
-          id: '02',
-          title: 'Policies',
-          items: [
-            { label: 'Financial Policies', link: '#' },
-            { label: 'Administrative Policies', link: '#' },
-            { label: 'Community Policies', link: '#' },
-            { label: 'Infrastructure Policies', link: '#' },
-            { label: 'Municipal Policies', link: '#' },
-            { label: 'Economic Development and Planning Policies', link: '#' },
-            { label: 'Incentives Policies', link: '#' },
-            { label: 'By-Laws', link: '#' },
-          ],
-        },
-        {
-          id: '03',
-          title: 'LED',
-          items: [
-            { label: 'LED Strategy', link: '#' },
-            { label: 'Incentives Policy', link: '#' },
-          ],
-        },
-        {
-          id: '04',
-          title: 'Economic Development Planning & Human Settlement',
-          items: [
-            { label: 'Town Planning', link: '#' },
-          ],
-        },
-        {
-          id: '05',
-          title: 'Performance Management',
-          items: [
-            { label: 'Performance Report', link: '#' },
-          ],
-        },
-        {
-          id: '06',
-          title: 'Public Notices',
-          items: [
-            { label: 'Notices', link: '#' },
-          ],
-        },
-        {
-          id: '07',
-          title: 'Tariffs',
-          items: [
-            { label: '2024-2025', link: '#' },
-          ],
-        },
-        {
-          id: '09',
-          title: 'IDP',
-          items: [
-            { label: '2026-2027', link: '#' },
-            { label: '2025-2026', link: '#' },
-            { label: '2024-2025', link: '#' },
-            { label: '2023-2024', link: '#' },
-            { label: '2022-2023', link: '#' },
-            { label: '2021-2022', link: '#' },
-          ],
-        },
-        {
-          id: '10',
-          title: 'Budget',
-          items: [
-            { label: '2026-2027', link: '#' },
-            { label: '2025-2026', link: '#' },
-            { label: '2024-2025', link: '#' },
-            { label: '2023-2024', link: '#' },
-            { label: '2022-2023', link: '#' },
-            { label: '2021-2022', link: '#' },
-          ],
-        },
-        {
-          id: '11',
-          title: 'Annual Report',
-          items: [
-            { label: '2025-2026', link: '#' },
-            { label: '2024-2025', link: '#' },
-            { label: '2023-2024', link: '#' },
-            { label: '2022-2023', link: '#' },
-            { label: '2021-2022', link: '#' },
-          ],
-        },
-        {
-          id: '12',
-          title: 'Newsletter',
-          items: [
-            { label: 'Latest editions', link: '#' },
-          ],
-        },
-        {
-          id: '13',
-          title: 'Building Control',
-          items: [
-            { label: 'Building Control Forms', link: '#' },
-          ],
-        },
-        {
-          id: '14',
-          title: 'All Service Agreements',
-          items: [
-            { label: 'Service Level Agreements', link: '#' },
-          ],
-        },
-        {
-          id: '15',
-          title: 'Long-Term Borrowings Contracts',
-          items: [
-            { label: 'Borrowings Contracts', link: '#' },
-          ],
-        },
-        {
-          id: '16',
-          title: 'EDP & HS',
-          items: [
-            { label: 'Environmental Management', link: '#' },
-          ],
-        },
-        {
-          id: '17',
-          title: 'Economic Development and Planning',
-          items: [
-            { label: 'Spatial Development Framework', link: '#' },
-          ],
-        },
-      ],
-      reportContacts: [
-        {
-          label: 'Municipality Contact Number',
-          number: '033 239 9200',
-          icon: 'bi bi-telephone-fill',
-        },
-        {
-          label: 'Control Room',
-          number: '033 239 9276',
-          icon: 'bi bi-headset',
-        },
-        {
-          label: 'WhatsApp Only',
-          number: '079 513 6406',
-          icon: 'bi bi-whatsapp',
-        },
-        {
-          label: 'Toll-Free',
-          number: '080 000 0124',
-          icon: 'bi bi-telephone-plus',
-        },
-      ],
-      reportIssues: [
-        'Electricity outages',
-        'Non-functional streetlights',
-        'Non-collection of refuse',
-        'Vehicle accidents',
-        'Disaster caused by floods, fires, snow or fallen trees',
-      ],
-      reportNotes: [
-        'If electricity in your area is the responsibility of Eskom, contact them on 086 0037 566.',
-        'If electricity in your area is the responsibility of the Municipality, contact us on 033 239 5209 / 080 000 1868.',
-        'Water and sanitation are the responsibility of uMngeni Local Municipality. Contact them on 0800 864 911 or 033 897 6766.',
-      ],
+      documentCategories: fallbackCategories,
+      loading: false,
+      error: '',
     }
+  },
+  mounted() {
+    this.loadDocumentCatalog()
+  },
+  methods: {
+    async loadDocumentCatalog() {
+      this.loading = true
+      this.error = ''
+      try {
+        const { data } = await api.get('/api/document-catalog')
+        this.documentCategories = (data.data || []).map((category, index) => ({
+          id: String(index + 1).padStart(2, '0'),
+          slug: category.slug,
+          title: category.name,
+          subtitle: category.subtitle,
+          description: category.description,
+          image_url: category.image_url,
+          items: (category.subcategories || []).map((item) => ({
+            label: item.name,
+            slug: item.slug,
+            documents_count: item.documents_count,
+          })),
+        }))
+      } catch (error) {
+        this.error = 'Showing the default document structure because the live catalogue is unavailable.'
+      } finally {
+        this.loading = false
+      }
+    },
+    textSummary(value) {
+      return stripRichText(value, '')
+    },
+    documentTotal(category) {
+      return (category.items || []).reduce((total, item) => total + (Number(item.documents_count) || 0), 0)
+    },
+    visibleItems(category) {
+      return (category.items || []).slice(0, 5)
+    },
+    hiddenItemCount(category) {
+      return Math.max((category.items || []).length - 5, 0)
+    },
   },
 }
 </script>
@@ -246,122 +271,152 @@ export default {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.document-state {
+  margin-bottom: 1rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.document-state.error {
+  color: #9b6900;
+}
+
 .doc-card {
   background: #ffffff;
-  border-radius: 6px;
-  padding: 1.4rem 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid #eef1f5;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 16px 42px rgba(26, 35, 50, 0.07);
+  border: 1px solid #e7eee9;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 330px;
 }
 
 .doc-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.09);
+  transform: translateY(-4px);
+  border-color: rgba(31, 156, 88, 0.35);
+  box-shadow: 0 22px 52px rgba(31, 156, 88, 0.12);
 }
 
-.doc-card-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+.doc-card-accent {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
 }
 
-.doc-card-index {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--primary);
-  background: rgba(31, 156, 88, 0.12);
-  border-radius: 999px;
-  padding: 0.2rem 0.6rem;
-  line-height: 1.4;
+.doc-card-body {
+  padding-top: 0.35rem;
+  min-height: 104px;
 }
 
 .doc-card-title {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.2;
   color: var(--text-dark);
 }
 
-.doc-card-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.doc-card-list li {
-  margin: 0.35rem 0;
-}
-
-.doc-card-link,
-.doc-card-text {
-  font-size: 0.85rem;
-  color: var(--text-mid);
-}
-
-.doc-card-link:hover {
+.doc-card-title a:hover {
   color: var(--primary);
-  text-decoration: underline;
 }
 
-.report-section {
+.doc-card-summary {
+  margin: 0.6rem 0 0;
+  color: var(--text-light);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.doc-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1rem 0;
+}
+
+.doc-card-meta span {
+  border-radius: 999px;
+  background: #f4f8f5;
+  color: var(--text-mid);
+  border: 1px solid #e4ece7;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.73rem;
+  font-weight: 800;
+}
+
+.doc-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.2rem;
+}
+
+.doc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  background: rgba(31, 156, 88, 0.08);
+  color: var(--text-mid);
+  padding: 0.42rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.doc-chip:hover {
+  background: rgba(31, 156, 88, 0.14);
+  color: var(--primary);
+}
+
+.doc-chip span {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
   background: #ffffff;
-  border-top: 1px solid #eef1f5;
+  color: var(--primary);
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
-.report-card {
+.doc-chip.more {
+  background: #f7f4e7;
+  color: #9b6900;
+}
+
+.doc-card-action {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border-top: 1px solid #edf2ee;
+  padding-top: 1rem;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 0.86rem;
+}
+
+.doc-card-action span {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
   background: var(--primary);
   color: #ffffff;
-  border-radius: 6px;
-  padding: 1rem 1.2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease;
 }
 
-.report-card-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-}
-
-.report-card-number {
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.report-card-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.85;
-}
-
-.report-panel {
-  background: var(--off-white);
-  border-radius: 6px;
-  padding: 1.2rem;
-  border: 1px solid #eef1f5;
-  height: 100%;
-}
-
-.report-panel-title {
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 0.8rem;
-}
-
-.report-list {
-  padding-left: 1.1rem;
-  margin: 0;
-  color: var(--text-mid);
-  font-size: 0.9rem;
+.doc-card-action:hover span {
+  transform: translateX(3px);
 }
 </style>

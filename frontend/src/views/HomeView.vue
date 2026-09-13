@@ -226,11 +226,10 @@
     <div class="container">
       <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
         <div>
-          <!-- <div class="section-label">NDZ News</div> -->
           <h2 class="section-title">Recent News</h2>
           <div class="section-divider"></div>
         </div>
-        <a href="#" class="btn-gov" style="background:var(--accent);border-color:var(--accent);">View All News</a>
+        <router-link to="/news" class="btn-gov" style="background:var(--accent);border-color:var(--accent);">View All News</router-link>
       </div>
       <div class="row g-4">
         <div class="col-md-4" v-for="article in news" :key="article.id">
@@ -532,8 +531,45 @@ export default {
   mounted() {
     this.fetchWeather();
     this.fetchNearbyWeather();
+    this.fetchPublicNews();
+    this.fetchPublicGallery();
   },
   methods: {
+    async fetchPublicNews() {
+      try {
+        const res = await fetch('/api/news?featured=1&limit=3');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && json.data.length > 0) {
+            this.news = json.data.map((item) => ({
+              id: item.id,
+              readTime: parseInt(item.read_time) || 2,
+              title: item.title,
+              date: item.published_at
+                ? new Date(item.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : 'Recent',
+              excerpt: item.excerpt,
+              image: item.image_url || 'https://picsum.photos/seed/ndz-news-1/800/500',
+            }));
+          }
+        }
+      } catch (e) {
+        // Fallback gracefully to default seed data
+      }
+    },
+    async fetchPublicGallery() {
+      try {
+        const res = await fetch('/api/gallery?limit=9');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && json.data.length > 0) {
+            this.tourismGallery = json.data.map((item) => item.image_url);
+          }
+        }
+      } catch (e) {
+        // Fallback gracefully to default seed data
+      }
+    },
     async fetchWeather() {
       try {
         const lat = -30.0272;

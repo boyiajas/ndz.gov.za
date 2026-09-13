@@ -5,6 +5,12 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import DashboardView from '../views/DashboardView.vue'
+import DashboardDocumentsView from '../views/DashboardDocumentsView.vue'
+import DashboardNewsView from '../views/DashboardNewsView.vue'
+import DashboardGalleryView from '../views/DashboardGalleryView.vue'
+import DashboardTendersView from '../views/DashboardTendersView.vue'
+import DashboardUsersView from '../views/DashboardUsersView.vue'
+import DashboardSettingsView from '../views/DashboardSettingsView.vue'
 import MayorsOfficeView from '../views/MayorsOfficeView.vue'
 import DeputyMayorView from '../views/DeputyMayorView.vue'
 import MunicipalManagerView from '../views/MunicipalManagerView.vue'
@@ -23,13 +29,51 @@ import ContractReportingView from '../views/ContractReportingView.vue'
 import ContactView from '../views/ContactView.vue'
 import EventGalleryView from '../views/EventGalleryView.vue'
 import DocumentsView from '../views/DocumentsView.vue'
+import DocumentCategoryView from '../views/DocumentCategoryView.vue'
+import DocumentListingView from '../views/DocumentListingView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
 const routes = [
     { path: '/', name: 'home', component: HomeView },
     { path: '/login', name: 'login', component: LoginView, meta: { guestOnly: true } },
     { path: '/register', name: 'register', component: RegisterView, meta: { guestOnly: true } },
-    { path: '/dashboard', name: 'dashboard', component: DashboardView, meta: { requiresAuth: true } },
+    { path: '/dashboard', name: 'dashboard', component: DashboardView, meta: { requiresAuth: true, portal: true } },
+    {
+        path: '/dashboard/documents',
+        name: 'dashboard-documents',
+        component: DashboardDocumentsView,
+        meta: { requiresAuth: true, requiresDocumentManager: true, portal: true },
+    },
+    {
+        path: '/dashboard/news',
+        name: 'dashboard-news',
+        component: DashboardNewsView,
+        meta: { requiresAuth: true, requiresContentManager: true, portal: true },
+    },
+    {
+        path: '/dashboard/gallery',
+        name: 'dashboard-gallery',
+        component: DashboardGalleryView,
+        meta: { requiresAuth: true, requiresContentManager: true, portal: true },
+    },
+    {
+        path: '/dashboard/tenders',
+        name: 'dashboard-tenders',
+        component: DashboardTendersView,
+        meta: { requiresAuth: true, requiresProcurementManager: true, portal: true },
+    },
+    {
+        path: '/dashboard/users',
+        name: 'dashboard-users',
+        component: DashboardUsersView,
+        meta: { requiresAuth: true, requiresAdmin: true, portal: true },
+    },
+    {
+        path: '/dashboard/settings',
+        name: 'dashboard-settings',
+        component: DashboardSettingsView,
+        meta: { requiresAuth: true, requiresAdmin: true, portal: true },
+    },
     { path: '/mayors-office', name: 'mayors-office', component: MayorsOfficeView },
     { path: '/deputy-mayor', name: 'deputy-mayor', component: DeputyMayorView },
     { path: '/municipal-manager', name: 'municipal-manager', component: MunicipalManagerView },
@@ -51,6 +95,8 @@ const routes = [
     { path: '/contact', name: 'contact', component: ContactView },
     { path: '/gallery', name: 'gallery', component: EventGalleryView },
     { path: '/documents', name: 'documents', component: DocumentsView },
+    { path: '/documents/:categorySlug', name: 'document-category', component: DocumentCategoryView },
+    { path: '/documents/:categorySlug/:subcategorySlug', name: 'document-listing', component: DocumentListingView },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundView },
 ]
 
@@ -65,6 +111,22 @@ router.beforeEach((to) => {
 
     if (to.meta.requiresAuth && !auth.isAuthenticated) {
         return { name: 'login', query: { redirect: to.fullPath } }
+    }
+
+    if (to.meta.requiresDocumentManager && !auth.canManageDocuments) {
+        return { name: 'dashboard' }
+    }
+
+    if (to.meta.requiresContentManager && !auth.canManageContent) {
+        return { name: 'dashboard' }
+    }
+
+    if (to.meta.requiresProcurementManager && !auth.canManageProcurement) {
+        return { name: 'dashboard' }
+    }
+
+    if (to.meta.requiresAdmin && !auth.isAdmin) {
+        return { name: 'dashboard' }
     }
 
     if (to.meta.guestOnly && auth.isAuthenticated) {
