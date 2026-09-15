@@ -55,7 +55,7 @@
               <li><router-link class="dropdown-item" to="/municipal-manager">Office of the Municipal Manager</router-link></li>
               <li><router-link class="dropdown-item" to="/budget-treasury">Budget & Treasury Office</router-link></li>
               <li><router-link class="dropdown-item" to="/public-works">Public Works & Basic Services</router-link></li>
-              <li><router-link class="dropdown-item" to="/">Development and Townplaning Services</router-link></li>
+              <li><router-link class="dropdown-item" to="/development-town-planning-services">Development and Town Planning Services</router-link></li>
               <li><router-link class="dropdown-item" to="/community-services">Community and Social Services</router-link></li>
                <li><router-link class="dropdown-item" to="/corporate-services">Corporate Support Services</router-link></li>
               <!-- <li><a class="dropdown-item" href="#">Communications</a></li>

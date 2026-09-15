@@ -20,6 +20,7 @@ import TourismView from '../views/TourismView.vue'
 import CorporateServicesView from '../views/CorporateServicesView.vue'
 import CommunityServicesView from '../views/CommunityServicesView.vue'
 import BudgetTreasuryView from '../views/BudgetTreasuryView.vue'
+import DevelopmentTownPlanningServicesView from '../views/DevelopmentTownPlanningServicesView.vue'
 import PublicWorksView from '../views/PublicWorksView.vue'
 import NdzNewsView from '../views/NdzNewsView.vue'
 import OpenTendersView from '../views/OpenTendersView.vue'
@@ -83,6 +84,7 @@ const routes = [
     { path: '/corporate-services', name: 'corporate-services', component: CorporateServicesView },
     { path: '/community-services', name: 'community-services', component: CommunityServicesView },
     { path: '/budget-treasury', name: 'budget-treasury', component: BudgetTreasuryView },
+    { path: '/development-town-planning-services', name: 'development-town-planning-services', component: DevelopmentTownPlanningServicesView },
     { path: '/public-works', name: 'public-works', component: PublicWorksView },
     { path: '/news', name: 'news', component: NdzNewsView },
     { path: '/open-tenders', name: 'open-tenders', component: OpenTendersView },
