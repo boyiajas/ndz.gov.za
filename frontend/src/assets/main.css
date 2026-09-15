@@ -23,6 +23,7 @@
   --text-mid: #4a5568;
   --text-light: #718096;
   --danger: #e53e3e;
+  --page-hero-image: url('/img/band-tourism.jpg');
 }
 
 * {
@@ -263,6 +264,32 @@ img {
   background: var(--accent);
   border-radius: 2px;
   margin: 0.75rem 0 1.25rem;
+}
+
+/* =====================
+   PAGE HEADER HERO
+   ===================== */
+.page-header {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(15, 107, 59, 0.96), rgba(31, 156, 88, 0.86)),
+    var(--page-hero-image) center / cover no-repeat !important;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(252, 191, 27, 0.28), transparent 28%),
+    linear-gradient(90deg, rgba(10, 69, 39, 0.28), transparent 58%);
+  pointer-events: none;
+}
+
+.page-header > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-gov {
