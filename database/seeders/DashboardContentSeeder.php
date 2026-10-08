@@ -241,7 +241,7 @@ class DashboardContentSeeder extends Seeder
         $settings = [
             'municipality_name' => ['value' => 'Dr Nkosazana Dlamini-Zuma Local Municipality', 'group' => 'general'],
             'tagline' => ['value' => 'Serving Our Communities with Dedication', 'group' => 'general'],
-            'contact_email' => ['value' => 'helpdesk@ndz.gov.za', 'group' => 'contact'],
+            'contact_email' => ['value' => 'Mailbox@ndz.gov.za', 'group' => 'contact'],
             'contact_phone' => ['value' => '+27 39 833 1038', 'group' => 'contact'],
             'physical_address' => ['value' => 'Main Street, Creighton, 3263, KwaZulu-Natal, South Africa', 'group' => 'contact'],
             'office_hours' => ['value' => 'Monday - Friday: 07:30 AM to 04:00 PM', 'group' => 'contact'],

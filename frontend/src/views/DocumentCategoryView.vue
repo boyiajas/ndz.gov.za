@@ -1,8 +1,6 @@
 <template>
   <div class="page-wrapper bg-light document-category-view">
-    <div class="category-hero" :class="{ 'has-image': category?.image_url }">
-      <img v-if="category?.image_url" :src="category.image_url" :alt="category.name" />
-      <div class="category-hero-overlay"></div>
+    <div class="category-hero">
       <div class="container category-hero-content">
         <p class="header-kicker">Document Name</p>
         <h1>{{ category?.name || 'Documents' }}</h1>
@@ -27,8 +25,11 @@
         <div v-else>
           <div class="category-intro">
             <div>
-              <span>{{ subcategories.length }} document sub names</span>
+              <span>{{ countLabel }}</span>
               <h2>{{ category.name }}</h2>
+              <div v-if="category.image_url" class="category-intro-image-wrap">
+                <img :src="formatImageUrl(category.image_url)" :alt="category.name" class="category-intro-image" />
+              </div>
               <p v-if="category.subtitle" class="category-subtitle">{{ category.subtitle }}</p>
               <div
                 v-if="category.description"
@@ -40,22 +41,70 @@
             <router-link to="/documents" class="back-link">Back to Documents</router-link>
           </div>
 
-          <div class="subcategory-grid">
-            <router-link
-              v-for="subcategory in subcategories"
-              :key="subcategory.id"
-              class="subcategory-card"
-              :to="{ name: 'document-listing', params: { categorySlug: category.slug, subcategorySlug: subcategory.slug } }"
-            >
-              <span class="subcategory-count">{{ subcategory.documents_count || 0 }}</span>
-              <strong>{{ subcategory.name }}</strong>
-              <small>{{ textSummary(subcategory.description, 'View published documents for this section.') }}</small>
-              <em>Open listing →</em>
-            </router-link>
+          <!-- Print or Download File Attachments (Direct Category Documents) -->
+          <div v-if="directDocuments.length" class="attachments-section mb-4">
+            <div class="attachments-header">
+              <h3>Print or Download File Attachments</h3>
+              <span>{{ directDocuments.length }} {{ directDocuments.length === 1 ? 'file' : 'files' }}</span>
+            </div>
+            <div class="public-table-wrap">
+              <table class="public-documents-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">#</th>
+                    <th>FILE</th>
+                    <th style="width: 140px;">DOWNLOADS</th>
+                    <th style="width: 130px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(doc, idx) in directDocuments" :key="doc.id">
+                    <td class="num-cell">{{ idx + 1 }}</td>
+                    <td>
+                      <strong class="doc-title-text">{{ doc.title }}</strong>
+                      <small v-if="doc.description" class="doc-desc-text">{{ textSummary(doc.description) }}</small>
+                    </td>
+                    <td>
+                      <span class="download-count">{{ doc.download_count || 0 }}</span>
+                    </td>
+                    <td class="download-cell">
+                      <a
+                        v-if="doc.file_url"
+                        :href="downloadUrl(doc)"
+                        target="_blank"
+                        rel="noopener"
+                        class="download-link"
+                      >
+                        Download
+                      </a>
+                      <span v-else class="pending-link">File pending</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div v-if="!subcategories.length" class="category-state">
-            No document sub names have been published under this document name yet.
+          <!-- Document Sub Names (Subcategories Grid) -->
+          <div v-if="subcategories.length" class="subcategories-section mb-4">
+            <h3 v-if="directDocuments.length" class="section-sub-title">Document Sub Names</h3>
+            <div class="subcategory-grid">
+              <router-link
+                v-for="subcategory in subcategories"
+                :key="subcategory.id"
+                class="subcategory-card"
+                :to="{ name: 'document-listing', params: { categorySlug: category.slug, subcategorySlug: subcategory.slug } }"
+              >
+                <span class="subcategory-count">{{ subcategory.documents_count || 0 }}</span>
+                <strong>{{ subcategory.name }}</strong>
+                <small>{{ textSummary(subcategory.description, 'View published documents for this section.') }}</small>
+                <em>Open listing →</em>
+              </router-link>
+            </div>
+          </div>
+
+          <div v-if="!subcategories.length && !directDocuments.length" class="category-state">
+            No documents or sub names have been published under this document name yet.
           </div>
         </div>
       </div>
@@ -73,9 +122,21 @@ export default {
     return {
       category: null,
       subcategories: [],
+      directDocuments: [],
       loading: true,
       error: '',
     }
+  },
+  computed: {
+    countLabel() {
+      if (this.subcategories?.length) {
+        return `${this.subcategories.length} document sub name${this.subcategories.length === 1 ? '' : 's'}`
+      }
+      if (this.directDocuments?.length) {
+        return `${this.directDocuments.length} document file${this.directDocuments.length === 1 ? '' : 's'}`
+      }
+      return 'Document category'
+    },
   },
   watch: {
     '$route.params.categorySlug': {
@@ -93,17 +154,29 @@ export default {
         const { data } = await api.get(`/api/document-catalog/${this.$route.params.categorySlug}`)
         this.category = data.data
         this.subcategories = data.data?.subcategories || []
+        this.directDocuments = data.data?.direct_documents || data.data?.directDocuments || []
       } catch (error) {
         this.error = 'This document name page could not be found or is not published yet.'
       } finally {
         this.loading = false
       }
     },
+    downloadUrl(document) {
+      const baseUrl = api.defaults.baseURL || window.location.origin
+      return new URL(`/api/documents/${document.id}/download`, baseUrl).toString()
+    },
     richText(value) {
       return sanitizeRichText(value)
     },
     textSummary(value, fallback) {
       return stripRichText(value, fallback)
+    },
+    formatImageUrl(url) {
+      if (!url) return ''
+      if (/^https?:\/\/localhost(?::80)?\/storage\//i.test(url)) {
+        return url.replace(/^https?:\/\/localhost(?::80)?/i, 'http://localhost:8001')
+      }
+      return url
     },
   },
 }
@@ -118,20 +191,6 @@ export default {
     linear-gradient(135deg, #1f9c58 0%, #0f6b3b 100%);
   color: #ffffff;
   overflow: hidden;
-}
-
-.category-hero img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.category-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(10, 69, 39, 0.9), rgba(10, 69, 39, 0.58));
 }
 
 .category-hero-content {
@@ -227,6 +286,22 @@ export default {
   margin: 0.25rem 0;
   color: var(--text-dark);
   font-weight: 800;
+}
+
+.category-intro-image-wrap {
+  margin: 0.85rem 0 1rem;
+}
+
+.category-intro-image {
+  max-width: 320px;
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  border: 1px solid #eef1f5;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: block;
 }
 
 .category-subtitle {
@@ -333,6 +408,132 @@ export default {
   font-style: normal;
   font-weight: 800;
   font-size: 0.82rem;
+}
+
+.attachments-section {
+  background: #ffffff;
+  border: 1px solid #eef1f5;
+  border-radius: 22px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+}
+
+.attachments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.attachments-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.attachments-header span {
+  font-size: 0.8rem;
+  color: var(--primary);
+  font-weight: 800;
+  background: rgba(31, 156, 88, 0.1);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.section-sub-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+
+.public-table-wrap {
+  overflow-x: auto;
+}
+
+.public-documents-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.public-documents-table th {
+  color: var(--text-light);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid #eef1f5;
+  text-align: left;
+}
+
+.public-documents-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f8fafc;
+  vertical-align: middle;
+}
+
+.public-documents-table tr:hover {
+  background-color: #fbfdfc;
+}
+
+.num-cell {
+  color: var(--text-light);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.doc-title-text {
+  display: block;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.doc-desc-text {
+  display: block;
+  color: var(--text-light);
+  margin-top: 0.25rem;
+  font-size: 0.82rem;
+}
+
+.download-count {
+  display: inline-block;
+  background: #f1f5f9;
+  color: var(--text-dark);
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.download-cell {
+  text-align: right;
+}
+
+.download-link {
+  display: inline-block;
+  background: var(--primary);
+  color: #ffffff !important;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  transition: opacity 0.15s ease;
+}
+
+.download-link:hover {
+  opacity: 0.9;
+}
+
+.pending-link {
+  color: var(--text-light);
+  font-size: 0.82rem;
+  font-style: italic;
 }
 
 @media (max-width: 992px) {

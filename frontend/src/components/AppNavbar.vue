@@ -7,7 +7,7 @@
         <span class="separator">|</span>
         <span>🕐 Mon – Fri: 08:00 – 16:00</span>
         <span class="separator">|</span>
-        <a href="mailto:helpdesk@ndz.gov.za">✉ helpdesk@ndz.gov.za</a>
+        <a href="mailto:Mailbox@ndz.gov.za">✉ Mailbox@ndz.gov.za</a>
         <span class="separator">|</span>
         <span>📍 Main Street, Creighton, 3263</span>
         <div class="ms-auto d-flex gap-2">
@@ -139,13 +139,24 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Career Centre</a>
             <ul class="dropdown-menu">
-              <li><router-link class="dropdown-item" to="#">Internships</router-link></li>
-              <li><router-link class="dropdown-item" to="#">Vacancies</router-link></li>
-              <li><router-link class="dropdown-item" to="#">Youth Opportunities</router-link></li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Application Forms <i class="bi bi-box-arrow-up-right ms-1 text-muted" style="font-size: 0.75rem;"></i>
+                </a>
+              </li>
+              <li class="dropdown-submenu">
+                <a class="dropdown-item dropdown-toggle" href="#">Vacancies</a>
+                <ul class="dropdown-menu">
+                  <li><router-link class="dropdown-item" to="/open-vacancies">Open Vacancies</router-link></li>
+                  <li><router-link class="dropdown-item" to="/closed-vacancies">Closed Vacancies</router-link></li>
+                </ul>
+              </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="#Q">Our Partners</router-link>
           </li>
 
           <li class="nav-item">
@@ -201,5 +212,15 @@ export default {
 }
 .dropdown-submenu:hover > .dropdown-menu {
   display: block;
+}
+@media (max-width: 991.98px) {
+  .dropdown-submenu > .dropdown-menu {
+    position: static;
+    display: block;
+    margin-left: 1rem;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
 }
 </style>

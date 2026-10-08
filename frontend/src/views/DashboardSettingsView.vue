@@ -191,7 +191,7 @@ export default {
       settings: {
         municipality_name: 'Dr Nkosazana Dlamini-Zuma Local Municipality',
         tagline: 'Serving Our Communities with Dedication',
-        contact_email: 'helpdesk@ndz.gov.za',
+        contact_email: 'Mailbox@ndz.gov.za',
         contact_phone: '+27 39 833 1038',
         physical_address: 'Main Street, Creighton, 3263, KwaZulu-Natal',
         office_hours: 'Monday - Friday: 07:30 AM to 04:00 PM',

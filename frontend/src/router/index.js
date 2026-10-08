@@ -25,6 +25,8 @@ import PublicWorksView from '../views/PublicWorksView.vue'
 import NdzNewsView from '../views/NdzNewsView.vue'
 import OpenTendersView from '../views/OpenTendersView.vue'
 import ClosedTendersView from '../views/ClosedTendersView.vue'
+import OpenVacanciesView from '../views/OpenVacanciesView.vue'
+import ClosedVacanciesView from '../views/ClosedVacanciesView.vue'
 import ClosedQuotesView from '../views/ClosedQuotesView.vue'
 import ContractReportingView from '../views/ContractReportingView.vue'
 import ContactView from '../views/ContactView.vue'
@@ -94,6 +96,9 @@ const routes = [
     { path: '/quote-documents', name: 'quote-documents', component: OpenTendersView },
     { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
     { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
+    { path: '/open-vacancies', name: 'open-vacancies', component: OpenVacanciesView },
+    { path: '/closed-vacancies', name: 'closed-vacancies', component: ClosedVacanciesView },
+    { path: '/vacancies', redirect: '/open-vacancies' },
     { path: '/contact', name: 'contact', component: ContactView },
     { path: '/gallery', name: 'gallery', component: EventGalleryView },
     { path: '/documents', name: 'documents', component: DocumentsView },

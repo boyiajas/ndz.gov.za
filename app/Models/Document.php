@@ -24,6 +24,7 @@ class Document extends Model
     ];
 
     protected $fillable = [
+        'document_category_id',
         'document_subcategory_id',
         'title',
         'description',
@@ -43,6 +44,11 @@ class Document extends Model
             'download_count' => 'integer',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(DocumentCategory::class, 'document_category_id');
     }
 
     public function subcategory(): BelongsTo

@@ -12,7 +12,7 @@
             South Africa
           </p>
           <p class="footer-address mt-2">
-            ✉ helpdesk@ndz.gov.za<br>
+            ✉ <a href="mailto:Mailbox@ndz.gov.za" style="color: inherit; text-decoration: none;">Mailbox@ndz.gov.za</a><br>
             📞 039 833 1038
           </p>
           <div class="footer-social mt-3">

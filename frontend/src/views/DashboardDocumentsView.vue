@@ -81,7 +81,10 @@
             >
               <span>
                 <strong>{{ category.name }}</strong>
-                <small>{{ category.subtitle || `${category.subcategories_count || category.subcategories?.length || 0} sub names` }}</small>
+                <small>
+                  {{ category.subcategories_count || category.subcategories?.length || 0 }} sub names
+                  • {{ category.direct_documents_count ?? category.directDocuments_count ?? 0 }} direct files
+                </small>
               </span>
               <span class="item-actions">
                 <router-link
@@ -142,6 +145,22 @@
 
           <div class="manager-list">
             <button
+              v-if="selectedCategory"
+              type="button"
+              class="list-item direct-scope-btn"
+              :class="{ active: selectedSubcategoryId === null }"
+              @click="selectDirectScope"
+            >
+              <span>
+                <strong>📁 Direct Files for {{ selectedCategory.name }}</strong>
+                <small>Upload files directly to this document name without creating a sub name</small>
+              </span>
+              <span class="item-actions">
+                <span class="direct-pill">Direct</span>
+              </span>
+            </button>
+
+            <button
               v-for="subcategory in selectedSubcategories"
               :key="subcategory.id"
               type="button"
@@ -164,7 +183,9 @@
                 <i class="danger" @click.stop="deleteSubcategory(subcategory)">Delete</i>
               </span>
             </button>
-            <p v-if="selectedCategory && !selectedSubcategories.length" class="empty-note">No sub names yet for this document name.</p>
+            <p v-if="selectedCategory && !selectedSubcategories.length" class="empty-note">
+              No sub names created yet. You can attach documents directly to {{ selectedCategory.name }} in Step 3 below.
+            </p>
           </div>
         </article>
       </section>
@@ -173,22 +194,31 @@
         <div class="manager-heading wide">
           <div>
             <p>Step 3</p>
-            <h2>Document listings for {{ selectedSubcategory?.name || 'selected sub name' }}</h2>
+            <h2>Document listings for {{ selectedDocumentScopeName }}</h2>
           </div>
           <button v-if="editingDocumentId" type="button" class="text-button" @click="resetDocumentForm">Cancel edit</button>
         </div>
 
         <form class="document-form" @submit.prevent="saveDocument">
           <label>
-            Sub name
-            <select v-model.number="documentForm.document_subcategory_id" required @change="selectSubcategory(documentForm.document_subcategory_id)">
-              <option disabled :value="null">Choose sub name</option>
-              <option v-for="subcategory in selectedSubcategories" :key="subcategory.id" :value="subcategory.id">{{ subcategory.name }}</option>
+            Parent document name
+            <select v-model.number="documentForm.document_category_id" required @change="onFormCategoryChange">
+              <option disabled :value="null">Choose document name</option>
+              <option v-for="cat in catalog" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+            </select>
+          </label>
+          <label>
+            Destination / Sub name
+            <select v-model="documentForm.document_subcategory_id">
+              <option :value="null">📁 Directly under Document name (No sub name)</option>
+              <option v-for="subcategory in formAvailableSubcategories" :key="subcategory.id" :value="subcategory.id">
+                ↳ Sub name: {{ subcategory.name }}
+              </option>
             </select>
           </label>
           <label>
             Document title
-            <input v-model="documentForm.title" type="text" placeholder="e.g. 2024/2025 Approved Budget" required />
+            <input v-model="documentForm.title" type="text" placeholder="e.g. Municipal Manager Organogram" required />
           </label>
           <label>
             File URL
@@ -227,7 +257,7 @@
               placeholder="Format the document summary shown on the public listing page."
             />
           </div>
-          <button type="submit" class="manager-button primary" :disabled="saving || !documentForm.document_subcategory_id">
+          <button type="submit" class="manager-button primary" :disabled="saving || !documentForm.document_category_id">
             {{ editingDocumentId ? 'Update document' : 'Add document' }}
           </button>
         </form>
@@ -237,6 +267,7 @@
             <thead>
               <tr>
                 <th>Title</th>
+                <th>Destination</th>
                 <th>Status</th>
                 <th>Published</th>
                 <th>Downloads</th>
@@ -249,6 +280,14 @@
                 <td>
                   <strong>{{ document.title }}</strong>
                   <small>{{ textSummary(document.description) }}</small>
+                </td>
+                <td>
+                  <span v-if="!document.document_subcategory_id" class="scope-pill direct">
+                    📁 Direct File
+                  </span>
+                  <span v-else class="scope-pill sub">
+                    ↳ {{ document.subcategory?.name || 'Sub name' }}
+                  </span>
                 </td>
                 <td><span class="status-pill" :class="document.status">{{ document.status }}</span></td>
                 <td>{{ formatDate(document.published_at) }}</td>
@@ -263,7 +302,7 @@
                 </td>
               </tr>
               <tr v-if="!documents.length">
-                <td colspan="6" class="empty-table">No documents have been added to this sub name yet.</td>
+                <td colspan="7" class="empty-table">No documents have been added to this section yet.</td>
               </tr>
             </tbody>
           </table>
@@ -292,7 +331,7 @@ export default {
       catalog: [],
       documents: [],
       selectedCategoryId: null,
-      selectedSubcategoryId: null,
+      selectedSubcategoryId: null, // null means "Direct to category", or integer subcategory id
       editingCategoryId: null,
       editingSubcategoryId: null,
       editingDocumentId: null,
@@ -302,6 +341,7 @@ export default {
       categoryForm: { name: '', subtitle: '', description: '', image_url: '', sort_order: 0, is_active: true },
       subcategoryForm: { document_category_id: null, name: '', description: '', sort_order: 0, is_active: true },
       documentForm: {
+        document_category_id: null,
         document_subcategory_id: null,
         title: '',
         description: '',
@@ -322,6 +362,19 @@ export default {
     selectedSubcategory() {
       return this.selectedSubcategories.find((subcategory) => subcategory.id === this.selectedSubcategoryId) || null
     },
+    formAvailableSubcategories() {
+      const cat = this.catalog.find((c) => c.id === this.documentForm.document_category_id)
+      return cat?.subcategories || []
+    },
+    selectedDocumentScopeName() {
+      if (this.selectedSubcategory) {
+        return `${this.selectedCategory?.name || 'Category'} → ${this.selectedSubcategory.name}`
+      }
+      if (this.selectedCategory) {
+        return `${this.selectedCategory.name} (Direct Files)`
+      }
+      return 'selected document name'
+    },
   },
   mounted() {
     if (this.auth.canManageDocuments) {
@@ -337,7 +390,8 @@ export default {
     },
     defaultDocumentForm() {
       return {
-        document_subcategory_id: null,
+        document_category_id: this.selectedCategoryId,
+        document_subcategory_id: this.selectedSubcategoryId || null,
         title: '',
         description: '',
         file_url: '',
@@ -362,6 +416,7 @@ export default {
         this.selectedCategoryId = null
         this.selectedSubcategoryId = null
         this.subcategoryForm.document_category_id = null
+        this.documentForm.document_category_id = null
         this.documentForm.document_subcategory_id = null
         return
       }
@@ -371,36 +426,56 @@ export default {
       }
 
       this.subcategoryForm.document_category_id = this.selectedCategoryId
-      const subcategories = this.selectedSubcategories
+      this.documentForm.document_category_id = this.selectedCategoryId
 
-      if (!subcategories.some((subcategory) => subcategory.id === this.selectedSubcategoryId)) {
-        this.selectedSubcategoryId = subcategories[0]?.id || null
+      if (this.selectedSubcategoryId && !this.selectedSubcategories.some((sub) => sub.id === this.selectedSubcategoryId)) {
+        this.selectedSubcategoryId = null
       }
 
       this.documentForm.document_subcategory_id = this.selectedSubcategoryId
     },
     async selectCategory(categoryId) {
       this.selectedCategoryId = categoryId
-      this.selectedSubcategoryId = this.selectedSubcategories[0]?.id || null
+      this.selectedSubcategoryId = null
       this.subcategoryForm.document_category_id = categoryId
-      this.documentForm.document_subcategory_id = this.selectedSubcategoryId
+      this.documentForm.document_category_id = categoryId
+      this.documentForm.document_subcategory_id = null
       await this.loadDocuments()
+    },
+    selectDirectScope() {
+      this.selectedSubcategoryId = null
+      this.documentForm.document_category_id = this.selectedCategoryId
+      this.documentForm.document_subcategory_id = null
+      this.loadDocuments()
     },
     async selectSubcategory(subcategoryId) {
       this.selectedSubcategoryId = subcategoryId
+      this.documentForm.document_category_id = this.selectedCategoryId
       this.documentForm.document_subcategory_id = subcategoryId
       await this.loadDocuments()
     },
+    onFormCategoryChange() {
+      if (this.documentForm.document_category_id) {
+        this.selectedCategoryId = this.documentForm.document_category_id
+        this.selectedSubcategoryId = null
+        this.documentForm.document_subcategory_id = null
+        this.loadDocuments()
+      }
+    },
     async loadDocuments() {
-      if (!this.selectedSubcategoryId) {
+      if (!this.selectedCategoryId) {
         this.documents = []
         return
       }
 
       try {
-        const { data } = await api.get('/api/admin/documents', {
-          params: { document_subcategory_id: this.selectedSubcategoryId },
-        })
+        const params = { document_category_id: this.selectedCategoryId }
+        if (this.selectedSubcategoryId) {
+          params.document_subcategory_id = this.selectedSubcategoryId
+        } else {
+          params.direct_only = true
+        }
+        const { data } = await api.get('/api/admin/documents', { params })
         this.documents = data.data || []
       } catch (error) {
         this.error = this.formatError(error)
@@ -489,21 +564,26 @@ export default {
     },
     async saveDocument() {
       await this.submit(async () => {
-        const payload = { ...this.documentForm }
+        const payload = {
+          ...this.documentForm,
+          document_category_id: this.documentForm.document_category_id || this.selectedCategoryId,
+          document_subcategory_id: this.documentForm.document_subcategory_id || null,
+        }
         const response = this.editingDocumentId
           ? await api.put(`/api/admin/documents/${this.editingDocumentId}`, payload)
           : await api.post('/api/admin/documents', payload)
 
         this.notice = this.editingDocumentId ? 'Document updated.' : 'Document added.'
-        this.selectedSubcategoryId = response.data.data.document_subcategory_id
         this.resetDocumentForm()
         await this.loadCatalog()
+        await this.loadDocuments()
       })
     },
     editDocument(document) {
       this.editingDocumentId = document.id
       this.documentForm = {
-        document_subcategory_id: document.document_subcategory_id,
+        document_category_id: document.document_category_id || document.subcategory?.document_category_id || this.selectedCategoryId,
+        document_subcategory_id: document.document_subcategory_id || null,
         title: document.title,
         description: document.description || '',
         file_url: document.file_url || '',
@@ -511,11 +591,16 @@ export default {
         published_at: document.published_at ? document.published_at.slice(0, 10) : '',
         sort_order: document.sort_order || 0,
       }
+      if (document.document_category_id) {
+        this.selectedCategoryId = document.document_category_id
+      }
+      this.selectedSubcategoryId = document.document_subcategory_id || null
     },
     resetDocumentForm() {
       this.editingDocumentId = null
       this.documentForm = {
         ...this.defaultDocumentForm(),
+        document_category_id: this.selectedCategoryId,
         document_subcategory_id: this.selectedSubcategoryId,
       }
     },
@@ -866,6 +951,38 @@ export default {
 
 .table-actions .danger {
   color: var(--danger);
+}
+
+.direct-scope-btn {
+  border-left: 3px solid var(--primary);
+  background: rgba(31, 156, 88, 0.04);
+}
+
+.direct-pill {
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+.scope-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.scope-pill.direct {
+  background: rgba(31, 156, 88, 0.12);
+  color: var(--primary);
+}
+
+.scope-pill.sub {
+  background: #f1f5f9;
+  color: var(--text-dark);
 }
 
 @media (max-width: 1100px) {

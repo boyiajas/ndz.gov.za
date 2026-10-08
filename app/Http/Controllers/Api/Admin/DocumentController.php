@@ -15,9 +15,20 @@ class DocumentController extends Controller
         $this->authorizeManage($request);
 
         $documents = Document::query()
-            ->with(['subcategory.category', 'creator:id,name,email', 'updater:id,name,email'])
-            ->when($request->integer('document_subcategory_id'), function ($query, int $subcategoryId) {
-                $query->where('document_subcategory_id', $subcategoryId);
+            ->with(['category', 'subcategory.category', 'creator:id,name,email', 'updater:id,name,email'])
+            ->when($request->integer('document_category_id'), function ($query, int $categoryId) {
+                $query->where('document_category_id', $categoryId);
+            })
+            ->when($request->filled('document_subcategory_id'), function ($query) use ($request) {
+                $val = $request->input('document_subcategory_id');
+                if ($val === 'direct' || $val === 'null' || $val === '0') {
+                    $query->whereNull('document_subcategory_id');
+                } else {
+                    $query->where('document_subcategory_id', (int) $val);
+                }
+            })
+            ->when($request->boolean('direct_only'), function ($query) {
+                $query->whereNull('document_subcategory_id');
             })
             ->orderByDesc('published_at')
             ->orderBy('sort_order')
@@ -37,7 +48,7 @@ class DocumentController extends Controller
 
         $document = Document::create($data);
 
-        return response()->json(['data' => $document->fresh(['subcategory.category', 'creator:id,name,email'])], 201);
+        return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'creator:id,name,email'])], 201);
     }
 
     public function update(Request $request, Document $document): JsonResponse
@@ -49,7 +60,7 @@ class DocumentController extends Controller
 
         $document->update($data);
 
-        return response()->json(['data' => $document->fresh(['subcategory.category', 'creator:id,name,email', 'updater:id,name,email'])]);
+        return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'creator:id,name,email', 'updater:id,name,email'])]);
     }
 
     public function destroy(Request $request, Document $document): JsonResponse
@@ -63,8 +74,9 @@ class DocumentController extends Controller
 
     private function validated(Request $request): array
     {
-        return $request->validate([
-            'document_subcategory_id' => ['required', 'integer', Rule::exists('document_subcategories', 'id')],
+        $data = $request->validate([
+            'document_category_id' => ['nullable', 'integer', Rule::exists('document_categories', 'id')],
+            'document_subcategory_id' => ['nullable', 'integer', Rule::exists('document_subcategories', 'id')],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'file_url' => ['nullable', 'string', 'max:2048'],
@@ -72,6 +84,19 @@ class DocumentController extends Controller
             'published_at' => ['nullable', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ]);
+
+        if (empty($data['document_category_id']) && empty($data['document_subcategory_id'])) {
+            abort(422, 'Please select a parent document name or sub name.');
+        }
+
+        if (!empty($data['document_subcategory_id'])) {
+            $subcategory = \App\Models\DocumentSubcategory::find($data['document_subcategory_id']);
+            if ($subcategory) {
+                $data['document_category_id'] = $subcategory->document_category_id;
+            }
+        }
+
+        return $data;
     }
 
     private function authorizeManage(Request $request): void

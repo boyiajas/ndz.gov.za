@@ -32,4 +32,28 @@ class DocumentCategory extends Model
     {
         return $this->hasMany(DocumentSubcategory::class);
     }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function directDocuments(): HasMany
+    {
+        return $this->hasMany(Document::class)->whereNull('document_subcategory_id');
+    }
+
+    public function getImageUrlAttribute(?string $value): ?string
+    {
+        if (!$value) {
+            return null;
+        }
+
+        // If the URL was stored with http://localhost/storage (missing port), fix it
+        if (preg_match('#^http://localhost(/storage/.*)$#i', $value, $matches)) {
+            return config('app.url') . $matches[1];
+        }
+
+        return $value;
+    }
 }

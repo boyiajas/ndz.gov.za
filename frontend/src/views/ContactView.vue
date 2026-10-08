@@ -85,7 +85,9 @@
                 <i class="bi bi-envelope-fill" style="color: var(--primary); font-size: 1.2rem; margin-right: 1rem; margin-top: 0.1rem;"></i>
                 <div>
                   <strong style="color: var(--text-dark);">Mail:</strong>
-                  <span style="color: var(--text-mid); display: block; margin-top: 0.2rem; font-size: 0.95rem;">helpdesk@ndz.gov.za</span>
+                  <span style="color: var(--text-mid); display: block; margin-top: 0.2rem; font-size: 0.95rem;">
+                    <a href="mailto:Mailbox@ndz.gov.za" style="color: inherit; text-decoration: none;">Mailbox@ndz.gov.za</a>
+                  </span>
                 </div>
               </div>
             </div>

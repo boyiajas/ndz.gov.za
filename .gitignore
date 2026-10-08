@@ -22,3 +22,9 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Large documents & media uploads (uploaded via FTP)
+/storage/app/public/uploads/
+/storage/app/public/documents/
+/public/storage/
+

@@ -20,7 +20,7 @@ class DocumentCategoryController extends Controller
                     ->orderBy('sort_order')
                     ->orderBy('name');
             }])
-            ->withCount('subcategories')
+            ->withCount(['subcategories', 'documents', 'directDocuments'])
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();

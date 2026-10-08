@@ -19,6 +19,10 @@ class DocumentCatalogController extends Controller
                     ->orderBy('sort_order')
                     ->orderBy('name');
             }])
+            ->withCount([
+                'documents' => fn ($query) => $query->published(),
+                'directDocuments' => fn ($query) => $query->published(),
+            ])
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
@@ -30,12 +34,20 @@ class DocumentCatalogController extends Controller
     {
         abort_unless($documentCategory->is_active, 404);
 
-        $documentCategory->load(['subcategories' => function ($query) {
-            $query->where('is_active', true)
-                ->withCount(['documents' => fn ($query) => $query->published()])
-                ->orderBy('sort_order')
-                ->orderBy('name');
-        }]);
+        $documentCategory->load([
+            'subcategories' => function ($query) {
+                $query->where('is_active', true)
+                    ->withCount(['documents' => fn ($query) => $query->published()])
+                    ->orderBy('sort_order')
+                    ->orderBy('name');
+            },
+            'directDocuments' => function ($query) {
+                $query->published()
+                    ->orderByDesc('published_at')
+                    ->orderBy('sort_order')
+                    ->orderBy('title');
+            },
+        ]);
 
         return response()->json(['data' => $documentCategory]);
     }

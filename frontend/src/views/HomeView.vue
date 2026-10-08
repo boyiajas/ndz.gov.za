@@ -19,7 +19,7 @@
     <div class="hero-quicklinks">
       <div class="container">
         <div class="d-flex">
-          <router-link class="quicklink-tile" to="/login">
+          <router-link class="quicklink-tile" to="/open-vacancies">
             <div class="ql-icon"><i class="bi bi-people-fill"></i></div>
             Careers
           </router-link>
@@ -274,7 +274,7 @@
             and addressing a wide range of service delivery matters.
           </p>
           <div class="d-flex flex-wrap gap-3 mt-4">
-            <a href="mailto:helpdesk@ndz.gov.za" class="btn-gov">Email Us</a>
+            <a href="mailto:Mailbox@ndz.gov.za" class="btn-gov">Email Us</a>
             <a href="tel:0398331038" class="contact-pill">📞 039 833 1038</a>
           </div>
         </div>
