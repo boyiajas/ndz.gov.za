@@ -260,6 +260,7 @@ class DashboardContentSeeder extends Seeder
                 'value' => [
                     'facebook' => 'https://facebook.com/ndzmunicipality',
                     'twitter' => 'https://x.com/ndzmunicipality',
+                    'instagram' => 'https://www.instagram.com/ndzmunicipality/',
                     'youtube' => 'https://youtube.com/@ndzmunicipality',
                 ],
                 'group' => 'social',

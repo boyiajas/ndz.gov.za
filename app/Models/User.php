@@ -71,6 +71,15 @@ class User extends Authenticatable
         ], true);
     }
 
+    public function canManageVacancies(): bool
+    {
+        return in_array($this->role, [
+            self::ROLE_ADMIN,
+            self::ROLE_MANAGER,
+            self::ROLE_EDITOR,
+        ], true);
+    }
+
     public function canManageUsers(): bool
     {
         return $this->role === self::ROLE_ADMIN;

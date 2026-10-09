@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Admin\ProcurementController as AdminProcurementCont
 use App\Http\Controllers\Api\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Api\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Api\Admin\VacancyController as AdminVacancyController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DocumentCatalogController;
 use App\Http\Controllers\Api\DocumentDownloadController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\VacancyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +47,8 @@ Route::get('/news/{idOrSlug}', [NewsController::class, 'show']);
 Route::get('/gallery', [GalleryController::class, 'index']);
 Route::get('/procurement', [ProcurementController::class, 'index']);
 Route::get('/procurement/{procurementNotice}', [ProcurementController::class, 'show']);
+Route::get('/vacancies', [VacancyController::class, 'index']);
+Route::get('/vacancies/{vacancy}', [VacancyController::class, 'show']);
 Route::get('/settings', [SettingController::class, 'index']);
 
 // Protected routes
@@ -83,6 +87,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('procurement', AdminProcurementController::class)
             ->parameters(['procurement' => 'procurement'])
             ->only(['index', 'store', 'update', 'destroy']);
+
+        // Vacancies (Careers)
+        Route::post('vacancies/{vacancy}/toggle-status', [AdminVacancyController::class, 'toggleStatus']);
+        Route::apiResource('vacancies', AdminVacancyController::class)
+            ->parameters(['vacancies' => 'vacancy'])
+            ->only(['index', 'store', 'show', 'update', 'destroy']);
 
         // Users & Roles
         Route::get('roles', [AdminUserController::class, 'roles']);

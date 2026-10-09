@@ -131,7 +131,14 @@
               </div>
 
               <!-- Vacancy Cards -->
-              <div v-if="filteredVacancies.length" class="d-flex flex-column gap-3">
+              <div v-if="loading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading vacancies...</span>
+                </div>
+                <p class="text-muted mt-2 small">Loading current open vacancies...</p>
+              </div>
+
+              <div v-else-if="filteredVacancies.length" class="d-flex flex-column gap-3">
                 <div
                   v-for="vacancy in filteredVacancies"
                   :key="vacancy.id"
@@ -141,27 +148,46 @@
                   <div class="card-body p-4">
                     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
                       <span class="badge bg-success text-white px-2 py-1 small fw-semibold">
-                        <i class="bi bi-check-circle me-1"></i> {{ vacancy.status }}
+                        <i class="bi bi-check-circle me-1"></i> {{ (vacancy.status || 'OPEN').toUpperCase() }}
                       </span>
-                      <small class="text-muted"><i class="bi bi-clock me-1"></i> Closing Date: <strong>{{ vacancy.closingDate }}</strong></small>
+                      <small class="text-muted" v-if="vacancy.closing_date || vacancy.closingDate">
+                        <i class="bi bi-clock me-1"></i> Closing Date: <strong>{{ formatDate(vacancy.closing_date || vacancy.closingDate) }}</strong>
+                      </small>
                     </div>
 
                     <h4 class="fw-bold text-dark mb-2">{{ vacancy.title }}</h4>
                     <p class="text-muted small mb-3">
                       <span class="me-3"><i class="bi bi-building me-1 text-primary"></i> <strong>Department:</strong> {{ vacancy.department }}</span>
-                      <span class="me-3"><i class="bi bi-hash me-1 text-primary"></i> <strong>Ref:</strong> {{ vacancy.refNo }}</span>
-                      <span v-if="vacancy.salary"><i class="bi bi-cash me-1 text-primary"></i> <strong>Remuneration:</strong> {{ vacancy.salary }}</span>
+                      <span class="me-3" v-if="vacancy.reference_no || vacancy.refNo"><i class="bi bi-hash me-1 text-primary"></i> <strong>Ref:</strong> {{ vacancy.reference_no || vacancy.refNo }}</span>
+                      <span v-if="vacancy.remuneration || vacancy.salary"><i class="bi bi-cash me-1 text-primary"></i> <strong>Remuneration:</strong> {{ vacancy.remuneration || vacancy.salary }}</span>
                     </p>
 
                     <p class="text-secondary mb-3" style="font-size: 0.95rem; line-height: 1.6;">
                       {{ vacancy.description }}
                     </p>
 
+                    <div v-if="vacancy.requirements" class="mb-3 p-3 bg-light rounded small text-secondary" style="white-space: pre-line;">
+                      <strong class="text-dark d-block mb-1">Key Requirements:</strong>
+                      {{ vacancy.requirements }}
+                    </div>
+
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-3 border-top">
-                      <small class="text-secondary"><i class="bi bi-geo-alt me-1 text-danger"></i> Location: {{ vacancy.location }}</small>
+                      <small class="text-secondary"><i class="bi bi-geo-alt me-1 text-danger"></i> Location: {{ vacancy.location || 'Creighton Main Office' }}</small>
                       <div class="d-flex gap-2">
                         <a
-                          href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
+                          v-if="vacancy.document_url"
+                          :href="vacancy.document_url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="btn btn-sm btn-outline-danger fw-semibold px-3 py-2 d-inline-flex align-items-center gap-1"
+                          title="Download official advert document"
+                        >
+                          <i class="bi bi-file-earmark-pdf-fill"></i>
+                          <span>Download Advert</span>
+                        </a>
+
+                        <a
+                          :href="vacancy.application_url || 'https://forms.cloud.microsoft/r/Rvv4zeUt9Y'"
                           target="_blank"
                           rel="noopener noreferrer"
                           class="btn btn-sm btn-primary fw-semibold px-3 py-2 d-inline-flex align-items-center gap-1"
@@ -198,57 +224,67 @@
 </template>
 
 <script>
+import api from '../api/axios'
+
 export default {
   name: 'OpenVacanciesView',
   data() {
     return {
       searchQuery: '',
       selectedDepartment: '',
+      loading: false,
       departments: [
         'Office of the Municipal Manager',
-        'Corporate Services',
         'Budget & Treasury',
-        'Community Services',
         'Public Works & Basic Services',
-        'Development & Town Planning Services',
+        'Corporate Support Services',
+        'Community and Social Services',
+        'Development and Town Planning Services',
       ],
-      vacancies: [
-        {
-          id: 1,
-          title: 'Internship Programme: Financial Management (3 Positions)',
-          department: 'Budget & Treasury',
-          refNo: 'NDZ-BTO-01/2026',
-          status: 'OPEN',
-          closingDate: '31 October 2026',
-          location: 'Creighton / Himeville Offices',
-          salary: 'Stipend as per National Treasury Guidelines',
-          description: 'A 24-month municipal financial management internship offering practical work experience in budgeting, reporting, expenditure management, revenue, and supply chain management.',
-        },
-        {
-          id: 2,
-          title: 'Senior Internal Auditor',
-          department: 'Office of the Municipal Manager',
-          refNo: 'NDZ-MM-02/2026',
-          status: 'OPEN',
-          closingDate: '15 November 2026',
-          location: 'Creighton Main Office',
-          salary: 'Task Grade 14',
-          description: 'Responsible for conducting risk-based audit reviews, preparing reports for the Audit and Performance Audit Committee (APAC), and ensuring statutory compliance across municipal operations.',
-        },
-      ],
+      vacancies: [],
     }
   },
   computed: {
     filteredVacancies() {
       return this.vacancies.filter((v) => {
-        const matchesQuery =
-          !this.searchQuery ||
-          v.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          v.department.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          v.description.toLowerCase().includes(this.searchQuery.toLowerCase())
+        const title = (v.title || '').toLowerCase()
+        const dept = (v.department || '').toLowerCase()
+        const desc = (v.description || '').toLowerCase()
+        const ref = (v.reference_no || v.refNo || '').toLowerCase()
+        const q = this.searchQuery.toLowerCase()
+
+        const matchesQuery = !this.searchQuery || title.includes(q) || dept.includes(q) || desc.includes(q) || ref.includes(q)
         const matchesDept = !this.selectedDepartment || v.department === this.selectedDepartment
         return matchesQuery && matchesDept
       })
+    },
+  },
+  mounted() {
+    this.fetchOpenVacancies()
+  },
+  methods: {
+    async fetchOpenVacancies() {
+      this.loading = true
+      try {
+        const { data } = await api.get('/api/vacancies?status=open')
+        if (data?.data?.length) {
+          this.vacancies = data.data
+        } else {
+          this.vacancies = []
+        }
+      } catch (err) {
+        console.warn('Failed to load vacancies from API, using fallback data', err)
+      } finally {
+        this.loading = false
+      }
+    },
+    formatDate(dateStr) {
+      if (!dateStr) return 'Open until filled'
+      if (dateStr.includes('T')) {
+        const d = new Date(dateStr)
+        return d.toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
+      }
+      return dateStr
     },
   },
 }

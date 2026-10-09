@@ -9,6 +9,7 @@ import DashboardDocumentsView from '../views/DashboardDocumentsView.vue'
 import DashboardNewsView from '../views/DashboardNewsView.vue'
 import DashboardGalleryView from '../views/DashboardGalleryView.vue'
 import DashboardTendersView from '../views/DashboardTendersView.vue'
+import DashboardVacanciesView from '../views/DashboardVacanciesView.vue'
 import DashboardUsersView from '../views/DashboardUsersView.vue'
 import DashboardSettingsView from '../views/DashboardSettingsView.vue'
 import MayorsOfficeView from '../views/MayorsOfficeView.vue'
@@ -64,6 +65,12 @@ const routes = [
         name: 'dashboard-tenders',
         component: DashboardTendersView,
         meta: { requiresAuth: true, requiresProcurementManager: true, portal: true },
+    },
+    {
+        path: '/dashboard/vacancies',
+        name: 'dashboard-vacancies',
+        component: DashboardVacanciesView,
+        meta: { requiresAuth: true, requiresVacancyManager: true, portal: true },
     },
     {
         path: '/dashboard/users',
@@ -129,6 +136,10 @@ router.beforeEach((to) => {
     }
 
     if (to.meta.requiresProcurementManager && !auth.canManageProcurement) {
+        return { name: 'dashboard' }
+    }
+
+    if (to.meta.requiresVacancyManager && !auth.canManageVacancies) {
         return { name: 'dashboard' }
     }
 

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             RoleBasedUserSeeder::class,
             DocumentCatalogSeeder::class,
             DashboardContentSeeder::class,
+            VacancySeeder::class,
         ]);
     }
 }

@@ -76,6 +76,40 @@ img {
   opacity: 0.4;
 }
 
+.top-bar-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.top-bar-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.top-bar-social a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a2332;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+}
+
+.top-bar-social a svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+}
+
 /* =====================
    MAIN NAVBAR
    ===================== */
@@ -948,24 +982,39 @@ img {
   /*rgba(255, 255, 255, 0.65); */
 }
 
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .footer-social a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.7);
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 0.85rem;
-  margin-right: 6px;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
 }
 
 .footer-social a:hover {
   background: var(--accent);
-  color: #fff;
+  color: #1a2332;
   border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.footer-social a svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .footer-col-title {

@@ -147,7 +147,7 @@
           </div>
         </div>
 
-        <div class="form-grid-3">
+        <div class="form-grid-4">
           <label>
             Facebook Page URL
             <input v-model="settings.social_links.facebook" type="url" placeholder="https://facebook.com/..." />
@@ -156,6 +156,11 @@
           <label>
             Twitter / X Profile URL
             <input v-model="settings.social_links.twitter" type="url" placeholder="https://x.com/..." />
+          </label>
+
+          <label>
+            Instagram Profile URL
+            <input v-model="settings.social_links.instagram" type="url" placeholder="https://instagram.com/..." />
           </label>
 
           <label>
@@ -204,6 +209,7 @@ export default {
         social_links: {
           facebook: '',
           twitter: '',
+          instagram: '',
           youtube: '',
         },
       },
@@ -311,6 +317,12 @@ export default {
 .form-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.form-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
@@ -490,9 +502,16 @@ input:focus {
   color: #6c7d73;
 }
 
+@media (max-width: 992px) {
+  .form-grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .form-grid-2,
-  .form-grid-3 {
+  .form-grid-3,
+  .form-grid-4 {
     grid-template-columns: 1fr;
   }
 }

@@ -124,6 +124,9 @@ export default {
       if (this.auth.canManageProcurement) {
         contentItems.push({ icon: '📑', label: 'Tenders & Quotes', to: '/dashboard/tenders' })
       }
+      if (this.auth.canManageVacancies) {
+        contentItems.push({ icon: '💼', label: 'Vacancies / Careers', to: '/dashboard/vacancies' })
+      }
 
       if (contentItems.length > 0) {
         groups.push({

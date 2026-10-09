@@ -82,25 +82,52 @@
               </div>
 
               <!-- Table of closed vacancies -->
-              <div class="table-responsive">
+              <div v-if="loading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading archived vacancies...</span>
+                </div>
+                <p class="text-muted mt-2 small">Loading archived vacancies...</p>
+              </div>
+
+              <div v-else-if="filteredVacancies.length === 0" class="text-center py-5 text-muted">
+                <i class="bi bi-archive text-secondary" style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;"></i>
+                <p>No archived vacancies found matching your search.</p>
+              </div>
+
+              <div v-else class="table-responsive">
                 <table class="table table-hover align-middle">
                   <thead class="table-light">
                     <tr>
                       <th scope="col" style="width: 15%;">Ref No</th>
-                      <th scope="col" style="width: 45%;">Job Title</th>
+                      <th scope="col" style="width: 40%;">Job Title</th>
                       <th scope="col" style="width: 25%;">Department</th>
-                      <th scope="col" style="width: 15%; text-align: right;">Closing Date</th>
+                      <th scope="col" style="width: 10%;">Advert</th>
+                      <th scope="col" style="width: 10%; text-align: right;">Closing Date</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="v in filteredVacancies" :key="v.id">
-                      <td><span class="badge bg-light text-dark border">{{ v.refNo }}</span></td>
+                      <td><span class="badge bg-light text-dark border">{{ v.reference_no || v.refNo || 'N/A' }}</span></td>
                       <td>
                         <strong>{{ v.title }}</strong>
                         <span class="badge bg-danger bg-opacity-10 text-danger ms-2" style="font-size: 0.75rem;">Closed</span>
                       </td>
                       <td class="text-secondary small">{{ v.department }}</td>
-                      <td class="text-muted small text-end">{{ v.closingDate }}</td>
+                      <td>
+                        <a
+                          v-if="v.document_url"
+                          :href="v.document_url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="btn btn-sm btn-outline-secondary py-1 px-2"
+                          title="Download past advert specification"
+                          style="font-size: 0.75rem;"
+                        >
+                          <i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i> PDF
+                        </a>
+                        <span v-else class="text-muted small">—</span>
+                      </td>
+                      <td class="text-muted small text-end">{{ formatDate(v.closing_date || v.closingDate) }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -114,60 +141,55 @@
 </template>
 
 <script>
+import api from '../api/axios'
+
 export default {
   name: 'ClosedVacanciesView',
   data() {
     return {
       searchQuery: '',
-      vacancies: [
-        {
-          id: 1,
-          title: 'Assistant Librarian',
-          refNo: 'NDZ-COMM-08/2024',
-          department: 'Community Services',
-          closingDate: '13 October 2024',
-        },
-        {
-          id: 2,
-          title: 'Personal Assistant to the Deputy Mayor',
-          refNo: 'NDZ-CORP-06/2024',
-          department: 'Corporate Services',
-          closingDate: '29 September 2024',
-        },
-        {
-          id: 3,
-          title: 'SCM Contract Management Officer',
-          refNo: 'NDZ-BTO-05/2024',
-          department: 'Budget & Treasury',
-          closingDate: '29 September 2024',
-        },
-        {
-          id: 4,
-          title: 'Disaster Management Officer',
-          refNo: 'NDZ-COMM-03/2024',
-          department: 'Community Services',
-          closingDate: '15 June 2024',
-        },
-        {
-          id: 5,
-          title: 'Town Planning Technician',
-          refNo: 'NDZ-DTPS-02/2024',
-          department: 'Development & Town Planning Services',
-          closingDate: '30 April 2024',
-        },
-      ],
+      loading: false,
+      vacancies: [],
     }
   },
   computed: {
     filteredVacancies() {
       return this.vacancies.filter((v) => {
-        return (
-          !this.searchQuery ||
-          v.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          v.refNo.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          v.department.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
+        const title = (v.title || '').toLowerCase()
+        const ref = (v.reference_no || v.refNo || '').toLowerCase()
+        const dept = (v.department || '').toLowerCase()
+        const q = this.searchQuery.toLowerCase()
+
+        return !this.searchQuery || title.includes(q) || ref.includes(q) || dept.includes(q)
       })
+    },
+  },
+  mounted() {
+    this.fetchClosedVacancies()
+  },
+  methods: {
+    async fetchClosedVacancies() {
+      this.loading = true
+      try {
+        const { data } = await api.get('/api/vacancies?status=closed')
+        if (data?.data?.length) {
+          this.vacancies = data.data
+        } else {
+          this.vacancies = []
+        }
+      } catch (err) {
+        console.warn('Failed to fetch closed vacancies from API', err)
+      } finally {
+        this.loading = false
+      }
+    },
+    formatDate(dateStr) {
+      if (!dateStr) return 'Past Deadline'
+      if (dateStr.includes('T')) {
+        const d = new Date(dateStr)
+        return d.toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
+      }
+      return dateStr
     },
   },
 }
