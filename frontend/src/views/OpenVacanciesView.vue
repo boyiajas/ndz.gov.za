@@ -26,23 +26,21 @@
             <div class="row align-items-center g-4">
               <div class="col-lg-8">
                 <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill mb-2">
-                  <i class="bi bi-file-earmark-text-fill me-1"></i> Official Online Application
+                  <i class="bi bi-info-circle-fill me-1"></i> Application Procedure
                 </span>
-                <h3 class="fw-bold text-dark mb-2">Employment Application Forms</h3>
+                <h3 class="fw-bold text-dark mb-2">How to Apply for Advertised Posts</h3>
                 <p class="text-secondary mb-0" style="line-height: 1.7;">
-                  All applicants for advertised positions at Dr Nkosazana Dlamini Zuma Municipality are required to complete the official online Application Form. Click below to submit your details and application securely via Microsoft Forms.
+                  Applications must include a comprehensive CV, certified copies of academic certificates, and South African ID. Submissions can be emailed to <a href="mailto:Mailbox@ndz.gov.za" class="fw-semibold text-primary">Mailbox@ndz.gov.za</a> or hand-delivered to the Main Street Municipal Offices in Creighton.
                 </p>
               </div>
               <div class="col-lg-4 text-lg-end">
                 <a
-                  href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:Mailbox@ndz.gov.za?subject=Municipal%20Job%20Application"
                   class="btn btn-success btn-lg px-4 py-3 fw-bold shadow-sm d-inline-flex align-items-center gap-2"
                   style="background: #2e7d32; border-color: #2e7d32;"
                 >
-                  <span>Open Application Form</span>
-                  <i class="bi bi-box-arrow-up-right"></i>
+                  <span>Email Application</span>
+                  <i class="bi bi-envelope-fill"></i>
                 </a>
               </div>
             </div>
@@ -64,16 +62,6 @@
                   <router-link to="/closed-vacancies" class="d-block p-3 text-white text-decoration-none border-bottom border-light border-opacity-10">
                     Closed Vacancies <i class="bi bi-chevron-right float-end"></i>
                   </router-link>
-                </li>
-                <li>
-                  <a
-                    href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="d-block p-3 text-white text-decoration-none border-bottom border-light border-opacity-10"
-                  >
-                    Application Forms <i class="bi bi-box-arrow-up-right float-end"></i>
-                  </a>
                 </li>
                 <li>
                   <router-link to="/contact" class="d-block p-3 text-white text-decoration-none">
@@ -187,13 +175,23 @@
                         </a>
 
                         <a
-                          :href="vacancy.application_url || 'https://forms.cloud.microsoft/r/Rvv4zeUt9Y'"
+                          v-if="vacancy.application_url"
+                          :href="vacancy.application_url"
                           target="_blank"
                           rel="noopener noreferrer"
                           class="btn btn-sm btn-primary fw-semibold px-3 py-2 d-inline-flex align-items-center gap-1"
                         >
                           <span>Apply Online</span>
                           <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                        <a
+                          v-else
+                          :href="'mailto:Mailbox@ndz.gov.za?subject=' + encodeURIComponent('Application: ' + vacancy.title + (vacancy.reference_no ? ' (' + vacancy.reference_no + ')' : ''))"
+                          class="btn btn-sm btn-outline-primary fw-semibold px-3 py-2 d-inline-flex align-items-center gap-1"
+                          title="Apply via email"
+                        >
+                          <i class="bi bi-envelope-fill"></i>
+                          <span>Apply via Email</span>
                         </a>
                       </div>
                     </div>
@@ -205,14 +203,12 @@
               <div v-else class="text-center py-5">
                 <div class="text-muted mb-3" style="font-size: 3rem;"><i class="bi bi-briefcase"></i></div>
                 <h5 class="fw-bold text-dark">No open vacancies matching your criteria</h5>
-                <p class="text-secondary small mb-4">Please check back regularly or submit your details through the official Application Form.</p>
+                <p class="text-secondary small mb-4">Please check back regularly or contact HR for upcoming career opportunities.</p>
                 <a
-                  href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:Mailbox@ndz.gov.za?subject=Career%20Opportunity%20Inquiry"
                   class="btn btn-outline-success fw-bold px-4 py-2"
                 >
-                  Submit General Application Form <i class="bi bi-box-arrow-up-right ms-1"></i>
+                  Contact HR Recruitment <i class="bi bi-envelope-fill ms-1"></i>
                 </a>
               </div>
             </div>

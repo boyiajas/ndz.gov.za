@@ -27,10 +27,15 @@
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Tenders & Quotations
           </router-link>
-          <router-link class="quicklink-tile" to="/scm-database-forms">
+          <a
+            class="quicklink-tile text-decoration-none"
+            href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <div class="ql-icon"><i class="bi bi-receipt-cutoff"></i></div>
             Scm Database Forms
-          </router-link>
+          </a>
            <router-link class="quicklink-tile" to="/gallery">
             <div class="ql-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
             Events

@@ -261,9 +261,9 @@
             <input
               v-model="form.application_url"
               type="url"
-              placeholder="https://forms.cloud.microsoft/..."
+              placeholder="e.g. https://forms.cloud.microsoft/... (optional)"
             />
-            <small class="form-text-muted">Defaults to municipal Microsoft Forms application link.</small>
+            <small class="form-text-muted">Optional. If empty, applicants are instructed to email Mailbox@ndz.gov.za.</small>
           </div>
 
           <div class="form-group">
@@ -394,7 +394,7 @@ export default {
         location: 'Creighton Main Office',
         description: '',
         requirements: '',
-        application_url: 'https://forms.cloud.microsoft/r/Rvv4zeUt9Y',
+        application_url: '',
         document_url: '',
         document_name: '',
         remove_document: false,
@@ -462,7 +462,7 @@ export default {
         location: 'Creighton Main Office',
         description: '',
         requirements: '',
-        application_url: 'https://forms.cloud.microsoft/r/Rvv4zeUt9Y',
+        application_url: '',
         document_url: '',
         document_name: '',
         remove_document: false,
@@ -488,7 +488,7 @@ export default {
         location: vacancy.location || 'Creighton Main Office',
         description: vacancy.description || '',
         requirements: vacancy.requirements || '',
-        application_url: vacancy.application_url || 'https://forms.cloud.microsoft/r/Rvv4zeUt9Y',
+        application_url: vacancy.application_url || '',
         document_url: vacancy.document_url || '',
         document_name: vacancy.document_name || '',
         remove_document: false,

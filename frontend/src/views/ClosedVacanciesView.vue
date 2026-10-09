@@ -37,16 +37,6 @@
                   </router-link>
                 </li>
                 <li>
-                  <a
-                    href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="d-block p-3 text-white text-decoration-none border-bottom border-light border-opacity-10"
-                  >
-                    Application Forms <i class="bi bi-box-arrow-up-right float-end"></i>
-                  </a>
-                </li>
-                <li>
                   <router-link to="/contact" class="d-block p-3 text-white text-decoration-none">
                     HR / Inquiries <i class="bi bi-chevron-right float-end"></i>
                   </router-link>

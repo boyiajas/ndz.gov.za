@@ -141,9 +141,18 @@
                 </ul>
               </li>
               
-              <!-- <li><a class="dropdown-item" href="#">QUOTE DOCUMENTS</a></li> -->
               <li><a class="dropdown-item" href="#">INTENTION TO AWARD</a></li>
               <li><router-link class="dropdown-item" to="/contract-reporting">CONTRACT REPORTING</router-link></li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  SCM DATABASE FORMS <i class="bi bi-box-arrow-up-right ms-1 text-muted" style="font-size: 0.75rem;"></i>
+                </a>
+              </li>
               <!-- <li class="dropdown-submenu">
                 <a class="dropdown-item dropdown-toggle" href="#">OPENING/CLOSING REGISTER</a>
                 <ul class="dropdown-menu">
@@ -180,23 +189,8 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Career Centre</a>
             <ul class="dropdown-menu">
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="https://forms.cloud.microsoft/r/Rvv4zeUt9Y"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Application Forms <i class="bi bi-box-arrow-up-right ms-1 text-muted" style="font-size: 0.75rem;"></i>
-                </a>
-              </li>
-              <li class="dropdown-submenu">
-                <a class="dropdown-item dropdown-toggle" href="#">Vacancies</a>
-                <ul class="dropdown-menu">
-                  <li><router-link class="dropdown-item" to="/open-vacancies">Open Vacancies</router-link></li>
-                  <li><router-link class="dropdown-item" to="/closed-vacancies">Closed Vacancies</router-link></li>
-                </ul>
-              </li>
+              <li><router-link class="dropdown-item" to="/open-vacancies">Open Vacancies</router-link></li>
+              <li><router-link class="dropdown-item" to="/closed-vacancies">Closed Vacancies</router-link></li>
             </ul>
           </li>
 

@@ -103,6 +103,13 @@ const routes = [
     { path: '/quote-documents', name: 'quote-documents', component: OpenTendersView },
     { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
     { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
+    {
+        path: '/scm-database-forms',
+        name: 'scm-database-forms',
+        beforeEnter() {
+            window.location.href = 'https://forms.cloud.microsoft/r/Rvv4zeUt9Y'
+        },
+    },
     { path: '/open-vacancies', name: 'open-vacancies', component: OpenVacanciesView },
     { path: '/closed-vacancies', name: 'closed-vacancies', component: ClosedVacanciesView },
     { path: '/vacancies', redirect: '/open-vacancies' },
