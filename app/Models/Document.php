@@ -26,6 +26,7 @@ class Document extends Model
     protected $fillable = [
         'document_category_id',
         'document_subcategory_id',
+        'department_id',
         'title',
         'description',
         'file_url',
@@ -44,6 +45,11 @@ class Document extends Model
             'download_count' => 'integer',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function category(): BelongsTo
@@ -74,5 +80,28 @@ class Document extends Model
                 $query->whereNull('published_at')
                     ->orWhere('published_at', '<=', now());
             });
+    }
+
+    public function scopeForUserDepartment(Builder $query, ?User $user): Builder
+    {
+        if (! $user || $user->isGlobalAdmin()) {
+            return $query;
+        }
+
+        $deptIds = $user->departmentIds();
+
+        if (! empty($deptIds)) {
+            return $query->where(function (Builder $q) use ($deptIds) {
+                $q->whereIn('documents.department_id', $deptIds)
+                  ->orWhere(function (Builder $subQ) use ($deptIds) {
+                      $subQ->whereNull('documents.department_id')
+                           ->whereHas('category', function (Builder $catQ) use ($deptIds) {
+                               $catQ->whereIn('department_id', $deptIds);
+                           });
+                  });
+            });
+        }
+
+        return $query;
     }
 }

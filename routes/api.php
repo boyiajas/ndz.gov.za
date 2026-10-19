@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\DashboardStatsController as AdminDashboardStatsController;
+use App\Http\Controllers\Api\Admin\DepartmentController as AdminDepartmentController;
 use App\Http\Controllers\Api\Admin\DocumentCategoryController as AdminDocumentCategoryController;
 use App\Http\Controllers\Api\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Api\Admin\DocumentSubcategoryController as AdminDocumentSubcategoryController;
@@ -46,17 +47,25 @@ Route::get('/news', [NewsController::class, 'index']);
 Route::get('/news/{idOrSlug}', [NewsController::class, 'show']);
 Route::get('/gallery', [GalleryController::class, 'index']);
 Route::get('/procurement', [ProcurementController::class, 'index']);
+Route::get('/procurement/years', [ProcurementController::class, 'years']);
+Route::get('/procurement/categories', [ProcurementController::class, 'categories']);
 Route::get('/procurement/{procurementNotice}', [ProcurementController::class, 'show']);
+Route::get('/procurement/{procurementNotice}/download', [ProcurementController::class, 'download']);
 Route::get('/vacancies', [VacancyController::class, 'index']);
 Route::get('/vacancies/{vacancy}', [VacancyController::class, 'show']);
+Route::get('/departments', fn () => response()->json(['data' => \App\Models\Department::active()->get()]));
 Route::get('/settings', [SettingController::class, 'index']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', fn (Request $request) => $request->user());
+    Route::get('/user', fn (Request $request) => $request->user()->load(['department:id,name,code,slug', 'departments:id,name,code,slug']));
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::prefix('admin')->group(function () {
+        // Departments Management
+        Route::post('/departments/seed-defaults', [AdminDepartmentController::class, 'seedDefaults']);
+        Route::apiResource('departments', AdminDepartmentController::class);
+
         // Dashboard overview stats
         Route::get('/dashboard-stats', AdminDashboardStatsController::class);
 

@@ -1,9 +1,21 @@
 import axios from 'axios'
 
-const apiBaseURL = import.meta.env.VITE_API_BASE_URL || window.location.origin
+// Dynamically resolve API baseURL:
+// 1. When browsing the site (e.g. at http://127.0.0.1:8000, http://localhost:8000, port 8001, or live domain),
+//    always use window.location.origin so requests seamlessly target the active backend port.
+// 2. When browsing directly via Vite dev server (port 5199 or 5173), target the backend dev port (8000).
+function getApiBaseURL() {
+  if (typeof window !== 'undefined') {
+    const port = window.location.port
+    if (port !== '5199' && port !== '5173') {
+      return window.location.origin
+    }
+  }
+  return import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
+}
 
 const api = axios.create({
-  baseURL: apiBaseURL,
+  baseURL: getApiBaseURL(),
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

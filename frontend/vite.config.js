@@ -14,6 +14,16 @@ export default defineConfig({
     port: 5199,
     strictPort: true,
     cors: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+      '/storage': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+    },
     watch: {
       // This repo carries a large static media set under frontend/public and a
       // growing dist folder. Ignore both to avoid exhausting file watchers.

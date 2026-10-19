@@ -27,8 +27,38 @@ export const useAuthStore = defineStore('auth', {
         canManageProcurement: (state) => ['admin', 'manager'].includes(state.user?.role),
         canManageVacancies: (state) => ['admin', 'manager', 'editor'].includes(state.user?.role),
         canManageUsers: (state) => state.user?.role === 'admin',
+        canManageDepartments: (state) => ['admin', 'manager'].includes(state.user?.role),
         canManageSettings: (state) => state.user?.role === 'admin',
         isAdmin: (state) => state.user?.role === 'admin',
+        department: (state) => state.user?.department || (state.user?.departments?.[0] || null),
+        departments: (state) => {
+            if (Array.isArray(state.user?.departments) && state.user.departments.length > 0) {
+                return state.user.departments
+            }
+            if (state.user?.department) {
+                return [state.user.department]
+            }
+            return []
+        },
+        departmentCode: (state) => state.user?.department?.code || state.user?.departments?.[0]?.code || null,
+        departmentId: (state) => state.user?.department_id || state.user?.department?.id || state.user?.departments?.[0]?.id || null,
+        departmentIds: (state) => {
+            if (Array.isArray(state.user?.departments) && state.user.departments.length > 0) {
+                return state.user.departments.map((d) => d.id)
+            }
+            if (state.user?.department_id) {
+                return [Number(state.user.department_id)]
+            }
+            return []
+        },
+        isGlobalAdmin: (state) => {
+            if (state.user?.role === 'admin') return true
+            if (state.user?.role === 'manager') {
+                const hasDepts = (Array.isArray(state.user?.departments) && state.user.departments.length > 0) || !!state.user?.department_id
+                return !hasDepts
+            }
+            return false
+        },
     },
 
     actions: {

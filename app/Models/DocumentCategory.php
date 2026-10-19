@@ -14,6 +14,7 @@ class DocumentCategory extends Model
         'name',
         'subtitle',
         'slug',
+        'department_id',
         'description',
         'image_url',
         'sort_order',
@@ -26,6 +27,11 @@ class DocumentCategory extends Model
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function subcategories(): HasMany

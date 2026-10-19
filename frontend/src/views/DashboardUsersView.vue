@@ -56,6 +56,15 @@
               <option value="citizen">Citizen User</option>
             </select>
           </div>
+
+          <div class="role-filter">
+            <select v-model="filterDepartment" @change="filterUsers">
+              <option value="all">All Departments</option>
+              <option v-for="dept in departmentsList" :key="dept.id" :value="dept.id">
+                {{ dept.name }}
+              </option>
+            </select>
+          </div>
         </div>
       </section>
 
@@ -73,6 +82,7 @@
                 <th style="width: 50px;"></th>
                 <th>Name & Account</th>
                 <th>Security Role</th>
+                <th>Assigned Department</th>
                 <th>Joined Date</th>
                 <th style="text-align: right;">Actions</th>
               </tr>
@@ -89,6 +99,19 @@
                 <td>
                   <span :class="['role-badge', user.role]">
                     {{ getRoleLabel(user.role) }}
+                  </span>
+                </td>
+                <td>
+                  <div v-if="user.departments && user.departments.length" class="dept-badges-wrap">
+                    <span v-for="d in user.departments" :key="d.id" class="dept-badge" :title="d.name">
+                      {{ d.code }}
+                    </span>
+                  </div>
+                  <span v-else-if="user.department" class="dept-badge" :title="user.department.name">
+                    {{ user.department.code || user.department.name }}
+                  </span>
+                  <span v-else class="text-muted" style="font-size: 0.82rem;">
+                    {{ user.role === 'admin' ? 'All Departments (Global)' : '—' }}
                   </span>
                 </td>
                 <td>
@@ -182,6 +205,21 @@
           </label>
 
           <label>
+            Assigned Municipal Department(s)
+            <MultiSelect
+              v-model="form.department_ids"
+              :options="departmentsList"
+              value-key="id"
+              label-key="name"
+              secondary-key="code"
+              placeholder="Assign to one or multiple departments..."
+            />
+            <small style="color: #64748b; font-size: 0.78rem; margin-top: 0.35rem; display: block;">
+              A user can belong to single or multiple departments. Restricts document and file access to the selected directorates.
+            </small>
+          </label>
+
+          <label>
             {{ editingUserId ? 'New Password (leave blank to keep current)' : 'Account Password *' }}
             <input
               v-model="form.password"
@@ -205,12 +243,13 @@
 
 <script>
 import DashboardLayout from '../components/DashboardLayout.vue'
+import MultiSelect from '../components/MultiSelect.vue'
 import { useAuthStore } from '../stores/auth'
 import api from '../api/axios'
 
 export default {
   name: 'DashboardUsersView',
-  components: { DashboardLayout },
+  components: { DashboardLayout, MultiSelect },
   setup() {
     return { auth: useAuthStore() }
   },
@@ -220,7 +259,9 @@ export default {
       users: [],
       filteredUsers: [],
       rolesList: [],
+      departmentsList: [],
       filterRole: 'all',
+      filterDepartment: 'all',
       searchQuery: '',
       loading: true,
       saving: false,
@@ -232,6 +273,7 @@ export default {
         name: '',
         email: '',
         role: 'editor',
+        department_ids: [],
         password: '',
       },
     }
@@ -257,6 +299,9 @@ export default {
       try {
         const { data } = await api.get('/api/admin/roles')
         this.rolesList = data.data || []
+        if (data.departments) {
+          this.departmentsList = data.departments
+        }
       } catch (err) {
         console.error('Failed to load roles list:', err)
       }
@@ -266,12 +311,22 @@ export default {
       if (this.filterRole !== 'all') {
         list = list.filter((u) => u.role === this.filterRole)
       }
+      if (this.filterDepartment !== 'all') {
+        const filterId = Number(this.filterDepartment)
+        list = list.filter((u) => {
+          if (Array.isArray(u.departments) && u.departments.some((d) => d.id === filterId)) return true
+          return Number(u.department_id) === filterId
+        })
+      }
       if (this.searchQuery.trim()) {
         const q = this.searchQuery.toLowerCase()
         list = list.filter(
           (u) =>
             u.name?.toLowerCase().includes(q) ||
-            u.email?.toLowerCase().includes(q)
+            u.email?.toLowerCase().includes(q) ||
+            u.department?.name?.toLowerCase().includes(q) ||
+            u.department?.code?.toLowerCase().includes(q) ||
+            u.departments?.some((d) => d.name?.toLowerCase().includes(q) || d.code?.toLowerCase().includes(q))
         )
       }
       this.filteredUsers = list
@@ -282,16 +337,24 @@ export default {
         name: '',
         email: '',
         role: 'editor',
+        department_ids: [],
         password: '',
       }
       this.isModalOpen = true
     },
     openEditModal(user) {
       this.editingUserId = user.id
+      let deptIds = []
+      if (Array.isArray(user.departments) && user.departments.length > 0) {
+        deptIds = user.departments.map((d) => d.id)
+      } else if (user.department_id) {
+        deptIds = [Number(user.department_id)]
+      }
       this.form = {
         name: user.name,
         email: user.email,
         role: user.role,
+        department_ids: deptIds,
         password: '',
       }
       this.isModalOpen = true
@@ -305,12 +368,23 @@ export default {
       this.error = ''
       this.notice = ''
 
+      const payload = {
+        name: this.form.name,
+        email: this.form.email,
+        role: this.form.role,
+        department_ids: this.form.department_ids || [],
+        department_id: this.form.department_ids?.[0] || null,
+      }
+      if (this.form.password) {
+        payload.password = this.form.password
+      }
+
       try {
         if (this.editingUserId) {
-          await api.put(`/api/admin/users/${this.editingUserId}`, this.form)
+          await api.put(`/api/admin/users/${this.editingUserId}`, payload)
           this.notice = 'User account updated successfully.'
         } else {
-          await api.post('/api/admin/users', this.form)
+          await api.post('/api/admin/users', payload)
           this.notice = 'New user created successfully.'
         }
         this.closeModal()
@@ -519,6 +593,23 @@ export default {
 .role-badge.manager { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
 .role-badge.editor { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
 .role-badge.citizen { background: #f5f5f5; color: #616161; border: 1px solid #e0e0e0; }
+
+.dept-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.dept-badges-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
 
 .joined-date {
   font-size: 0.82rem;

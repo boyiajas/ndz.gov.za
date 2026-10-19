@@ -99,6 +99,14 @@
             </div>
           </router-link>
 
+          <router-link v-if="auth.canManageDepartments" to="/dashboard/departments" class="workspace-action">
+            <span class="action-icon">🏛</span>
+            <div>
+              <strong>Municipal Departments</strong>
+              <small>Configure directorates, leadership titles, and document scopes.</small>
+            </div>
+          </router-link>
+
           <router-link v-if="auth.canManageSettings" to="/dashboard/settings" class="workspace-action">
             <span class="action-icon">⚙</span>
             <div>
@@ -123,6 +131,18 @@
           <span class="profile-email">{{ auth.user?.email }}</span>
           <span class="profile-badge">{{ auth.roleLabel }}</span>
 
+          <div v-if="auth.departments && auth.departments.length > 1" style="display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.45rem;">
+            <div v-for="d in auth.departments" :key="d.id" class="profile-dept-badge">
+              🏛 {{ d.name }} ({{ d.code }})
+            </div>
+          </div>
+          <div v-else-if="auth.department" class="profile-dept-badge">
+            🏛 {{ auth.department.name || auth.department }}
+          </div>
+          <div v-else-if="auth.isGlobalAdmin" class="profile-dept-badge global">
+            🌐 All Municipal Departments (Global)
+          </div>
+
           <div class="role-capabilities">
             <p class="capabilities-title">Authorized Capabilities</p>
             <ul class="capabilities-list">
@@ -137,6 +157,9 @@
               </li>
               <li :class="{ 'is-active': auth.canManageUsers }">
                 <span>{{ auth.canManageUsers ? '✓' : '✗' }}</span> User & Role Administration
+              </li>
+              <li :class="{ 'is-active': auth.canManageDepartments }">
+                <span>{{ auth.canManageDepartments ? '✓' : '✗' }}</span> Departments Management
               </li>
               <li :class="{ 'is-active': auth.canManageSettings }">
                 <span>{{ auth.canManageSettings ? '✓' : '✗' }}</span> Municipal Settings
@@ -476,6 +499,24 @@ export default {
   padding: 0.3rem 0.85rem;
   font-size: 0.78rem;
   font-weight: 800;
+}
+
+.profile-dept-badge {
+  display: inline-block;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  margin-top: 0.45rem;
+}
+
+.profile-dept-badge.global {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
 }
 
 .role-capabilities {

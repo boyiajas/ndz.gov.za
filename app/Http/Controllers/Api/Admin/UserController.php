@@ -16,10 +16,20 @@ class UserController extends Controller
     {
         $this->authorizeUsers($request);
 
-        $query = User::query()->orderByDesc('created_at');
+        $query = User::query()
+            ->with(['department:id,name,code,slug', 'departments:id,name,code,slug'])
+            ->orderByDesc('created_at');
 
         if ($request->filled('role')) {
             $query->where('role', $request->query('role'));
+        }
+
+        if ($request->filled('department_id') && $request->query('department_id') !== 'all') {
+            $deptId = (int) $request->query('department_id');
+            $query->where(function ($q) use ($deptId) {
+                $q->where('department_id', $deptId)
+                  ->orWhereHas('departments', fn ($d) => $d->where('departments.id', $deptId));
+            });
         }
 
         if ($request->filled('search')) {
@@ -41,18 +51,33 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'role' => ['required', 'string', Rule::in(User::ROLES)],
+            'department_ids' => ['nullable', 'array'],
+            'department_ids.*' => ['integer', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'password' => ['required', 'string', Password::defaults()],
         ]);
+
+        $departmentIds = [];
+        if (isset($validated['department_ids'])) {
+            $departmentIds = array_values(array_unique(array_filter(array_map('intval', $validated['department_ids']))));
+        } elseif (! empty($validated['department_id'])) {
+            $departmentIds = [(int) $validated['department_id']];
+        }
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $validated['role'],
+            'department_id' => $departmentIds[0] ?? null,
             'password' => Hash::make($validated['password']),
             'email_verified_at' => now(),
         ]);
 
-        return response()->json(['data' => $user], 201);
+        $user->departments()->sync($departmentIds);
+
+        return response()->json([
+            'data' => $user->fresh(['department:id,name,code,slug', 'departments:id,name,code,slug']),
+        ], 201);
     }
 
     public function update(Request $request, User $user): JsonResponse
@@ -63,6 +88,9 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'role' => ['required', 'string', Rule::in(User::ROLES)],
+            'department_ids' => ['nullable', 'array'],
+            'department_ids.*' => ['integer', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'password' => ['nullable', 'string', Password::defaults()],
         ]);
 
@@ -76,9 +104,26 @@ class UserController extends Controller
             $data['password'] = Hash::make($validated['password']);
         }
 
-        $user->update($data);
+        if (array_key_exists('department_ids', $validated)) {
+            $departmentIds = array_values(array_unique(array_filter(array_map('intval', $validated['department_ids'] ?? []))));
+            $data['department_id'] = $departmentIds[0] ?? null;
+            $user->update($data);
+            $user->departments()->sync($departmentIds);
+        } elseif (array_key_exists('department_id', $validated)) {
+            $data['department_id'] = $validated['department_id'];
+            $user->update($data);
+            if ($validated['department_id']) {
+                $user->departments()->sync([(int) $validated['department_id']]);
+            } else {
+                $user->departments()->detach();
+            }
+        } else {
+            $user->update($data);
+        }
 
-        return response()->json(['data' => $user->fresh()]);
+        return response()->json([
+            'data' => $user->fresh(['department:id,name,code,slug', 'departments:id,name,code,slug']),
+        ]);
     }
 
     public function destroy(Request $request, User $user): JsonResponse
@@ -157,7 +202,10 @@ class UserController extends Controller
             ],
         ];
 
-        return response()->json(['data' => $roles]);
+        return response()->json([
+            'data' => $roles,
+            'departments' => \App\Models\Department::active()->get(['id', 'name', 'code', 'slug']),
+        ]);
     }
 
     private function authorizeUsers(Request $request): void

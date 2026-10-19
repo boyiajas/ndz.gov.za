@@ -15,6 +15,58 @@
       <div v-if="notice" class="portal-alert success">{{ notice }}</div>
       <div v-if="error" class="portal-alert danger">{{ error }}</div>
 
+      <!-- Department Scope Banner / Admin Department Filter -->
+      <div v-if="!auth.isGlobalAdmin && auth.departments.length > 1" class="admin-dept-filter-bar">
+        <div class="admin-dept-info">
+          <span class="admin-globe-icon">🏛</span>
+          <div>
+            <strong>Multi-Department Assigned Access</strong>
+            <p>Your account is assigned to {{ auth.departments.length }} directorates: {{ auth.departments.map(d => d.code).join(', ') }}.</p>
+          </div>
+        </div>
+        <div class="admin-dept-select-wrap">
+          <label for="user-dept-filter">Directorate Filter:</label>
+          <select id="user-dept-filter" v-model="selectedDepartmentId" @change="onDepartmentFilterChange">
+            <option value="all">All My Assigned Departments ({{ auth.departments.length }})</option>
+            <option v-for="dept in auth.departments" :key="dept.id" :value="dept.id">
+              {{ dept.name }} ({{ dept.code }})
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div v-else-if="!auth.isGlobalAdmin && auth.departments.length === 1" class="dept-scope-banner">
+        <div class="dept-scope-icon">🏛</div>
+        <div class="dept-scope-content">
+          <div class="dept-scope-title">
+            Department Scope: <strong>{{ auth.departments[0].name }}</strong>
+            <span class="dept-code-pill">{{ auth.departments[0].code }}</span>
+          </div>
+          <p class="dept-scope-desc">
+            Your account is assigned to this municipal department. You can upload and manage documents specifically belonging to {{ auth.departments[0].name }}.
+          </p>
+        </div>
+      </div>
+
+      <div v-else-if="auth.isGlobalAdmin" class="admin-dept-filter-bar">
+        <div class="admin-dept-info">
+          <span class="admin-globe-icon">🌐</span>
+          <div>
+            <strong>Global Administrator Access</strong>
+            <p>Managing documents across all municipal departments. Filter below to inspect a specific department.</p>
+          </div>
+        </div>
+        <div class="admin-dept-select-wrap">
+          <label for="admin-dept-filter">Filter Department:</label>
+          <select id="admin-dept-filter" v-model="selectedDepartmentId" @change="onDepartmentFilterChange">
+            <option value="all">All Departments</option>
+            <option v-for="dept in departmentsList" :key="dept.id" :value="dept.id">
+              {{ dept.name }} ({{ dept.code }})
+            </option>
+          </select>
+        </div>
+      </div>
+
       <section class="manager-grid">
         <article class="manager-panel">
           <div class="manager-heading">
@@ -26,6 +78,15 @@
           </div>
 
           <form class="manager-form" @submit.prevent="saveCategory">
+            <label v-if="auth.isGlobalAdmin || auth.departments.length > 1">
+              Assigned Municipal Department *
+              <select v-model.number="categoryForm.department_id" required>
+                <option :value="null" disabled>Choose Department</option>
+                <option v-for="dept in (auth.isGlobalAdmin ? departmentsList : auth.departments)" :key="dept.id" :value="dept.id">
+                  {{ dept.name }} ({{ dept.code }})
+                </option>
+              </select>
+            </label>
             <label>
               Document name title
               <input v-model="categoryForm.name" type="text" placeholder="e.g. Policies" required />
@@ -82,6 +143,7 @@
               <span>
                 <strong>{{ category.name }}</strong>
                 <small>
+                  <span v-if="category.department" class="cat-dept-badge">{{ category.department.code }}</span>
                   {{ category.subcategories_count || category.subcategories?.length || 0 }} sub names
                   • {{ category.direct_documents_count ?? category.directDocuments_count ?? 0 }} direct files
                 </small>
@@ -330,6 +392,8 @@ export default {
     return {
       catalog: [],
       documents: [],
+      departmentsList: [],
+      selectedDepartmentId: 'all',
       selectedCategoryId: null,
       selectedSubcategoryId: null, // null means "Direct to category", or integer subcategory id
       editingCategoryId: null,
@@ -338,7 +402,7 @@ export default {
       saving: false,
       error: '',
       notice: '',
-      categoryForm: { name: '', subtitle: '', description: '', image_url: '', sort_order: 0, is_active: true },
+      categoryForm: { name: '', subtitle: '', department_id: null, description: '', image_url: '', sort_order: 0, is_active: true },
       subcategoryForm: { document_category_id: null, name: '', description: '', sort_order: 0, is_active: true },
       documentForm: {
         document_category_id: null,
@@ -376,14 +440,38 @@ export default {
       return 'selected document name'
     },
   },
-  mounted() {
+  async mounted() {
     if (this.auth.canManageDocuments) {
-      this.loadCatalog()
+      if (this.auth.isGlobalAdmin) {
+        await this.loadDepartments()
+      }
+      await this.loadCatalog()
     }
   },
   methods: {
+    async loadDepartments() {
+      try {
+        const { data } = await api.get('/api/departments')
+        this.departmentsList = data.data || []
+      } catch (err) {
+        console.error('Failed to load departments:', err)
+      }
+    },
+    async onDepartmentFilterChange() {
+      this.selectedCategoryId = null
+      this.selectedSubcategoryId = null
+      await this.loadCatalog()
+    },
     defaultCategoryForm() {
-      return { name: '', subtitle: '', description: '', image_url: '', sort_order: 0, is_active: true }
+      return {
+        name: '',
+        subtitle: '',
+        department_id: (this.selectedDepartmentId !== 'all' ? Number(this.selectedDepartmentId) : null) || (this.auth.departmentId || null),
+        description: '',
+        image_url: '',
+        sort_order: 0,
+        is_active: true,
+      }
     },
     defaultSubcategoryForm() {
       return { document_category_id: null, name: '', description: '', sort_order: 0, is_active: true }
@@ -403,7 +491,11 @@ export default {
     async loadCatalog() {
       this.error = ''
       try {
-        const { data } = await api.get('/api/admin/document-categories')
+        const params = {}
+        if (this.selectedDepartmentId !== 'all') {
+          params.department_id = this.selectedDepartmentId
+        }
+        const { data } = await api.get('/api/admin/document-categories', { params })
         this.catalog = data.data || []
         this.syncSelection()
         await this.loadDocuments()
@@ -475,6 +567,9 @@ export default {
         } else {
           params.direct_only = true
         }
+        if (this.selectedDepartmentId !== 'all') {
+          params.department_id = this.selectedDepartmentId
+        }
         const { data } = await api.get('/api/admin/documents', { params })
         this.documents = data.data || []
       } catch (error) {
@@ -484,6 +579,9 @@ export default {
     async saveCategory() {
       await this.submit(async () => {
         const payload = { ...this.categoryForm }
+        if (!payload.department_id && this.selectedDepartmentId !== 'all') {
+          payload.department_id = Number(this.selectedDepartmentId)
+        }
         const response = this.editingCategoryId
           ? await api.put(`/api/admin/document-categories/${this.editingCategoryId}`, payload)
           : await api.post('/api/admin/document-categories', payload)
@@ -501,6 +599,7 @@ export default {
       this.categoryForm = {
         name: category.name,
         subtitle: category.subtitle || '',
+        department_id: category.department_id || null,
         description: category.description || '',
         image_url: category.image_url || '',
         sort_order: category.sort_order || 0,
@@ -983,6 +1082,123 @@ export default {
 .scope-pill.sub {
   background: #f1f5f9;
   color: var(--text-dark);
+}
+
+.dept-scope-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #e6f7ec 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.dept-scope-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.dept-scope-content {
+  flex: 1;
+}
+
+.dept-scope-title {
+  font-size: 0.95rem;
+  color: #166534;
+  margin-bottom: 0.2rem;
+}
+
+.dept-code-pill {
+  display: inline-block;
+  background: #166534;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  margin-left: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.dept-scope-desc {
+  font-size: 0.82rem;
+  color: #374151;
+  margin: 0;
+}
+
+.admin-dept-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-dept-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.admin-globe-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.admin-dept-info strong {
+  font-size: 0.95rem;
+  color: #1e293b;
+  display: block;
+}
+
+.admin-dept-info p {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0.15rem 0 0 0;
+}
+
+.admin-dept-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.admin-dept-select-wrap label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.admin-dept-select-wrap select {
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #94a3b8;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 240px;
+}
+
+.cat-dept-badge {
+  display: inline-block;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  margin-right: 0.35rem;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1100px) {

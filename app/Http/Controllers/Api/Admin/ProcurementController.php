@@ -20,12 +20,23 @@ class ProcurementController extends Controller
             $query->where('type', $request->query('type'));
         }
 
+        if ($request->filled('category')) {
+            $query->where('category', $request->query('category'));
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->query('status'));
         }
 
         if ($request->filled('financial_year')) {
-            $query->where('financial_year', $request->query('financial_year'));
+            $year = $request->query('financial_year');
+            $hyphenYear = str_replace('/', '-', $year);
+            $slashYear = str_replace('-', '/', $year);
+            $query->where(function ($q) use ($year, $hyphenYear, $slashYear) {
+                $q->where('financial_year', $year)
+                  ->orWhere('financial_year', $hyphenYear)
+                  ->orWhere('financial_year', $slashYear);
+            });
         }
 
         if ($request->filled('search')) {
@@ -46,15 +57,28 @@ class ProcurementController extends Controller
         $validated = $request->validate([
             'type' => ['required', 'string', Rule::in([ProcurementNotice::TYPE_TENDER, ProcurementNotice::TYPE_QUOTE])],
             'status' => ['required', 'string', Rule::in([ProcurementNotice::STATUS_OPEN, ProcurementNotice::STATUS_CLOSED])],
+            'category' => ['nullable', 'string', 'max:100'],
             'financial_year' => ['required', 'string', 'max:50'],
-            'reference_no' => ['required', 'string', 'max:100', 'unique:procurement_notices,reference_no'],
+            'reference_no' => ['nullable', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'closing_date' => ['nullable', 'date'],
             'briefing_date' => ['nullable', 'string', 'max:255'],
             'contact_person' => ['nullable', 'string', 'max:255'],
             'document_url' => ['nullable', 'string', 'max:2048'],
+            'download_count' => ['nullable', 'integer', 'min:0'],
+            'file_name' => ['nullable', 'string', 'max:255'],
+            'file_size' => ['nullable', 'string', 'max:50'],
         ]);
+
+        if (empty($validated['category'])) {
+            $validated['category'] = $validated['type'] === ProcurementNotice::TYPE_QUOTE ? 'Quotations' : 'Open Tenders';
+        }
+
+        if (empty($validated['reference_no'])) {
+            $prefix = $validated['type'] === ProcurementNotice::TYPE_QUOTE ? 'NDZ-RFQ' : 'NDZ-TDR';
+            $validated['reference_no'] = $prefix . '-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(4));
+        }
 
         $validated['created_by'] = $request->user()->id;
 
@@ -70,15 +94,23 @@ class ProcurementController extends Controller
         $validated = $request->validate([
             'type' => ['required', 'string', Rule::in([ProcurementNotice::TYPE_TENDER, ProcurementNotice::TYPE_QUOTE])],
             'status' => ['required', 'string', Rule::in([ProcurementNotice::STATUS_OPEN, ProcurementNotice::STATUS_CLOSED])],
+            'category' => ['nullable', 'string', 'max:100'],
             'financial_year' => ['required', 'string', 'max:50'],
-            'reference_no' => ['required', 'string', 'max:100', Rule::unique('procurement_notices', 'reference_no')->ignore($procurement->id)],
+            'reference_no' => ['nullable', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'closing_date' => ['nullable', 'date'],
             'briefing_date' => ['nullable', 'string', 'max:255'],
             'contact_person' => ['nullable', 'string', 'max:255'],
             'document_url' => ['nullable', 'string', 'max:2048'],
+            'download_count' => ['nullable', 'integer', 'min:0'],
+            'file_name' => ['nullable', 'string', 'max:255'],
+            'file_size' => ['nullable', 'string', 'max:50'],
         ]);
+
+        if (empty($validated['category'])) {
+            $validated['category'] = $validated['type'] === ProcurementNotice::TYPE_QUOTE ? 'Quotations' : 'Open Tenders';
+        }
 
         $procurement->update($validated);
 

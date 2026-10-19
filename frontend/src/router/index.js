@@ -11,6 +11,7 @@ import DashboardGalleryView from '../views/DashboardGalleryView.vue'
 import DashboardTendersView from '../views/DashboardTendersView.vue'
 import DashboardVacanciesView from '../views/DashboardVacanciesView.vue'
 import DashboardUsersView from '../views/DashboardUsersView.vue'
+import DashboardDepartmentsView from '../views/DashboardDepartmentsView.vue'
 import DashboardSettingsView from '../views/DashboardSettingsView.vue'
 import MayorsOfficeView from '../views/MayorsOfficeView.vue'
 import DeputyMayorView from '../views/DeputyMayorView.vue'
@@ -76,6 +77,12 @@ const routes = [
         path: '/dashboard/users',
         name: 'dashboard-users',
         component: DashboardUsersView,
+        meta: { requiresAuth: true, requiresAdmin: true, portal: true },
+    },
+    {
+        path: '/dashboard/departments',
+        name: 'dashboard-departments',
+        component: DashboardDepartmentsView,
         meta: { requiresAuth: true, requiresAdmin: true, portal: true },
     },
     {

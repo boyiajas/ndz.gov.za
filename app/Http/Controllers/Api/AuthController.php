@@ -54,6 +54,7 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+        $user->load(['department:id,name,code,slug', 'departments:id,name,code,slug']);
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([

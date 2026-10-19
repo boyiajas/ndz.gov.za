@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'role',
+        'department_id',
         'password',
     ];
 
@@ -40,9 +41,47 @@ class User extends Authenticatable
         self::ROLE_CITIZEN,
     ];
 
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function departments(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'department_user')->withTimestamps();
+    }
+
+    /**
+     * Retrieve all department IDs assigned to this user.
+     *
+     * @return array<int>
+     */
+    public function departmentIds(): array
+    {
+        $ids = $this->relationLoaded('departments')
+            ? $this->departments->pluck('id')->all()
+            : $this->departments()->pluck('departments.id')->all();
+
+        if (empty($ids) && $this->department_id) {
+            $ids = [(int) $this->department_id];
+        }
+
+        return array_values(array_unique(array_filter(array_map('intval', $ids))));
+    }
+
+    public function hasDepartment(int $departmentId): bool
+    {
+        return in_array($departmentId, $this->departmentIds(), true);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function isGlobalAdmin(): bool
+    {
+        return $this->isAdmin() || ($this->role === self::ROLE_MANAGER && empty($this->departmentIds()));
     }
 
     public function canManageDocuments(): bool

@@ -20,6 +20,7 @@ class ProcurementNotice extends Model
     protected $fillable = [
         'type',
         'status',
+        'category',
         'financial_year',
         'reference_no',
         'title',
@@ -28,6 +29,9 @@ class ProcurementNotice extends Model
         'briefing_date',
         'contact_person',
         'document_url',
+        'download_count',
+        'file_name',
+        'file_size',
         'created_by',
     ];
 
@@ -35,6 +39,7 @@ class ProcurementNotice extends Model
     {
         return [
             'closing_date' => 'datetime',
+            'download_count' => 'integer',
         ];
     }
 

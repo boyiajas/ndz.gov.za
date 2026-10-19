@@ -1,23 +1,30 @@
 <template>
   <div class="page-wrapper bg-light">
-    <div class="page-header" style="background: var(--primary, #004d40); color: #fff; padding: 4rem 0; text-align: left;">
+    <!-- Header Banner -->
+    <div class="page-header" style="background: var(--primary, #004d40); color: #fff; padding: 3.5rem 0 3rem; text-align: left;">
       <div class="container">
         <h1 style="margin: 0; font-size: 2.5rem; font-weight: 700;">{{ currentSection.title }}</h1>
-        <p style="margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.8;">Supply Chain Management</p>
+        <p style="margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.85;">Supply Chain Management</p>
 
         <nav aria-label="breadcrumb" style="margin-top: 1.5rem; display: flex; justify-content: flex-start;">
-          <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 50px;">
-            <li class="breadcrumb-item"><router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link></li>
+          <ol class="breadcrumb" style="margin: 0; font-size: 0.95rem; background: rgba(255, 255, 255, 0.12); padding: 0.5rem 1.25rem; border-radius: 50px;">
+            <li class="breadcrumb-item">
+              <router-link to="/" style="color: rgba(255,255,255,0.9); text-decoration: none;">Home</router-link>
+            </li>
             <li class="breadcrumb-item"><span style="color: rgba(255,255,255,0.7);">SCM</span></li>
-            <li class="breadcrumb-item active" aria-current="page" style="color: #fff; font-weight: 600;">{{ currentSection.title }}</li>
+            <li class="breadcrumb-item active" aria-current="page" style="color: #fff; font-weight: 600;">
+              {{ currentSection.title }} <span v-if="!isDirectListing && selectedYear">- {{ selectedYear }}</span>
+            </li>
           </ol>
         </nav>
       </div>
     </div>
 
+    <!-- Main Content Section -->
     <section class="open-tenders-section">
       <div class="container">
         <div class="tenders-shell">
+          <!-- SCM Category Tabs -->
           <nav class="tenders-tabs" aria-label="SCM tabs">
             <router-link
               v-for="tab in tabs"
@@ -31,60 +38,245 @@
           </nav>
 
           <div class="tenders-panel">
-            <div class="tenders-grid">
-              <button
-                v-for="year in currentSection.years"
-                :key="year.id"
-                class="tender-year-card"
-                :class="{ 'is-active': activeYear && year.id === activeYear.id }"
-                type="button"
-                @click="setActiveYear(year.id)"
-              >
-                {{ year.label }}
-              </button>
+            <!-- DIRECT DOCUMENT LISTINGS (Bid Documents / Quote Documents) -->
+            <div v-if="isDirectListing" class="direct-docs-wrapper">
+              <!-- Dark Header Banner (Old Website Style) -->
+              <div class="old-site-banner">
+                <h2 class="old-site-banner-title">{{ currentSection.title }}</h2>
+              </div>
+
+              <div class="old-site-content-body">
+                <!-- Section Subhead -->
+                <div class="table-intro-divider" style="margin-top: 0.5rem; margin-bottom: 1rem;">
+                  <h3 class="attachments-label">Print or Download File Attachments</h3>
+                </div>
+
+                <!-- Year / Filter Pills if multiple available -->
+                <div v-if="directYears.length > 1" class="doc-filter-pills">
+                  <button
+                    type="button"
+                    class="doc-pill-btn"
+                    :class="{ 'is-active': activeDirectYear === 'all' }"
+                    @click="activeDirectYear = 'all'"
+                  >
+                    All Documents ({{ directTotalCount }})
+                  </button>
+                  <button
+                    v-for="yr in directYears"
+                    :key="yr"
+                    type="button"
+                    class="doc-pill-btn"
+                    :class="{ 'is-active': activeDirectYear === yr }"
+                    @click="activeDirectYear = yr"
+                  >
+                    {{ yr }} ({{ countForDirectYear(yr) }})
+                  </button>
+                </div>
+
+                <!-- Search & Counter -->
+                <div class="table-search-bar">
+                  <input
+                    v-model="searchQuery"
+                    type="text"
+                    :placeholder="`Search ${currentSection.title.toLowerCase()} by title or keyword...`"
+                    class="search-input"
+                  />
+                  <span class="search-counter" v-if="filteredDocuments.length">
+                    {{ filteredDocuments.length }} file<span v-if="filteredDocuments.length !== 1">s</span> available
+                  </span>
+                </div>
+
+                <!-- Loading State -->
+                <div v-if="loading" class="loading-state">
+                  <span class="spinner-icon">⏳</span> Loading {{ currentSection.title.toLowerCase() }}...
+                </div>
+
+                <!-- Documents Table (Old Website Style) -->
+                <div v-else-if="filteredDocuments.length > 0" class="table-responsive">
+                  <table class="da-attachments-table">
+                    <thead>
+                      <tr>
+                        <th class="attachment-index" style="width: 60px;">#</th>
+                        <th class="attachment-title">FILE</th>
+                        <th class="attachment-downloads" style="width: 140px; text-align: right;">DOWNLOADS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(doc, idx) in filteredDocuments"
+                        :key="doc.id || idx"
+                        class="pdf-row"
+                      >
+                        <td class="attachment-index">{{ idx + 1 }}</td>
+                        <td class="attachment-title">
+                          <a
+                            :href="getDocumentUrl(doc)"
+                            target="_blank"
+                            rel="noopener"
+                            class="attachment-link"
+                            @click="handleDocumentClick(doc)"
+                          >
+                            <span class="doc-icon">{{ getFileIcon(doc) }}</span>
+                            <span class="link-text">{{ doc.title }}</span>
+                            <span v-if="doc.file_size" class="doc-size">({{ doc.file_size }})</span>
+                          </a>
+                        </td>
+                        <td class="attachment-downloads" style="text-align: right;">
+                          <span class="dl-count-badge">{{ doc.download_count ?? 0 }}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Empty State -->
+                <div v-else class="old-site-empty">
+                  <p>No {{ currentSection.title.toLowerCase() }} found matching your criteria.</p>
+                </div>
+              </div>
             </div>
 
-            <div class="year-results" v-if="activeYear">
-              <div class="year-results-header">
-                <div>
-                  <p class="year-results-kicker">{{ currentSection.title }}</p>
-                  <h2 class="year-results-title">{{ activeYear.label }} Listings</h2>
-                </div>
-                <span class="year-results-count">{{ activeYear.items.length }} item<span v-if="activeYear.items.length !== 1">s</span></span>
+            <!-- FINANCIAL YEAR DRIVEN LISTINGS (Open Tenders / Open Quotations) -->
+            <div v-else class="year-driven-wrapper">
+              <!-- Year Cards Grid -->
+              <div class="year-cards-header">
+                <h2 class="year-cards-heading">Select Financial Year</h2>
+                <p class="year-cards-sub">
+                  Click a {{ currentSection.type === 'quote' ? 'quotation' : 'tender' }} year below to view and download all available procurement opportunities and documents.
+                </p>
               </div>
 
-              <div v-if="activeYear.items.length" class="year-results-list">
-                <article
-                  v-for="item in activeYear.items"
-                  :key="item.id"
-                  class="year-result-card"
+              <div class="tenders-grid">
+                <button
+                  v-for="year in availableYears"
+                  :key="year"
+                  class="tender-year-card"
+                  :class="{ 'is-active': selectedYear === year }"
+                  type="button"
+                  @click="selectYear(year)"
                 >
-                  <div class="year-result-copy">
-                    <p class="year-result-reference">{{ item.reference }}</p>
-                    <h3 class="year-result-name">{{ item.title }}</h3>
-                    <div class="year-result-meta">
-                      <span
-                        v-for="detail in item.details"
-                        :key="detail"
-                        class="year-result-detail"
-                      >
-                        {{ detail }}
-                      </span>
-                    </div>
+                  <span class="year-title">{{ year }}</span>
+                  <span class="year-badge-count">
+                    <span v-if="loading && notices.length === 0">Loading...</span>
+                    <span v-else>{{ countForYear(year) }} {{ countForYear(year) === 1 ? 'document' : 'documents' }}</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- Selected Year Document Section (Matching Old Website Design) -->
+              <div id="year-results-section" class="old-site-tender-section" v-if="selectedYear">
+                <!-- Dark Header Banner -->
+                <div class="old-site-banner">
+                  <h2 class="old-site-banner-title">{{ currentSection.title }} {{ selectedYear }}</h2>
+                </div>
+
+                <!-- Introductory Municipal Notice -->
+                <div class="old-site-content-body">
+                  <h3 class="section-kicker">{{ currentSection.kickerPrefix }}: {{ selectedYear }} Financial Year</h3>
+
+                  <p class="intro-paragraph">
+                    Welcome to the official <strong>{{ currentSection.welcomePrefix }}</strong> of the
+                    <strong>Dr. Nkosazana Dlamini-Zuma Municipality</strong> for the
+                    <strong>{{ selectedYear }} financial year</strong>.
+                  </p>
+
+                  <p class="intro-paragraph">
+                    {{ currentSection.introText }}
+                  </p>
+
+                  <p class="intro-paragraph">
+                    We are committed to a <strong>fair, transparent, and competitive procurement process</strong> that promotes
+                    local economic development, empowers emerging businesses, and ensures quality service delivery to our communities.
+                  </p>
+
+                  <div class="bullet-list-box">
+                    <p class="bullet-list-title">Here you will find:</p>
+                    <ul class="bullet-list">
+                      <li v-for="bullet in currentSection.bullets" :key="bullet">{{ bullet }}</li>
+                    </ul>
                   </div>
 
-                  <a
-                    class="year-result-action"
-                    :href="item.href || '#'"
-                    @click.prevent
-                  >
-                    {{ item.actionLabel || 'Open' }}
-                  </a>
-                </article>
-              </div>
+                  <p class="intro-paragraph">
+                    {{ currentSection.closingText }}
+                  </p>
 
-              <div v-else class="year-results-empty">
-                No records are currently available for {{ activeYear.label }}.
+                  <!-- Quick Action Link (e.g. Download Quote Documents / Download Bid Documents) -->
+                  <div v-if="currentSection.quickAction" class="quick-action-link-row">
+                    <router-link :to="currentSection.quickAction.to" class="green-text-link">
+                      {{ currentSection.quickAction.text }}
+                    </router-link>
+                  </div>
+
+                  <div class="table-intro-divider">
+                    <p class="table-intro-title">{{ currentSection.tableIntro }}</p>
+                    <h4 class="attachments-label">Print or Download File Attachments</h4>
+                  </div>
+
+                  <!-- Search & Filter within Selected Year -->
+                  <div class="table-search-bar">
+                    <input
+                      v-model="searchQuery"
+                      type="text"
+                      :placeholder="`Search ${selectedYear} ${currentSection.singularTitle.toLowerCase()} by title or keyword...`"
+                      class="search-input"
+                    />
+                    <span class="search-counter" v-if="filteredDocuments.length">
+                      {{ filteredDocuments.length }} file<span v-if="filteredDocuments.length !== 1">s</span> available
+                    </span>
+                  </div>
+
+                  <!-- Loading State -->
+                  <div v-if="loading" class="loading-state">
+                    <span class="spinner-icon">⏳</span> Loading documents for {{ selectedYear }}...
+                  </div>
+
+                  <!-- Documents Table (Old Website Style) -->
+                  <div v-else-if="filteredDocuments.length > 0" class="table-responsive">
+                    <table class="da-attachments-table">
+                      <thead>
+                        <tr>
+                          <th class="attachment-index" style="width: 60px;">#</th>
+                          <th class="attachment-title">FILE</th>
+                          <th class="attachment-downloads" style="width: 140px; text-align: right;">DOWNLOADS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(doc, idx) in filteredDocuments"
+                          :key="doc.id || idx"
+                          class="pdf-row"
+                        >
+                          <td class="attachment-index">{{ idx + 1 }}</td>
+                          <td class="attachment-title">
+                            <a
+                              :href="getDocumentUrl(doc)"
+                              target="_blank"
+                              rel="noopener"
+                              class="attachment-link"
+                              @click="handleDocumentClick(doc)"
+                            >
+                              <span class="doc-icon">{{ getFileIcon(doc) }}</span>
+                              <span class="link-text">{{ doc.title }}</span>
+                              <span v-if="doc.file_size" class="doc-size">({{ doc.file_size }})</span>
+                            </a>
+                          </td>
+                          <td class="attachment-downloads" style="text-align: right;">
+                            <span class="dl-count-badge">{{ doc.download_count ?? 0 }}</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Empty State -->
+                  <div v-else class="old-site-empty">
+                    <div v-if="errorMessage" class="error-box">
+                      <p class="error-text">{{ errorMessage }}</p>
+                      <button type="button" class="btn-retry" @click="fetchProcurementNotices">Retry</button>
+                    </div>
+                    <p v-else>No procurement documents found for {{ selectedYear }} matching your criteria.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -95,373 +287,36 @@
 </template>
 
 <script>
+import api from '../api/axios'
+
 export default {
   name: 'OpenTendersView',
   data() {
-    const openTenderYears = [
-      {
-        id: 'year-2025-2026',
-        label: '2025-2026',
-        items: [
-          {
-            id: 'ot-2526-1',
-            reference: 'UMN18/2025-26',
-            title: 'Appointment of a service provider to provide internet and VOIP service for the municipality for 36 months',
-            details: ['Published: 16 Mar 2026', 'Closing: 16 Apr 2026', '2 files'],
-            actionLabel: 'View Notice',
-          },
-          {
-            id: 'ot-2526-2',
-            reference: 'UMN20/2025-26',
-            title: 'Appointment of a panel of town planners for the municipality for 36 months',
-            details: ['Published: 05 Jan 2026', 'Closing: 04 Mar 2026', '1 file'],
-            actionLabel: 'View Notice',
-          },
-          {
-            id: 'ot-2526-3',
-            reference: 'UMN21/2025-26',
-            title: 'Appointment of a service provider for servicing fire extinguishers, fire hoses, and installation of new extinguishers',
-            details: ['Published: 05 Jan 2026', 'Closing: 05 Mar 2026', '2 files'],
-            actionLabel: 'View Notice',
-          },
-        ],
-      },
-      {
-        id: 'year-2024-2025',
-        label: '2024-2025',
-        items: [
-          {
-            id: 'ot-2425-1',
-            reference: 'UMN08/2024-25',
-            title: 'Appointment of a service provider to act as transaction advisor for the public-private partnership energy project',
-            details: ['Published: 14 Feb 2025', 'Closing: 28 Mar 2025', '1 file'],
-            actionLabel: 'View Tender',
-          },
-          {
-            id: 'ot-2425-2',
-            reference: 'UMN05/2024-25',
-            title: 'Appointment of a panel of occupational medical practitioners for a period of 36 months',
-            details: ['Published: 23 Jan 2025', 'Closing: 20 Feb 2025', '1 file'],
-            actionLabel: 'View Tender',
-          },
-          {
-            id: 'ot-2425-3',
-            reference: 'UMN03/2024-25',
-            title: 'Appointment of a panel of service providers to render tree pruning and felling services',
-            details: ['Published: 11 Nov 2024', 'Closing: 13 Dec 2024', '1 file'],
-            actionLabel: 'View Tender',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-a',
-        label: '2023-2024',
-        items: [
-          {
-            id: 'ot-2324-1',
-            reference: 'UMN01/2023-24',
-            title: 'Appointment of a service provider to provide banking and cash collection services for five years',
-            details: ['Published: 09 Oct 2023', 'Closing: 17 Nov 2023', '1 file'],
-            actionLabel: 'View Tender',
-          },
-          {
-            id: 'ot-2324-2',
-            reference: 'UMN04/2023-24',
-            title: 'Appointment of a service provider to provide insurance services for a period of 36 months',
-            details: ['Published: 06 Dec 2023', 'Closing: 26 Jan 2024', '1 file'],
-            actionLabel: 'View Tender',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-b',
-        label: '2023-2024',
-        items: [
-          {
-            id: 'ot-2324-3',
-            reference: 'UMN05/2023-24',
-            title: 'Appointment of a panel of occupational medical practitioners for a period of 36 months',
-            details: ['Published: 15 Jan 2024', 'Closing: 23 Feb 2024', '1 file'],
-            actionLabel: 'View Tender',
-          },
-        ],
-      },
-      {
-        id: 'year-2022-2023',
-        label: '2022-2023',
-        items: [
-          {
-            id: 'ot-2223-1',
-            reference: 'UMN12/2022-23',
-            title: 'Supply and installation of street lighting infrastructure upgrades',
-            details: ['Published: 08 Feb 2023', 'Closing: 17 Mar 2023', '2 files'],
-            actionLabel: 'View Tender',
-          },
-          {
-            id: 'ot-2223-2',
-            reference: 'UMN09/2022-23',
-            title: 'Appointment of a service provider for fleet maintenance and repairs',
-            details: ['Published: 19 Sep 2022', 'Closing: 28 Oct 2022', '1 file'],
-            actionLabel: 'View Tender',
-          },
-        ],
-      },
-      {
-        id: 'year-2021-2022',
-        label: '2021-2022',
-        items: [
-          {
-            id: 'ot-2122-1',
-            reference: 'UMN07/2021-22',
-            title: 'Construction of community sanitation facilities in identified wards',
-            details: ['Published: 03 Nov 2021', 'Closing: 15 Dec 2021', '3 files'],
-            actionLabel: 'View Tender',
-          },
-        ],
-      },
-    ]
-
-    const openQuoteYears = [
-      {
-        id: 'year-2025-2026',
-        label: '2025-2026',
-        items: [
-          {
-            id: 'oq-2526-1',
-            reference: 'Q-01/2026',
-            title: 'Supply and delivery of office stationery for the municipality',
-            details: ['Published: 01 Apr 2026', 'Closing: 15 Apr 2026', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-          {
-            id: 'oq-2526-2',
-            reference: 'Q-02/2026',
-            title: 'Provision of catering services for the upcoming mayoral imbizo',
-            details: ['Published: 28 Mar 2026', 'Closing: 10 Apr 2026', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-        ],
-      },
-      {
-        id: 'year-2024-2025',
-        label: '2024-2025',
-        items: [
-          {
-            id: 'oq-2425-1',
-            reference: 'Q-18/2025',
-            title: 'Supply of personal protective equipment for field teams',
-            details: ['Published: 18 Feb 2025', 'Closing: 01 Mar 2025', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-          {
-            id: 'oq-2425-2',
-            reference: 'Q-11/2024',
-            title: 'Repair and servicing of municipal printers and copiers',
-            details: ['Published: 04 Nov 2024', 'Closing: 15 Nov 2024', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-a',
-        label: '2023-2024',
-        items: [
-          {
-            id: 'oq-2324-1',
-            reference: 'Q-07/2024',
-            title: 'Supply and delivery of cleaning material for municipal offices',
-            details: ['Published: 06 May 2024', 'Closing: 17 May 2024', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-b',
-        label: '2023-2024',
-        items: [
-          {
-            id: 'oq-2324-2',
-            reference: 'Q-03/2024',
-            title: 'Appointment of a service provider for event staging and sound hire',
-            details: ['Published: 09 Jan 2024', 'Closing: 19 Jan 2024', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-        ],
-      },
-      {
-        id: 'year-2022-2023',
-        label: '2022-2023',
-        items: [
-          {
-            id: 'oq-2223-1',
-            reference: 'Q-26/2023',
-            title: 'Supply of road signs and traffic cones for public works',
-            details: ['Published: 03 Mar 2023', 'Closing: 10 Mar 2023', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-        ],
-      },
-      {
-        id: 'year-2021-2022',
-        label: '2021-2022',
-        items: [
-          {
-            id: 'oq-2122-1',
-            reference: 'Q-14/2022',
-            title: 'Maintenance of council chamber audio visual equipment',
-            details: ['Published: 22 Feb 2022', 'Closing: 04 Mar 2022', '1 file'],
-            actionLabel: 'View RFQ',
-          },
-        ],
-      },
-    ]
-
-    const bidDocumentYears = [
-      {
-        id: 'year-2025-2026',
-        label: '2025-2026',
-        items: [
-          {
-            id: 'bd-2526-1',
-            reference: 'BD-2026-01',
-            title: 'Bid returnables and declaration forms pack',
-            details: ['Updated: 12 Jul 2026', 'PDF and Word pack', '4 files'],
-            actionLabel: 'Open Pack',
-          },
-          {
-            id: 'bd-2526-2',
-            reference: 'BD-2026-02',
-            title: 'General conditions of contract and tender compliance checklist',
-            details: ['Updated: 04 Jun 2026', 'PDF pack', '2 files'],
-            actionLabel: 'Open Pack',
-          },
-        ],
-      },
-      {
-        id: 'year-2024-2025',
-        label: '2024-2025',
-        items: [
-          {
-            id: 'bd-2425-1',
-            reference: 'BD-2025-03',
-            title: 'CIDB evaluation schedules and compulsory briefing forms',
-            details: ['Updated: 13 Feb 2025', 'Spreadsheet and PDF', '3 files'],
-            actionLabel: 'Open Pack',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-a',
-        label: '2023-2024',
-        items: [
-          {
-            id: 'bd-2324-1',
-            reference: 'BD-2024-01',
-            title: 'Supplier declaration, tax clearance, and functionality schedule',
-            details: ['Updated: 10 Apr 2024', 'PDF pack', '3 files'],
-            actionLabel: 'Open Pack',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-b',
-        label: '2023-2024',
-        items: [],
-      },
-      {
-        id: 'year-2022-2023',
-        label: '2022-2023',
-        items: [
-          {
-            id: 'bd-2223-1',
-            reference: 'BD-2023-05',
-            title: 'Historic bid forms and supplementary returnables',
-            details: ['Updated: 01 Aug 2022', 'Archive pack', '2 files'],
-            actionLabel: 'Open Archive',
-          },
-        ],
-      },
-      {
-        id: 'year-2021-2022',
-        label: '2021-2022',
-        items: [],
-      },
-    ]
-
-    const quoteDocumentYears = [
-      {
-        id: 'year-2025-2026',
-        label: '2025-2026',
-        items: [
-          {
-            id: 'qd-2526-1',
-            reference: 'QD-2026-01',
-            title: 'Standard quotation request template and vendor response form',
-            details: ['Updated: 09 Jul 2026', 'Word and PDF', '2 files'],
-            actionLabel: 'Open Pack',
-          },
-          {
-            id: 'qd-2526-2',
-            reference: 'QD-2026-02',
-            title: 'Local content declaration and pricing schedule template',
-            details: ['Updated: 18 May 2026', 'Spreadsheet pack', '2 files'],
-            actionLabel: 'Open Pack',
-          },
-        ],
-      },
-      {
-        id: 'year-2024-2025',
-        label: '2024-2025',
-        items: [
-          {
-            id: 'qd-2425-1',
-            reference: 'QD-2025-04',
-            title: 'Archived quotation templates for supply and service requests',
-            details: ['Updated: 14 Jan 2025', 'Archive pack', '3 files'],
-            actionLabel: 'Open Archive',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-a',
-        label: '2023-2024',
-        items: [
-          {
-            id: 'qd-2324-1',
-            reference: 'QD-2024-02',
-            title: 'Quotation compliance forms and vendor declaration pack',
-            details: ['Updated: 22 Mar 2024', 'PDF pack', '2 files'],
-            actionLabel: 'Open Pack',
-          },
-        ],
-      },
-      {
-        id: 'year-2023-2024-b',
-        label: '2023-2024',
-        items: [],
-      },
-      {
-        id: 'year-2022-2023',
-        label: '2022-2023',
-        items: [
-          {
-            id: 'qd-2223-1',
-            reference: 'QD-2023-03',
-            title: 'Historical RFQ evaluation and adjudication templates',
-            details: ['Updated: 02 Nov 2022', 'Archive pack', '2 files'],
-            actionLabel: 'Open Archive',
-          },
-        ],
-      },
-      {
-        id: 'year-2021-2022',
-        label: '2021-2022',
-        items: [],
-      },
-    ]
-
     return {
-      selectedYearId: 'year-2025-2026',
+      selectedYear: '2025-2026',
+      searchQuery: '',
+      activeDirectYear: 'all',
+      loading: false,
+      errorMessage: '',
+      notices: (() => {
+        try {
+          return JSON.parse(localStorage.getItem('cached_procurement_notices') || '[]')
+        } catch {
+          return []
+        }
+      })(),
+      availableYears: [
+        '2026-2027',
+        '2025-2026',
+        '2024-2025',
+        '2023-2024',
+        '2022-2023',
+        '2021-2022',
+        '2020-2021',
+        '2018-2019',
+        '2017-2018',
+        '2016-2017',
+      ],
       tabs: [
         { id: 'open-tenders', label: 'Open Tenders', to: '/open-tenders' },
         { id: 'open-quotes', label: 'Open Quotations', to: '/open-quotes' },
@@ -472,22 +327,62 @@ export default {
         'open-tenders': {
           id: 'open-tenders',
           title: 'Open Tenders',
-          years: openTenderYears,
+          singularTitle: 'Tenders',
+          type: 'tender',
+          category: 'Open Tenders',
+          isDirect: false,
+          kickerPrefix: 'Tenders',
+          welcomePrefix: 'Tenders Section',
+          introText: 'This platform provides all relevant tender notices, bid documents, and procurement opportunities available to Service Providers, Contractors, and Suppliers interested in doing business with the municipality.',
+          bullets: [
+            'Open Tender Invitations',
+            'Bid Specifications and Requirements',
+            'Closing Dates and Submission Guidelines',
+          ],
+          closingText: "All interested parties are encouraged to regularly check this page for updates and to ensure compliance with the specific conditions of each tender. Together, let's build a responsive, inclusive, and service-driven municipality.",
+          quickAction: {
+            text: 'Download Bid Documents',
+            to: '/bid-documents',
+          },
+          defaultYear: '2025-2026',
         },
         'open-quotes': {
           id: 'open-quotes',
           title: 'Open Quotations',
-          years: openQuoteYears,
+          singularTitle: 'Quotations',
+          type: 'quote',
+          category: 'Quotations',
+          isDirect: false,
+          kickerPrefix: 'Quotations',
+          welcomePrefix: 'Quotation Section',
+          introText: 'This platform provides all relevant quotations notices, quote documents, and procurement opportunities available to Service Providers, Contractors, and Suppliers interested in doing business with the municipality.',
+          bullets: [
+            'Request for Quotations (RFQs)',
+            'Quote Specifications and Requirements',
+            'Closing Dates and Submission Guidelines',
+          ],
+          closingText: "All interested parties are encouraged to regularly check this page for updates and to ensure compliance with the specific conditions of each quotation. Together, let's build a responsive, inclusive, and service-driven municipality.",
+          quickAction: {
+            text: 'Download Quote Documents',
+            to: '/quote-documents',
+          },
+          defaultYear: '2026-2027',
         },
         'bid-documents': {
           id: 'bid-documents',
           title: 'Bid Documents',
-          years: bidDocumentYears,
+          singularTitle: 'Bid Documents',
+          type: 'tender',
+          category: 'Bid Documents',
+          isDirect: true,
         },
         'quote-documents': {
           id: 'quote-documents',
           title: 'Quote Documents',
-          years: quoteDocumentYears,
+          singularTitle: 'Quote Documents',
+          type: 'quote',
+          category: 'Quote Documents',
+          isDirect: true,
         },
       },
     }
@@ -496,18 +391,192 @@ export default {
     currentSection() {
       return this.sections[this.$route.name] || this.sections['open-tenders']
     },
-    activeYear() {
-      return this.currentSection.years.find((year) => year.id === this.selectedYearId) || this.currentSection.years[0] || null
+    isDirectListing() {
+      return Boolean(this.currentSection.isDirect)
+    },
+    directYears() {
+      const set = new Set()
+      this.notices.forEach((n) => {
+        if (n.category === this.currentSection.category && n.financial_year) {
+          set.add(n.financial_year.replace('/', '-'))
+        }
+      })
+      return Array.from(set).sort()
+    },
+    directTotalCount() {
+      return this.notices.filter((n) => n.category === this.currentSection.category).length
+    },
+    filteredDocuments() {
+      const q = this.searchQuery.trim().toLowerCase()
+      const targetYear = (this.selectedYear || '').toLowerCase().replace('/', '-')
+
+      let list = []
+
+      if (this.isDirectListing) {
+        list = this.notices.filter((n) => {
+          if (n.category !== this.currentSection.category) return false
+          if (this.activeDirectYear !== 'all') {
+            const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
+            if (itemYear !== this.activeDirectYear.toLowerCase()) return false
+          }
+          return true
+        })
+      } else {
+        list = this.notices.filter((n) => {
+          const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
+          if (itemYear !== targetYear) return false
+
+          if (this.currentSection.id === 'open-quotes') {
+            return n.type === 'quote' || n.category === 'Quotations' || n.category === 'Open Quotations'
+          }
+          return n.type === 'tender' || n.category === 'Open Tenders' || (!n.type && !n.category?.includes('Quote'))
+        })
+      }
+
+      if (q) {
+        list = list.filter(
+          (doc) =>
+            doc.title?.toLowerCase().includes(q) ||
+            doc.reference_no?.toLowerCase().includes(q) ||
+            doc.file_name?.toLowerCase().includes(q)
+        )
+      }
+
+      list.sort((a, b) => {
+        const nameA = a.file_name || a.reference_no || a.title || ''
+        const nameB = b.file_name || b.reference_no || b.title || ''
+        return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' })
+      })
+
+      return list
     },
   },
   watch: {
     '$route.name'() {
-      this.selectedYearId = this.currentSection.years[0]?.id || null
+      this.searchQuery = ''
+      this.activeDirectYear = 'all'
+      if (!this.isDirectListing && !this.$route.query.year) {
+        this.selectedYear = this.pickDefaultYear()
+      }
+      this.fetchProcurementNotices()
     },
   },
+  mounted() {
+    if (this.$route.query.year) {
+      this.selectedYear = this.$route.query.year.replace('/', '-')
+    } else {
+      this.selectedYear = this.currentSection.defaultYear || '2025-2026'
+    }
+    this.fetchProcurementNotices()
+  },
   methods: {
-    setActiveYear(yearId) {
-      this.selectedYearId = yearId
+    pickDefaultYear() {
+      if (this.$route.query.year) {
+        return this.$route.query.year.replace('/', '-')
+      }
+      const section = this.currentSection
+      if (section.defaultYear && this.countForYear(section.defaultYear) > 0) {
+        return section.defaultYear
+      }
+      for (const yr of this.availableYears) {
+        if (this.countForYear(yr) > 0) {
+          return yr
+        }
+      }
+      return section.defaultYear || '2025-2026'
+    },
+    getFileIcon(doc) {
+      const name = (doc.file_name || doc.document_url || doc.title || '').toLowerCase()
+      if (name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.csv') || name.includes('boq')) {
+        return '📊'
+      }
+      if (name.endsWith('.doc') || name.endsWith('.docx')) {
+        return '📝'
+      }
+      if (name.endsWith('.zip') || name.endsWith('.rar')) {
+        return '🗜️'
+      }
+      return '📄'
+    },
+    getDocumentUrl(doc) {
+      if (!doc || !doc.document_url) return '#'
+      if (doc.document_url.startsWith('http://') || doc.document_url.startsWith('https://')) {
+        return doc.document_url
+      }
+      if (typeof window !== 'undefined' && (window.location.port === '5199' || window.location.port === '5173')) {
+        return `http://127.0.0.1:8000${doc.document_url}`
+      }
+      return doc.document_url
+    },
+    async fetchProcurementNotices() {
+      this.loading = true
+      this.errorMessage = ''
+      try {
+        const { data } = await api.get('/api/procurement')
+        this.notices = data.data || []
+        try {
+          localStorage.setItem('cached_procurement_notices', JSON.stringify(this.notices))
+        } catch {}
+
+        // Extract available years from live data
+        const yearSet = new Set(this.availableYears)
+        this.notices.forEach((n) => {
+          if (n.financial_year && n.financial_year !== 'Current') {
+            yearSet.add(n.financial_year.replace('/', '-'))
+          }
+        })
+        this.availableYears = Array.from(yearSet).sort().reverse()
+
+        // Ensure selected year is in available list and has items if possible
+        if (!this.isDirectListing) {
+          if (!this.availableYears.includes(this.selectedYear) || (this.countForYear(this.selectedYear) === 0 && !this.$route.query.year)) {
+            this.selectedYear = this.pickDefaultYear()
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load procurement notices', err)
+        if (this.notices.length === 0) {
+          this.errorMessage = 'Unable to load procurement documents. Please check backend connection and retry.'
+        }
+      } finally {
+        this.loading = false
+      }
+    },
+    countForYear(year) {
+      const targetYear = (year || '').toLowerCase().replace('/', '-')
+      return this.notices.filter((n) => {
+        const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
+        if (itemYear !== targetYear) return false
+        if (this.currentSection.id === 'open-quotes') {
+          return n.type === 'quote' || n.category === 'Quotations' || n.category === 'Open Quotations'
+        }
+        return n.type === 'tender' || n.category === 'Open Tenders' || (!n.type && !n.category?.includes('Quote'))
+      }).length
+    },
+    countForDirectYear(yr) {
+      const target = (yr || '').toLowerCase().replace('/', '-')
+      return this.notices.filter((n) => {
+        if (n.category !== this.currentSection.category) return false
+        const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
+        return itemYear === target
+      }).length
+    },
+    selectYear(year) {
+      this.selectedYear = year
+      this.searchQuery = ''
+      // Scroll smoothly to the results section
+      this.$nextTick(() => {
+        const el = document.getElementById('year-results-section')
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
+    },
+    handleDocumentClick(doc) {
+      doc.download_count = (doc.download_count || 0) + 1
+      if (doc.id) {
+        api.get(`/api/procurement/${doc.id}/download`).catch(() => {})
+      }
     },
   },
 }
@@ -516,11 +585,11 @@ export default {
 <style scoped>
 .page-wrapper {
   min-height: 100vh;
-  background-color: #f3f3f3;
+  background-color: #f7f9f8;
 }
 
 .open-tenders-section {
-  padding: 2rem 0 5rem;
+  padding: 2.5rem 0 5rem;
 }
 
 .page-header :deep(.breadcrumb-item + .breadcrumb-item::before) {
@@ -537,6 +606,9 @@ export default {
 
 .tenders-shell {
   width: 100%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .tenders-tabs {
@@ -544,6 +616,7 @@ export default {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: stretch;
   gap: 0;
+  background: #ffffff;
 }
 
 .tenders-tab {
@@ -558,215 +631,399 @@ export default {
   font-weight: 700;
   text-align: center;
   text-decoration: none;
-  border: 1px solid #ececec;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1px solid #eef2f0;
+  transition: all 0.2s ease;
 }
 
 .tenders-tab:hover {
-  color: #0d9d49;
+  color: #0f6b3b;
+  background: #f4faf6;
 }
 
 .tenders-tab.is-active {
-  background: #0d9d49;
+  background: #0f6b3b;
   color: #ffffff;
-  border-color: #0d9d49;
+  border-color: #0f6b3b;
 }
 
 .tenders-panel {
-  padding: 1.35rem;
+  padding: 2.5rem 2rem;
   background: #ffffff;
+}
+
+.year-cards-header {
+  margin-bottom: 1.5rem;
+}
+
+.year-cards-heading {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #17231c;
+  margin: 0 0 0.4rem;
+}
+
+.year-cards-sub {
+  color: #5a6678;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 .tenders-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.15rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
 }
 
 .tender-year-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 13.25rem;
+  min-height: 10.5rem;
   padding: 1.5rem;
   width: 100%;
   background: #ffffff;
-  color: #1f2f4a;
-  font-size: clamp(1.85rem, 2vw, 2.2rem);
-  font-weight: 700;
-  text-decoration: none;
-  font-family: inherit;
-  border: 2px solid #0d9d49;
+  color: #003323;
+  border: 2px solid #0f6b3b;
+  border-radius: 12px;
   appearance: none;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(15, 107, 59, 0.05);
 }
 
 .tender-year-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(13, 157, 73, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(15, 107, 59, 0.15);
+  border-color: #0c562f;
 }
 
 .tender-year-card.is-active {
-  background: #0d9d49;
+  background: #0f6b3b;
   color: #ffffff;
-  box-shadow: 0 14px 30px rgba(13, 157, 73, 0.2);
+  border-color: #0f6b3b;
+  box-shadow: 0 12px 28px rgba(15, 107, 59, 0.25);
 }
 
-.year-results {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
+.year-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-.year-results-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
+.year-badge-count {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  background: #eef8f2;
+  color: #0f6b3b;
+}
+
+.tender-year-card.is-active .year-badge-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+/* Old Site Tender Section */
+.old-site-tender-section {
+  border-top: 2px solid #eef2f0;
+  padding-top: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.old-site-banner {
+  background: #17231c;
+  color: #ffffff;
+  padding: 1.25rem 1.75rem;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 1.75rem;
+}
+
+.old-site-banner-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.old-site-content-body {
+  padding: 0 0.5rem;
+}
+
+.section-kicker {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #17231c;
   margin-bottom: 1rem;
 }
 
-.year-results-kicker {
-  margin: 0 0 0.35rem;
-  color: #0d9d49;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.intro-paragraph {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: #334155;
+  margin-bottom: 0.9rem;
 }
 
-.year-results-title {
-  margin: 0;
-  color: #1f2f4a;
-  font-size: clamp(1.4rem, 2vw, 1.8rem);
+.bullet-list-box {
+  background: #f8faf9;
+  border-left: 4px solid #0f6b3b;
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1.25rem 0;
+}
+
+.bullet-list-title {
   font-weight: 800;
+  font-size: 0.95rem;
+  color: #17231c;
+  margin-bottom: 0.4rem;
 }
 
-.year-results-count {
+.bullet-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #334155;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.quick-action-link-row {
+  margin: 1.25rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #dce8e0;
+}
+
+.green-text-link {
+  color: #0f6b3b;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: underline;
+  transition: color 0.15s ease;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.45rem 0.85rem;
-  background: #eef8f2;
-  color: #0d9d49;
-  font-size: 0.9rem;
-  font-weight: 700;
-  border-radius: 999px;
+  gap: 0.35rem;
 }
 
-.year-results-list {
-  display: grid;
-  gap: 1rem;
+.green-text-link:hover {
+  color: #094726;
+  text-decoration: underline;
 }
 
-.year-result-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.2rem 1.25rem;
-  background: #f8fbf9;
-  border: 1px solid #dcebdd;
-  border-left: 4px solid #0d9d49;
-  border-radius: 0.75rem;
+.table-intro-divider {
+  margin-top: 1.75rem;
+  margin-bottom: 1rem;
 }
 
-.year-result-copy {
-  min-width: 0;
+.table-intro-title {
+  font-size: 0.95rem;
+  color: #334155;
+  margin-bottom: 0.5rem;
 }
 
-.year-result-reference {
-  margin: 0 0 0.35rem;
-  color: #0d9d49;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+.attachments-label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #17231c;
+  margin: 0;
 }
 
-.year-result-name {
-  margin: 0 0 0.65rem;
-  color: #1f2f4a;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-.year-result-meta {
+/* Document Filter Pills */
+.doc-filter-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
 }
 
-.year-result-detail {
-  color: #5a6678;
-  font-size: 0.92rem;
+.doc-pill-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 50px;
+  background: #f1f6f3;
+  color: #17231c;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: 1px solid #c2dbcd;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.year-result-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.8rem 1.15rem;
-  background: #0d9d49;
+.doc-pill-btn:hover {
+  background: #e1efe7;
+  color: #0f6b3b;
+}
+
+.doc-pill-btn.is-active {
+  background: #0f6b3b;
   color: #ffffff;
+  border-color: #0f6b3b;
+}
+
+.table-search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 0.65rem 1rem;
+  border: 1px solid #d9e6de;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #fbfdfc;
+}
+
+.search-counter {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f6b3b;
+}
+
+/* Da-Attachments-Table matching the old website */
+.table-responsive {
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #eef2f0;
+  border-radius: 8px;
+}
+
+.da-attachments-table {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 0.92rem;
+}
+
+.da-attachments-table thead th {
+  background: #f8faf9;
+  color: #4a5c52;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1.2rem;
+  border-bottom: 2px solid #dde6e1;
+  text-align: left;
+}
+
+.da-attachments-table tbody tr {
+  border-bottom: 1px solid #edf3ef;
+  transition: background-color 0.15s ease;
+}
+
+.da-attachments-table tbody tr:hover {
+  background-color: #f4faf6;
+}
+
+.da-attachments-table td {
+  padding: 0.9rem 1.2rem;
+  vertical-align: middle;
+}
+
+.attachment-index {
+  color: #6c7d73;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.attachment-link {
+  color: #0f6b3b;
   font-weight: 700;
   text-decoration: none;
-  border-radius: 0.65rem;
-  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.4;
 }
 
-.year-result-action:hover {
-  background: #0a853d;
-  color: #ffffff;
+.attachment-link:hover {
+  color: #0c562f;
+  text-decoration: underline;
 }
 
-.year-results-empty {
-  padding: 1.25rem;
-  color: #5a6678;
-  font-size: 0.98rem;
+.doc-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.doc-size {
+  color: #6c7d73;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.dl-count-badge {
+  display: inline-block;
+  background: #f0f7f3;
+  color: #0f6b3b;
+  padding: 0.2rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 1px solid #c2dbcd;
+}
+
+.old-site-empty {
   text-align: center;
-  background: #f8fbf9;
-  border: 1px dashed #c7d8c8;
-  border-radius: 0.75rem;
+  padding: 3rem 1rem;
+  color: #6c7d73;
+  background: #f8faf9;
+  border-radius: 8px;
+  border: 1px dashed #c2dbcd;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #0f6b3b;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.spinner-icon {
+  display: inline-block;
+  margin-right: 0.4rem;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 @media (max-width: 991.98px) {
   .tenders-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .tenders-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .year-results-header,
-  .year-result-card {
-    align-items: flex-start;
-    flex-direction: column;
-  }
 }
 
 @media (max-width: 575.98px) {
-  .open-tenders-section {
-    padding: 1.5rem 0 4rem;
-  }
-
-  .tenders-tabs,
-  .tenders-grid {
+  .tenders-tabs {
     grid-template-columns: 1fr;
   }
 
-  .tenders-tab {
-    min-height: 3.35rem;
-    font-size: 1rem;
+  .tender-year-card {
+    min-height: 8.5rem;
   }
 
-  .tender-year-card {
-    min-height: 10rem;
-    font-size: 1.7rem;
+  .year-title {
+    font-size: 1.8rem;
+  }
+
+  .tenders-panel {
+    padding: 1.5rem 1rem;
   }
 }
 </style>

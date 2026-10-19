@@ -139,6 +139,9 @@ export default {
       if (this.auth.canManageUsers) {
         adminItems.push({ icon: '👥', label: 'Users & Roles', to: '/dashboard/users' })
       }
+      if (this.auth.canManageDepartments) {
+        adminItems.push({ icon: '🏛', label: 'Departments', to: '/dashboard/departments' })
+      }
       if (this.auth.canManageSettings) {
         adminItems.push({ icon: '⚙', label: 'Site Settings', to: '/dashboard/settings' })
       }

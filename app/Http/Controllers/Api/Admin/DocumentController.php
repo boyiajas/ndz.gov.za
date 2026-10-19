@@ -14,8 +14,32 @@ class DocumentController extends Controller
     {
         $this->authorizeManage($request);
 
-        $documents = Document::query()
-            ->with(['category', 'subcategory.category', 'creator:id,name,email', 'updater:id,name,email'])
+        $user = $request->user();
+        $query = Document::query()
+            ->with(['category.department:id,name,code', 'subcategory.category', 'department:id,name,code', 'creator:id,name,email', 'updater:id,name,email']);
+
+        $deptIds = $user->departmentIds();
+
+        if (! $user->isGlobalAdmin() && ! empty($deptIds)) {
+            $query->forUserDepartment($user);
+            if ($request->filled('department_id') && $request->input('department_id') !== 'all') {
+                $targetDept = (int) $request->input('department_id');
+                if (in_array($targetDept, $deptIds, true)) {
+                    $query->where(function ($q) use ($targetDept) {
+                        $q->where('documents.department_id', $targetDept)
+                          ->orWhereHas('category', fn ($c) => $c->where('department_id', $targetDept));
+                    });
+                }
+            }
+        } elseif ($request->filled('department_id') && $request->input('department_id') !== 'all') {
+            $deptId = (int) $request->input('department_id');
+            $query->where(function ($q) use ($deptId) {
+                $q->where('documents.department_id', $deptId)
+                  ->orWhereHas('category', fn ($c) => $c->where('department_id', $deptId));
+            });
+        }
+
+        $documents = $query
             ->when($request->integer('document_category_id'), function ($query, int $categoryId) {
                 $query->where('document_category_id', $categoryId);
             })
@@ -42,30 +66,73 @@ class DocumentController extends Controller
     {
         $this->authorizeManage($request);
 
+        $user = $request->user();
+        $deptIds = $user->departmentIds();
         $data = $this->validated($request);
-        $data['created_by'] = $request->user()->id;
-        $data['updated_by'] = $request->user()->id;
+
+        if (! $user->isGlobalAdmin() && ! empty($deptIds)) {
+            $category = \App\Models\DocumentCategory::find($data['document_category_id']);
+            if ($category && $category->department_id && ! in_array((int) $category->department_id, $deptIds, true)) {
+                abort(403, 'You can only upload documents to categories belonging to your assigned department(s).');
+            }
+            if (empty($data['department_id']) || ! in_array((int) $data['department_id'], $deptIds, true)) {
+                $data['department_id'] = $category?->department_id ?: $deptIds[0];
+            }
+        } elseif (empty($data['department_id']) && ! empty($data['document_category_id'])) {
+            $category = \App\Models\DocumentCategory::find($data['document_category_id']);
+            $data['department_id'] = $category?->department_id;
+        }
+
+        $data['created_by'] = $user->id;
+        $data['updated_by'] = $user->id;
 
         $document = Document::create($data);
 
-        return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'creator:id,name,email'])], 201);
+        return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'department', 'creator:id,name,email'])], 201);
     }
 
     public function update(Request $request, Document $document): JsonResponse
     {
         $this->authorizeManage($request);
 
+        $user = $request->user();
+        $deptIds = $user->departmentIds();
+
+        if (! $user->isGlobalAdmin() && ! empty($deptIds)) {
+            $docDept = $document->department_id ?? $document->category?->department_id;
+            if ($docDept && ! in_array((int) $docDept, $deptIds, true)) {
+                abort(403, 'You are not authorized to update documents belonging to another department.');
+            }
+        }
+
         $data = $this->validated($request);
-        $data['updated_by'] = $request->user()->id;
+
+        if (! $user->isGlobalAdmin() && ! empty($deptIds)) {
+            if (empty($data['department_id']) || ! in_array((int) $data['department_id'], $deptIds, true)) {
+                $data['department_id'] = $document->department_id ?: $deptIds[0];
+            }
+        }
+
+        $data['updated_by'] = $user->id;
 
         $document->update($data);
 
-        return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'creator:id,name,email', 'updater:id,name,email'])]);
+        return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'department', 'creator:id,name,email', 'updater:id,name,email'])]);
     }
 
     public function destroy(Request $request, Document $document): JsonResponse
     {
         $this->authorizeManage($request);
+
+        $user = $request->user();
+        $deptIds = $user->departmentIds();
+
+        if (! $user->isGlobalAdmin() && ! empty($deptIds)) {
+            $docDept = $document->department_id ?? $document->category?->department_id;
+            if ($docDept && ! in_array((int) $docDept, $deptIds, true)) {
+                abort(403, 'You are not authorized to delete documents belonging to another department.');
+            }
+        }
 
         $document->delete();
 
@@ -77,6 +144,7 @@ class DocumentController extends Controller
         $data = $request->validate([
             'document_category_id' => ['nullable', 'integer', Rule::exists('document_categories', 'id')],
             'document_subcategory_id' => ['nullable', 'integer', Rule::exists('document_subcategories', 'id')],
+            'department_id' => ['nullable', 'integer', Rule::exists('departments', 'id')],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'file_url' => ['nullable', 'string', 'max:2048'],
