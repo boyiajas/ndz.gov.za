@@ -36,7 +36,7 @@ class SyncLiveQuotesCommand extends Command
         if (!$skipDownload) {
             $this->info('Starting Python quotation downloader from live site ndz.gov.za...');
             $scriptPath = base_path('scripts/download_and_import_quotes.py');
-            $cmd = 'python3 ' . escapeshellarg($scriptPath);
+            $cmd = 'python3 ' . escapeshellarg($scriptPath) . ' --base-dir ' . escapeshellarg(base_path());
             if ($years) {
                 $cmd .= ' ' . escapeshellarg($years);
             }

@@ -28,3 +28,7 @@ Thumbs.db
 /storage/app/public/documents/
 /public/storage/
 
+# Python caches
+__pycache__/
+*.pyc
+

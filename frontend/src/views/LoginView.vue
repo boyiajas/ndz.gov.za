@@ -68,10 +68,13 @@ export default {
     return {
       form: { email: '', password: '' },
       seededAccounts: [
-        { role: 'Administrator', email: 'admin@ndz.gov.za' },
-        { role: 'Municipal Manager', email: 'manager@ndz.gov.za' },
-        { role: 'Content Editor', email: 'editor@ndz.gov.za' },
-        { role: 'Citizen', email: 'citizen@ndz.gov.za' },
+        { role: 'Admin (IT)', email: 'spenganem@ndz.gov.za' },
+        { role: 'Admin (Systems)', email: 'nxelem@ndz.gov.za' },
+        { role: 'Communications', email: 'communications@ndz.gov.za' },
+        { role: 'Projects', email: 'mshengus@ndz.gov.za' },
+        { role: 'Services', email: 'sokhelab@ndz.gov.za' },
+        { role: 'Spokesperson', email: 'vakalisan@ndz.gov.za' },
+        { role: 'Portal Admin', email: 'admin@ndz.gov.za' },
       ],
     }
   },
@@ -81,7 +84,7 @@ export default {
       this.form.password = 'Password123!'
     },
     async handleSubmit() {
-      const ok = await this.auth.login(this.form.email, this.form.password)
+      const ok = await this.auth.login(this.form.email.trim(), this.form.password)
       if (ok) this.router.push(this.route.query.redirect || '/dashboard')
     },
   },

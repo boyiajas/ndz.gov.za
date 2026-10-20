@@ -26,7 +26,18 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-BASE_DIR = "/var/www/Laravel_Projects/ndz.gov.za"
+def get_base_dir():
+    base = os.getenv("LARAVEL_BASE_PATH", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    args = sys.argv[1:]
+    i = 0
+    while i < len(args):
+        if args[i] == '--base-dir' and i + 1 < len(args):
+            base = args[i + 1]
+            break
+        i += 1
+    return os.path.abspath(base)
+
+BASE_DIR = get_base_dir()
 BID_DIR = os.path.join(BASE_DIR, "storage/app/public/uploads/bid_documents")
 QUOTE_DIR = os.path.join(BASE_DIR, "storage/app/public/uploads/quote_documents")
 MANIFEST_PATH = os.path.join(BASE_DIR, "storage/app/bid_and_quote_docs_manifest.json")

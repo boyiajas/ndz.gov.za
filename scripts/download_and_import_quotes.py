@@ -14,10 +14,6 @@ import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 
-BASE_DIR = "/var/www/Laravel_Projects/ndz.gov.za"
-OUTPUT_DIR = os.path.join(BASE_DIR, "storage/app/public/uploads/quotes")
-MANIFEST_PATH = os.path.join(BASE_DIR, "storage/app/quotes_manifest.json")
-
 YEARS = [
     '2026-2027',
     '2025-2026',
@@ -30,6 +26,26 @@ YEARS = [
     '2017-2018',
     '2016-2017'
 ]
+
+def get_config():
+    base = os.getenv("LARAVEL_BASE_PATH", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    target_years = YEARS
+    args = sys.argv[1:]
+    i = 0
+    while i < len(args):
+        if args[i] == '--base-dir' and i + 1 < len(args):
+            base = args[i + 1]
+            i += 2
+        elif not args[i].startswith('--'):
+            target_years = args[i].split(',')
+            i += 1
+        else:
+            i += 1
+    return os.path.abspath(base), target_years
+
+BASE_DIR, _ = get_config()
+OUTPUT_DIR = os.path.join(BASE_DIR, "storage/app/public/uploads/quotes")
+MANIFEST_PATH = os.path.join(BASE_DIR, "storage/app/quotes_manifest.json")
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -163,8 +179,7 @@ def main():
     
     all_items = []
     session = requests.Session()
-    
-    target_years = sys.argv[1].split(',') if len(sys.argv) > 1 and sys.argv[1] else YEARS
+    _, target_years = get_config()
     
     print(f"=== Starting Quotations Crawl for {len(target_years)} years ===")
     for year in target_years:

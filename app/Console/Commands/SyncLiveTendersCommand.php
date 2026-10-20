@@ -36,7 +36,7 @@ class SyncLiveTendersCommand extends Command
         if (!$skipDownload) {
             $this->info('Starting Python tender downloader from live site ndz.gov.za...');
             $scriptPath = base_path('scripts/download_and_import_tenders.py');
-            $cmd = 'python3 ' . escapeshellarg($scriptPath);
+            $cmd = 'python3 ' . escapeshellarg($scriptPath) . ' --base-dir ' . escapeshellarg(base_path());
             if ($years) {
                 $cmd .= ' ' . escapeshellarg($years);
             }

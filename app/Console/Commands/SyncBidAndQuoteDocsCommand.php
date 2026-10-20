@@ -34,7 +34,7 @@ class SyncBidAndQuoteDocsCommand extends Command
         if (!$skipDownload) {
             $this->info('Starting Python downloader for Bid Documents and Quote Documents from ndz.gov.za...');
             $scriptPath = base_path('scripts/download_and_import_bid_and_quote_docs.py');
-            $cmd = 'python3 ' . escapeshellarg($scriptPath);
+            $cmd = 'python3 ' . escapeshellarg($scriptPath) . ' --base-dir ' . escapeshellarg(base_path());
 
             $exitCode = 0;
             passthru($cmd, $exitCode);
