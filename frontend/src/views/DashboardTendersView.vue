@@ -34,6 +34,20 @@
 
     <!-- Filter Bar -->
     <section class="portal-panel filter-panel mb-4">
+      <!-- Category Quick Filter Tabs -->
+      <div class="category-tabs-row">
+        <button
+          v-for="cat in quickCategories"
+          :key="cat.value"
+          type="button"
+          :class="['cat-tab-btn', { active: filterCategory === cat.value }]"
+          @click="setCategoryFilter(cat.value)"
+        >
+          {{ cat.label }}
+          <span class="cat-count">{{ cat.count }}</span>
+        </button>
+      </div>
+
       <div class="filter-controls">
         <div class="search-wrap">
           <input
@@ -218,7 +232,7 @@
                 <option value="Bid Documents">Bid Documents</option>
                 <option value="Quotations">Quotations</option>
                 <option value="Quote Documents">Quote Documents</option>
-                <option value="Intention to Award">Intention to Award</option>
+                <option value="Intention To Award">Intention To Award</option>
                 <option value="Online Submission">Online Submission</option>
                 <option value="Other SCM Documents">Other SCM Documents</option>
               </select>
@@ -399,11 +413,26 @@ export default {
       return Array.from(set).sort().reverse()
     },
     availableCategories() {
-      const set = new Set(['Open Tenders', 'Bid Documents', 'Quotations', 'Quote Documents', 'Intention to Award', 'Other SCM Documents'])
+      const set = new Set(['Open Tenders', 'Bid Documents', 'Quotations', 'Quote Documents', 'Intention To Award', 'Other SCM Documents'])
       this.notices.forEach((n) => {
         if (n.category) set.add(n.category)
       })
       return Array.from(set).sort()
+    },
+    quickCategories() {
+      const counts = {}
+      this.notices.forEach((n) => {
+        const cat = n.category || 'Open Tenders'
+        counts[cat] = (counts[cat] || 0) + 1
+      })
+      return [
+        { label: 'All Listings', value: 'all', count: this.notices.length },
+        { label: 'Open Tenders', value: 'Open Tenders', count: counts['Open Tenders'] || 0 },
+        { label: 'Quotations', value: 'Quotations', count: counts['Quotations'] || 0 },
+        { label: 'Bid Documents', value: 'Bid Documents', count: counts['Bid Documents'] || 0 },
+        { label: 'Quote Documents', value: 'Quote Documents', count: counts['Quote Documents'] || 0 },
+        { label: 'Intention To Award', value: 'Intention To Award', count: counts['Intention To Award'] || 0 },
+      ]
     },
     totalPages() {
       return Math.ceil(this.filteredNotices.length / this.perPage) || 1
@@ -469,13 +498,19 @@ export default {
 
       this.filteredNotices = list
     },
+    setCategoryFilter(val) {
+      this.filterCategory = val
+      this.resetPaginationAndFilter()
+    },
     openCreateModal() {
       this.editingNoticeId = null
+      const defaultCategory = (this.filterCategory !== 'all' && this.filterCategory) ? this.filterCategory : 'Open Tenders'
+      const defaultType = (defaultCategory === 'Quotations' || defaultCategory === 'Quote Documents') ? 'quote' : 'tender'
       this.form = {
         reference_no: '',
         title: '',
-        category: 'Open Tenders',
-        type: 'tender',
+        category: defaultCategory,
+        type: defaultType,
         status: 'open',
         financial_year: '2025-2026',
         closing_date: '',
@@ -638,7 +673,59 @@ export default {
 }
 
 .filter-panel {
-  padding: 1rem 1.25rem;
+  padding: 1.25rem;
+}
+
+.category-tabs-row {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #edf3ef;
+}
+
+.cat-tab-btn {
+  background: #fbfdfc;
+  border: 1px solid #d9e6de;
+  color: #384d41;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.cat-tab-btn:hover {
+  background: #f0f7f3;
+  border-color: #a3c9b4;
+  color: #0f6b3b;
+}
+
+.cat-tab-btn.active {
+  background: #0f6b3b;
+  border-color: #0f6b3b;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 107, 59, 0.2);
+}
+
+.cat-tab-btn .cat-count {
+  background: #edf6f0;
+  color: #0f6b3b;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 20px;
+  font-weight: 800;
+}
+
+.cat-tab-btn.active .cat-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
 
 .filter-controls {

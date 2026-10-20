@@ -140,8 +140,7 @@
                   <li><a class="dropdown-item" href="#">Quotes 2023-2024</a></li> -->
                 </ul>
               </li>
-              
-              <li><a class="dropdown-item" href="#">INTENTION TO AWARD</a></li>
+              <li><router-link class="dropdown-item" to="/intention-to-award">INTENTION TO AWARD</router-link></li>
               <li><router-link class="dropdown-item" to="/contract-reporting">CONTRACT REPORTING</router-link></li>
               <li>
                 <a

@@ -108,6 +108,7 @@ const routes = [
     { path: '/open-quotes', name: 'open-quotes', component: OpenTendersView },
     { path: '/bid-documents', name: 'bid-documents', component: OpenTendersView },
     { path: '/quote-documents', name: 'quote-documents', component: OpenTendersView },
+    { path: '/intention-to-award', name: 'intention-to-award', component: OpenTendersView },
     { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
     { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
     {

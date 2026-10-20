@@ -121,6 +121,27 @@ class ProcurementTenderTest extends TestCase
             ->assertJsonPath('data.0.title', 'SERVICE PROVIDER FOR REPAIRS');
     }
 
+    public function test_public_can_fetch_intention_to_award_documents(): void
+    {
+        ProcurementNotice::create([
+            'title' => 'INTENTION TO AWARD - SUPPLY AND DELIVERY OF ROAD SIGNS',
+            'financial_year' => '2020-2021',
+            'category' => 'Intention To Award',
+            'type' => 'tender',
+            'status' => 'open',
+            'reference_no' => 'NDZ-AWARD-2020-001',
+            'document_url' => '/storage/uploads/intention_to_award/road_signs.pdf',
+            'download_count' => 14,
+        ]);
+
+        $response = $this->getJson('/api/procurement?category=Intention To Award');
+        $response->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'INTENTION TO AWARD - SUPPLY AND DELIVERY OF ROAD SIGNS')
+            ->assertJsonPath('data.0.category', 'Intention To Award')
+            ->assertJsonPath('data.0.download_count', 14);
+    }
+
     public function test_downloading_tender_increments_download_count(): void
     {
         $notice = ProcurementNotice::create([

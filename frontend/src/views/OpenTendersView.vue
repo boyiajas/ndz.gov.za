@@ -322,6 +322,7 @@ export default {
         { id: 'open-quotes', label: 'Open Quotations', to: '/open-quotes' },
         { id: 'bid-documents', label: 'Bid Documents', to: '/bid-documents' },
         { id: 'quote-documents', label: 'Quote Documents', to: '/quote-documents' },
+        { id: 'intention-to-award', label: 'Intention To Award', to: '/intention-to-award' },
       ],
       sections: {
         'open-tenders': {
@@ -384,6 +385,14 @@ export default {
           category: 'Quote Documents',
           isDirect: true,
         },
+        'intention-to-award': {
+          id: 'intention-to-award',
+          title: 'Intention To Award',
+          singularTitle: 'Intention To Award',
+          type: 'tender',
+          category: 'Intention To Award',
+          isDirect: true,
+        },
       },
     }
   },
@@ -401,7 +410,7 @@ export default {
           set.add(n.financial_year.replace('/', '-'))
         }
       })
-      return Array.from(set).sort()
+      return Array.from(set).sort().reverse()
     },
     directTotalCount() {
       return this.notices.filter((n) => n.category === this.currentSection.category).length
