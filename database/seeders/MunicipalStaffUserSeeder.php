@@ -24,6 +24,20 @@ class MunicipalStaffUserSeeder extends Seeder
 
         $departmentsByCode = Department::all()->keyBy('code');
 
+        // Purge legacy sample / dummy login accounts
+        $sampleEmails = [
+            'admin@ndz.gov.za',
+            'manager@ndz.gov.za',
+            'bto@ndz.gov.za',
+            'corporate@ndz.gov.za',
+            'community@ndz.gov.za',
+            'publicworks@ndz.gov.za',
+            'townplanning@ndz.gov.za',
+            'editor@ndz.gov.za',
+            'citizen@ndz.gov.za',
+        ];
+        User::whereIn('email', $sampleEmails)->delete();
+
         /**
          * Staff configuration:
          * 1. Mfuneko Spengane (spenganem@ndz.gov.za) - IT Admin / Corporate Support Services

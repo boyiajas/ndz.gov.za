@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DocumentCatalogSeeder::class,
             DepartmentSeeder::class,
-            RoleBasedUserSeeder::class,
             MunicipalStaffUserSeeder::class,
             DashboardContentSeeder::class,
             VacancySeeder::class,

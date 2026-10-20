@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\DocumentCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class DepartmentScopedAccessTest extends TestCase
@@ -17,6 +18,27 @@ class DepartmentScopedAccessTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+    }
+
+    protected function getDepartmentUser(string $deptCode = 'BTO'): User
+    {
+        $dept = Department::where('code', $deptCode)->first();
+        $user = User::firstOrCreate(
+            ['email' => strtolower($deptCode) . '-test@ndz.gov.za'],
+            [
+                'name' => "{$deptCode} Officer",
+                'role' => User::ROLE_EDITOR,
+                'department_id' => $dept->id,
+                'password' => Hash::make('Password123!'),
+            ]
+        );
+        $user->departments()->sync([$dept->id]);
+        return $user;
+    }
+
+    protected function getAdminUser(): User
+    {
+        return User::where('role', User::ROLE_ADMIN)->first() ?? User::factory()->create(['role' => User::ROLE_ADMIN]);
     }
 
     public function test_public_can_fetch_departments(): void
@@ -30,7 +52,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_department_user_only_sees_own_department_categories(): void
     {
-        $btoUser = User::where('email', 'bto@ndz.gov.za')->first();
+        $btoUser = $this->getDepartmentUser('BTO');
         $this->assertNotNull($btoUser);
         $this->assertNotNull($btoUser->department_id);
 
@@ -47,7 +69,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_global_admin_sees_all_categories_and_can_filter_by_department(): void
     {
-        $admin = User::where('email', 'admin@ndz.gov.za')->first();
+        $admin = $this->getAdminUser();
         $this->assertNotNull($admin);
 
         // Without filter: sees all categories
@@ -73,7 +95,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_department_user_cannot_upload_document_to_another_department_category(): void
     {
-        $btoUser = User::where('email', 'bto@ndz.gov.za')->first();
+        $btoUser = $this->getDepartmentUser('BTO');
         $commDept = Department::where('code', 'COMM')->first();
         $commCategory = DocumentCategory::where('department_id', $commDept->id)->first();
         $this->assertNotNull($commCategory);
@@ -92,7 +114,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_department_user_can_upload_document_to_own_department_category(): void
     {
-        $btoUser = User::where('email', 'bto@ndz.gov.za')->first();
+        $btoUser = $this->getDepartmentUser('BTO');
         $btoCategory = DocumentCategory::where('department_id', $btoUser->department_id)->first();
         $this->assertNotNull($btoCategory);
 
@@ -111,7 +133,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_admin_can_assign_department_and_role_to_user(): void
     {
-        $admin = User::where('email', 'admin@ndz.gov.za')->first();
+        $admin = $this->getAdminUser();
         $corpDept = Department::where('code', 'CORP')->first();
         $this->assertNotNull($corpDept);
 
@@ -148,7 +170,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_user_can_belong_to_multiple_departments(): void
     {
-        $admin = User::where('email', 'admin@ndz.gov.za')->first();
+        $admin = $this->getAdminUser();
         $btoDept = Department::where('code', 'BTO')->first();
         $pwDept = Department::where('code', 'PW')->first();
         $commDept = Department::where('code', 'COMM')->first();
@@ -212,7 +234,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_admin_can_crud_departments(): void
     {
-        $admin = User::where('email', 'admin@ndz.gov.za')->first();
+        $admin = $this->getAdminUser();
 
         // 1. Index departments with summary
         $indexResponse = $this->actingAs($admin)->getJson('/api/admin/departments');
@@ -258,7 +280,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_admin_cannot_delete_department_with_linked_categories(): void
     {
-        $admin = User::where('email', 'admin@ndz.gov.za')->first();
+        $admin = $this->getAdminUser();
         $btoDept = Department::where('code', 'BTO')->first();
 
         $response = $this->actingAs($admin)->deleteJson('/api/admin/departments/' . $btoDept->id);
@@ -268,7 +290,7 @@ class DepartmentScopedAccessTest extends TestCase
 
     public function test_admin_can_trigger_seed_defaults(): void
     {
-        $admin = User::where('email', 'admin@ndz.gov.za')->first();
+        $admin = $this->getAdminUser();
 
         $response = $this->actingAs($admin)->postJson('/api/admin/departments/seed-defaults');
         $response->assertStatus(200)

@@ -29,7 +29,7 @@ class AdminDashboardTest extends TestCase
 
     public function test_citizen_cannot_access_admin_endpoints(): void
     {
-        $citizen = User::where('role', User::ROLE_CITIZEN)->first();
+        $citizen = User::where('role', User::ROLE_CITIZEN)->first() ?? User::factory()->create(['role' => User::ROLE_CITIZEN]);
 
         $response = $this->actingAs($citizen)->getJson('/api/admin/news');
         $response->assertStatus(403);
