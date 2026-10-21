@@ -93,7 +93,13 @@
                   <div class="user-avatar-sm">{{ getInitials(user.name) }}</div>
                 </td>
                 <td>
-                  <strong class="user-name">{{ user.name }}</strong>
+                  <router-link
+                    :to="{ path: '/dashboard/profile', query: { id: user.id } }"
+                    class="user-name-link"
+                    title="View user profile"
+                  >
+                    <strong class="user-name">{{ user.name }}</strong>
+                  </router-link>
                   <span class="user-email">{{ user.email }}</span>
                 </td>
                 <td>
@@ -119,6 +125,13 @@
                 </td>
                 <td style="text-align: right;">
                   <div class="action-buttons">
+                    <router-link
+                      :to="{ path: '/dashboard/profile', query: { id: user.id } }"
+                      class="btn-profile"
+                      title="View user profile and audit history"
+                    >
+                      Profile
+                    </router-link>
                     <button type="button" class="btn-edit" @click="openEditModal(user)">Edit Role</button>
                     <button
                       type="button"
@@ -620,6 +633,37 @@ export default {
   display: flex;
   gap: 0.4rem;
   justify-content: flex-end;
+}
+
+.user-name-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
+
+.user-name-link:hover .user-name {
+  color: #0f6b3b;
+  text-decoration: underline;
+}
+
+.btn-profile {
+  border: 1px solid #d4e3dc;
+  background: #ffffff;
+  color: #17231c;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.btn-profile:hover {
+  background: #0f6b3b;
+  color: #ffffff;
+  border-color: #0f6b3b;
 }
 
 .btn-edit {

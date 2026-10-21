@@ -14,6 +14,7 @@ import DashboardUsersView from '../views/DashboardUsersView.vue'
 import DashboardDepartmentsView from '../views/DashboardDepartmentsView.vue'
 import DashboardSettingsView from '../views/DashboardSettingsView.vue'
 import DashboardAuditTrailView from '../views/DashboardAuditTrailView.vue'
+import DashboardProfileView from '../views/DashboardProfileView.vue'
 import MayorsOfficeView from '../views/MayorsOfficeView.vue'
 import DeputyMayorView from '../views/DeputyMayorView.vue'
 import MunicipalManagerView from '../views/MunicipalManagerView.vue'
@@ -44,6 +45,12 @@ const routes = [
     { path: '/login', name: 'login', component: LoginView, meta: { guestOnly: true } },
     { path: '/register', name: 'register', component: RegisterView, meta: { guestOnly: true } },
     { path: '/dashboard', name: 'dashboard', component: DashboardView, meta: { requiresAuth: true, portal: true } },
+    {
+        path: '/dashboard/profile',
+        name: 'dashboard-profile',
+        component: DashboardProfileView,
+        meta: { requiresAuth: true, portal: true },
+    },
     {
         path: '/dashboard/documents',
         name: 'dashboard-documents',

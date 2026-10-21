@@ -6,13 +6,18 @@
         <span>NDZ Portal</span>
       </router-link>
 
-      <div class="portal-user-card">
+      <router-link
+        to="/dashboard/profile"
+        class="portal-user-card"
+        title="View profile details"
+      >
         <div class="portal-avatar">{{ initials }}</div>
-        <div>
+        <div class="portal-user-meta">
           <strong>{{ auth.user?.name || 'Portal User' }}</strong>
           <span>{{ roleLabel }}</span>
         </div>
-      </div>
+        <span class="user-card-arrow" aria-hidden="true">›</span>
+      </router-link>
 
       <nav class="portal-nav" aria-label="Portal navigation">
         <div v-for="group in menuGroups" :key="group.title" class="portal-nav-group">
@@ -215,10 +220,27 @@ export default {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 18px;
-  padding: 1rem;
+  padding: 0.85rem 1rem;
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  text-decoration: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.portal-user-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.portal-user-card.router-link-active {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
 }
 
 .portal-avatar {
@@ -230,21 +252,41 @@ export default {
   display: grid;
   place-items: center;
   font-weight: 800;
+  flex-shrink: 0;
 }
 
-.portal-user-card strong,
-.portal-user-card span {
+.portal-user-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.portal-user-meta strong {
   display: block;
-}
-
-.portal-user-card strong {
   font-size: 0.9rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.portal-user-card span {
-  color: rgba(255, 255, 255, 0.72);
+.portal-user-meta span {
+  display: block;
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.78rem;
   margin-top: 0.15rem;
+}
+
+.user-card-arrow {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.portal-user-card:hover .user-card-arrow {
+  color: #ffffff;
+  transform: translateX(2px);
 }
 
 .portal-nav {

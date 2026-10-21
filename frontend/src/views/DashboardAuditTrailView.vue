@@ -230,7 +230,16 @@
                 <div class="actor-info">
                   <div class="actor-avatar">{{ getUserInitials(item.user_name) }}</div>
                   <div class="actor-names">
-                    <strong>{{ item.user_name || 'System / Guest' }}</strong>
+                    <router-link
+                      v-if="item.user_id"
+                      :to="{ path: '/dashboard/profile', query: { id: item.user_id } }"
+                      class="actor-link"
+                      @click.stop
+                      title="View user profile"
+                    >
+                      <strong>{{ item.user_name }}</strong>
+                    </router-link>
+                    <strong v-else>{{ item.user_name || 'System / Guest' }}</strong>
                     <span class="actor-email">{{ item.user_email || 'No email' }}</span>
                     <span :class="['actor-role-pill', item.user_role]">
                       {{ formatRole(item.user_role) }}
@@ -920,6 +929,17 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
+}
+
+.actor-link {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.actor-link:hover strong {
+  color: #0f6b3b;
+  text-decoration: underline;
 }
 
 .actor-names strong {

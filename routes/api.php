@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\DocumentDownloadController;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\ProcurementController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\VacancyController;
 use Illuminate\Http\Request;
@@ -61,6 +62,12 @@ Route::get('/settings', [SettingController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn (Request $request) => $request->user()->load(['department:id,name,code,slug', 'departments:id,name,code,slug']));
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Profile details & account settings
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+    Route::get('/profile/{user}', [ProfileController::class, 'viewUser']);
 
     Route::prefix('admin')->group(function () {
         // Departments Management
