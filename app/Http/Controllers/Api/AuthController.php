@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +29,14 @@ class AuthController extends Controller
             'role' => User::ROLE_CITIZEN,
             'password' => Hash::make($request->password),
         ]);
+
+        AuditService::log(
+            action: 'create',
+            module: 'Auth',
+            description: "New citizen account registered: {$user->name} ({$user->email})",
+            user: $user,
+            auditable: $user
+        );
 
         $token = $user->createToken('api-token')->plainTextToken;
 
@@ -60,6 +69,14 @@ class AuthController extends Controller
         $user->load(['department:id,name,code,slug', 'departments:id,name,code,slug']);
         $token = $user->createToken('api-token')->plainTextToken;
 
+        AuditService::log(
+            action: 'login',
+            module: 'Auth',
+            description: "User logged into portal: {$user->name} ({$user->email}) [Role: {$user->role}]",
+            user: $user,
+            auditable: $user
+        );
+
         return response()->json([
             'user' => $user,
             'token' => $token,
@@ -71,6 +88,17 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = $request->user();
+        if ($user) {
+            AuditService::log(
+                action: 'logout',
+                module: 'Auth',
+                description: "User logged out of portal: {$user->name} ({$user->email})",
+                user: $user,
+                auditable: $user
+            );
+        }
+
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully.']);

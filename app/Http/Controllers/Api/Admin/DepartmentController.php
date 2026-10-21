@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Services\AuditService;
 use Database\Seeders\DepartmentSeeder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -63,6 +64,15 @@ class DepartmentController extends Controller
 
         $department = Department::create($data);
 
+        AuditService::log(
+            action: 'create',
+            module: 'Departments',
+            description: "Created department '{$department->name}' [Code: {$department->code}]",
+            auditable: $department,
+            departmentId: $department->id,
+            newValues: ['name' => $department->name, 'code' => $department->code]
+        );
+
         return response()->json([
             'message' => 'Department created successfully.',
             'data' => $department->fresh()->loadCount(['categories', 'documents', 'users']),
@@ -83,6 +93,8 @@ class DepartmentController extends Controller
     {
         $this->authorizeAdmin($request);
 
+        $oldValues = ['name' => $department->name, 'code' => $department->code];
+
         $data = $this->validated($request, $department->id);
 
         if (empty($data['slug'])) {
@@ -92,6 +104,16 @@ class DepartmentController extends Controller
         $data['code'] = strtoupper(trim($data['code']));
 
         $department->update($data);
+
+        AuditService::log(
+            action: 'update',
+            module: 'Departments',
+            description: "Updated department '{$department->name}' [Code: {$department->code}]",
+            auditable: $department,
+            departmentId: $department->id,
+            oldValues: $oldValues,
+            newValues: ['name' => $department->name, 'code' => $department->code]
+        );
 
         return response()->json([
             'message' => 'Department updated successfully.',
@@ -112,6 +134,15 @@ class DepartmentController extends Controller
             ], 422);
         }
 
+        AuditService::log(
+            action: 'delete',
+            module: 'Departments',
+            description: "Deleted department '{$department->name}' [Code: {$department->code}]",
+            auditable: $department,
+            departmentId: $department->id,
+            oldValues: ['name' => $department->name, 'code' => $department->code]
+        );
+
         $department->users()->detach();
         $department->delete();
 
@@ -123,6 +154,12 @@ class DepartmentController extends Controller
         $this->authorizeAdmin($request);
 
         (new DepartmentSeeder())->run();
+
+        AuditService::log(
+            action: 'create',
+            module: 'Departments',
+            description: 'Triggered seeding and verification of default municipal directorates'
+        );
 
         $departments = Department::query()
             ->withCount(['categories', 'documents', 'users'])

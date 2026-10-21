@@ -28,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
         canManageVacancies: (state) => ['admin', 'manager', 'editor'].includes(state.user?.role),
         canManageUsers: (state) => state.user?.role === 'admin',
         canManageDepartments: (state) => ['admin', 'manager'].includes(state.user?.role),
+        canViewAuditLogs: (state) => ['admin', 'manager'].includes(state.user?.role),
         canManageSettings: (state) => state.user?.role === 'admin',
         isAdmin: (state) => state.user?.role === 'admin',
         department: (state) => state.user?.department || (state.user?.departments?.[0] || null),

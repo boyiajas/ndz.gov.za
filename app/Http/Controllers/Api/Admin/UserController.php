@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -75,6 +76,14 @@ class UserController extends Controller
 
         $user->departments()->sync($departmentIds);
 
+        AuditService::log(
+            action: 'create',
+            module: 'Users',
+            description: "Created user account '{$user->name}' ({$user->email}) with role '{$user->role}'",
+            auditable: $user,
+            newValues: ['name' => $user->name, 'email' => $user->email, 'role' => $user->role, 'department_ids' => $departmentIds]
+        );
+
         return response()->json([
             'data' => $user->fresh(['department:id,name,code,slug', 'departments:id,name,code,slug']),
         ], 201);
@@ -93,6 +102,13 @@ class UserController extends Controller
             'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'password' => ['nullable', 'string', Password::defaults()],
         ]);
+
+        $oldValues = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'department_id' => $user->department_id,
+        ];
 
         $data = [
             'name' => $validated['name'],
@@ -121,6 +137,20 @@ class UserController extends Controller
             $user->update($data);
         }
 
+        AuditService::log(
+            action: 'update',
+            module: 'Users',
+            description: "Updated user account '{$user->name}' ({$user->email}) [Role: {$user->role}]",
+            auditable: $user,
+            oldValues: $oldValues,
+            newValues: [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'department_id' => $user->department_id,
+            ]
+        );
+
         return response()->json([
             'data' => $user->fresh(['department:id,name,code,slug', 'departments:id,name,code,slug']),
         ]);
@@ -133,6 +163,18 @@ class UserController extends Controller
         if ($request->user()->id === $user->id) {
             return response()->json(['message' => 'You cannot delete your own account.'], 422);
         }
+
+        AuditService::log(
+            action: 'delete',
+            module: 'Users',
+            description: "Deleted user account '{$user->name}' ({$user->email})",
+            auditable: $user,
+            oldValues: [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ]
+        );
 
         $user->delete();
 

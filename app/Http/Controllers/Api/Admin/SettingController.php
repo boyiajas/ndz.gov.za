@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,13 @@ class SettingController extends Controller
         foreach ($validated['settings'] as $key => $value) {
             Setting::set($key, $value);
         }
+
+        AuditService::log(
+            action: 'update',
+            module: 'Settings',
+            description: 'Updated municipal portal site settings and system configurations',
+            newValues: array_keys($validated['settings'])
+        );
 
         $all = Setting::all()->pluck('value', 'key')->map(function ($val) {
             $decoded = json_decode($val, true);

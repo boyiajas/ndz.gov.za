@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vacancy;
+use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -78,6 +79,14 @@ class VacancyController extends Controller
 
         $vacancy = Vacancy::create($validated);
 
+        AuditService::log(
+            action: 'create',
+            module: 'Vacancies',
+            description: "Created vacancy advertisement: '{$vacancy->reference_no}' - {$vacancy->title} [Dept: {$vacancy->department}]",
+            auditable: $vacancy,
+            newValues: ['reference_no' => $vacancy->reference_no, 'title' => $vacancy->title, 'department' => $vacancy->department, 'status' => $vacancy->status]
+        );
+
         return response()->json([
             'message' => 'Vacancy created successfully.',
             'data' => $vacancy->fresh('creator:id,name'),
@@ -96,6 +105,12 @@ class VacancyController extends Controller
     public function update(Request $request, Vacancy $vacancy): JsonResponse
     {
         $this->authorizeVacancies($request);
+
+        $oldValues = [
+            'title' => $vacancy->title,
+            'department' => $vacancy->department,
+            'status' => $vacancy->status,
+        ];
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -129,6 +144,15 @@ class VacancyController extends Controller
 
         $vacancy->update($validated);
 
+        AuditService::log(
+            action: 'update',
+            module: 'Vacancies',
+            description: "Updated vacancy advertisement: '{$vacancy->reference_no}' - {$vacancy->title}",
+            auditable: $vacancy,
+            oldValues: $oldValues,
+            newValues: ['title' => $vacancy->title, 'department' => $vacancy->department, 'status' => $vacancy->status]
+        );
+
         return response()->json([
             'message' => 'Vacancy updated successfully.',
             'data' => $vacancy->fresh('creator:id,name'),
@@ -138,6 +162,14 @@ class VacancyController extends Controller
     public function destroy(Request $request, Vacancy $vacancy): JsonResponse
     {
         $this->authorizeVacancies($request);
+
+        AuditService::log(
+            action: 'delete',
+            module: 'Vacancies',
+            description: "Deleted vacancy advertisement: '{$vacancy->reference_no}' - {$vacancy->title}",
+            auditable: $vacancy,
+            oldValues: ['title' => $vacancy->title, 'reference_no' => $vacancy->reference_no]
+        );
 
         $vacancy->delete();
 
@@ -155,6 +187,14 @@ class VacancyController extends Controller
             : Vacancy::STATUS_OPEN;
 
         $vacancy->update(['status' => $newStatus]);
+
+        AuditService::log(
+            action: 'status_change',
+            module: 'Vacancies',
+            description: "Toggled vacancy '{$vacancy->title}' status to '{$newStatus}'",
+            auditable: $vacancy,
+            newValues: ['status' => $newStatus]
+        );
 
         return response()->json([
             'message' => "Vacancy status changed to {$newStatus}.",

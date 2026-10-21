@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProcurementNotice;
+use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -84,12 +85,33 @@ class ProcurementController extends Controller
 
         $notice = ProcurementNotice::create($validated);
 
+        AuditService::log(
+            action: 'create',
+            module: 'Procurement',
+            description: "Published {$notice->type} notice: '{$notice->reference_no}' - {$notice->title} [Category: {$notice->category}, Year: {$notice->financial_year}]",
+            auditable: $notice,
+            newValues: [
+                'reference_no' => $notice->reference_no,
+                'title' => $notice->title,
+                'category' => $notice->category,
+                'type' => $notice->type,
+                'financial_year' => $notice->financial_year,
+            ]
+        );
+
         return response()->json(['data' => $notice->fresh('creator:id,name')], 201);
     }
 
     public function update(Request $request, ProcurementNotice $procurement): JsonResponse
     {
         $this->authorizeProcurement($request);
+
+        $oldValues = [
+            'reference_no' => $procurement->reference_no,
+            'title' => $procurement->title,
+            'category' => $procurement->category,
+            'status' => $procurement->status,
+        ];
 
         $validated = $request->validate([
             'type' => ['required', 'string', Rule::in([ProcurementNotice::TYPE_TENDER, ProcurementNotice::TYPE_QUOTE])],
@@ -114,12 +136,38 @@ class ProcurementController extends Controller
 
         $procurement->update($validated);
 
+        AuditService::log(
+            action: 'update',
+            module: 'Procurement',
+            description: "Updated {$procurement->type} notice: '{$procurement->reference_no}' - {$procurement->title}",
+            auditable: $procurement,
+            oldValues: $oldValues,
+            newValues: [
+                'reference_no' => $procurement->reference_no,
+                'title' => $procurement->title,
+                'category' => $procurement->category,
+                'status' => $procurement->status,
+            ]
+        );
+
         return response()->json(['data' => $procurement->fresh('creator:id,name')]);
     }
 
     public function destroy(Request $request, ProcurementNotice $procurement): JsonResponse
     {
         $this->authorizeProcurement($request);
+
+        AuditService::log(
+            action: 'delete',
+            module: 'Procurement',
+            description: "Deleted {$procurement->type} notice: '{$procurement->reference_no}' - {$procurement->title}",
+            auditable: $procurement,
+            oldValues: [
+                'reference_no' => $procurement->reference_no,
+                'title' => $procurement->title,
+                'category' => $procurement->category,
+            ]
+        );
 
         $procurement->delete();
 

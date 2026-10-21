@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AuditLogController as AdminAuditLogController;
 use App\Http\Controllers\Api\Admin\DashboardStatsController as AdminDashboardStatsController;
 use App\Http\Controllers\Api\Admin\DepartmentController as AdminDepartmentController;
 use App\Http\Controllers\Api\Admin\DocumentCategoryController as AdminDocumentCategoryController;
@@ -111,5 +112,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // Settings
         Route::get('settings', [AdminSettingController::class, 'index']);
         Route::post('settings', [AdminSettingController::class, 'update']);
+
+        // Audit Trail Logs
+        Route::get('audit-logs/filters', [AdminAuditLogController::class, 'filters']);
+        Route::get('audit-logs/export', [AdminAuditLogController::class, 'export']);
+        Route::get('audit-logs', [AdminAuditLogController::class, 'index']);
+        Route::get('audit-logs/{auditLog}', [AdminAuditLogController::class, 'show']);
     });
 });

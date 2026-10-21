@@ -129,6 +129,14 @@ class User extends Authenticatable
         return $this->role === self::ROLE_ADMIN;
     }
 
+    public function canViewAuditLogs(): bool
+    {
+        return in_array($this->role, [
+            self::ROLE_ADMIN,
+            self::ROLE_MANAGER,
+        ], true);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

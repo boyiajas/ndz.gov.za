@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
+use App\Services\AuditService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -88,6 +89,15 @@ class DocumentController extends Controller
 
         $document = Document::create($data);
 
+        AuditService::log(
+            action: 'upload',
+            module: 'Documents',
+            description: "Uploaded document: '{$document->title}' [File: {$document->file_name}]",
+            auditable: $document,
+            departmentId: $document->department_id,
+            newValues: ['title' => $document->title, 'file_name' => $document->file_name, 'category_id' => $document->document_category_id]
+        );
+
         return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'department', 'creator:id,name,email'])], 201);
     }
 
@@ -105,6 +115,12 @@ class DocumentController extends Controller
             }
         }
 
+        $oldValues = [
+            'title' => $document->title,
+            'file_name' => $document->file_name,
+            'department_id' => $document->department_id,
+        ];
+
         $data = $this->validated($request);
 
         if (! $user->isGlobalAdmin() && ! empty($deptIds)) {
@@ -116,6 +132,16 @@ class DocumentController extends Controller
         $data['updated_by'] = $user->id;
 
         $document->update($data);
+
+        AuditService::log(
+            action: 'update',
+            module: 'Documents',
+            description: "Updated document: '{$document->title}' [File: {$document->file_name}]",
+            auditable: $document,
+            departmentId: $document->department_id,
+            oldValues: $oldValues,
+            newValues: ['title' => $document->title, 'file_name' => $document->file_name]
+        );
 
         return response()->json(['data' => $document->fresh(['category', 'subcategory.category', 'department', 'creator:id,name,email', 'updater:id,name,email'])]);
     }
@@ -133,6 +159,15 @@ class DocumentController extends Controller
                 abort(403, 'You are not authorized to delete documents belonging to another department.');
             }
         }
+
+        AuditService::log(
+            action: 'delete',
+            module: 'Documents',
+            description: "Deleted document: '{$document->title}' [File: {$document->file_name}]",
+            auditable: $document,
+            departmentId: $document->department_id,
+            oldValues: ['title' => $document->title, 'file_name' => $document->file_name]
+        );
 
         $document->delete();
 

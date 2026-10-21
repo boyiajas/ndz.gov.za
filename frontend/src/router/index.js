@@ -13,6 +13,7 @@ import DashboardVacanciesView from '../views/DashboardVacanciesView.vue'
 import DashboardUsersView from '../views/DashboardUsersView.vue'
 import DashboardDepartmentsView from '../views/DashboardDepartmentsView.vue'
 import DashboardSettingsView from '../views/DashboardSettingsView.vue'
+import DashboardAuditTrailView from '../views/DashboardAuditTrailView.vue'
 import MayorsOfficeView from '../views/MayorsOfficeView.vue'
 import DeputyMayorView from '../views/DeputyMayorView.vue'
 import MunicipalManagerView from '../views/MunicipalManagerView.vue'
@@ -91,6 +92,12 @@ const routes = [
         component: DashboardSettingsView,
         meta: { requiresAuth: true, requiresAdmin: true, portal: true },
     },
+    {
+        path: '/dashboard/audit-trail',
+        name: 'dashboard-audit-trail',
+        component: DashboardAuditTrailView,
+        meta: { requiresAuth: true, requiresAuditViewer: true, portal: true },
+    },
     { path: '/mayors-office', name: 'mayors-office', component: MayorsOfficeView },
     { path: '/deputy-mayor', name: 'deputy-mayor', component: DeputyMayorView },
     { path: '/municipal-manager', name: 'municipal-manager', component: MunicipalManagerView },
@@ -155,6 +162,10 @@ router.beforeEach((to) => {
     }
 
     if (to.meta.requiresVacancyManager && !auth.canManageVacancies) {
+        return { name: 'dashboard' }
+    }
+
+    if (to.meta.requiresAuditViewer && !auth.canViewAuditLogs) {
         return { name: 'dashboard' }
     }
 

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             MunicipalStaffUserSeeder::class,
             DashboardContentSeeder::class,
             VacancySeeder::class,
+            AuditTrailSeeder::class,
         ]);
     }
 }

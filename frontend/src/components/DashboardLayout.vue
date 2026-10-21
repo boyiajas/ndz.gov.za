@@ -142,6 +142,9 @@ export default {
       if (this.auth.canManageDepartments) {
         adminItems.push({ icon: '🏛', label: 'Departments', to: '/dashboard/departments' })
       }
+      if (this.auth.canViewAuditLogs) {
+        adminItems.push({ icon: '📋', label: 'Audit Trail', to: '/dashboard/audit-trail' })
+      }
       if (this.auth.canManageSettings) {
         adminItems.push({ icon: '⚙', label: 'Site Settings', to: '/dashboard/settings' })
       }
