@@ -565,34 +565,34 @@ export default {
 .profile-hero-card {
   background: linear-gradient(135deg, #ffffff 0%, #f7fbf8 100%);
   border: 1px solid #dbe8e0;
-  border-radius: 24px;
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 2rem;
-  box-shadow: 0 6px 25px rgba(15, 107, 59, 0.05);
+  gap: 1rem;
+  box-shadow: 0 4px 16px rgba(15, 107, 59, 0.04);
   flex-wrap: wrap;
 }
 
 .hero-main {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.85rem;
 }
 
 .hero-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   background: #f59e0b;
   color: #1a2332;
-  font-size: 1.9rem;
+  font-size: 1.15rem;
   font-weight: 800;
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
 }
 
 .hero-info {
@@ -603,20 +603,20 @@ export default {
 .hero-title-row {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .hero-title-row h2 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: #17231c;
 }
 
 .job-title-text {
-  margin: 0.2rem 0 0.5rem;
-  font-size: 0.95rem;
+  margin: 0.05rem 0 0.15rem;
+  font-size: 0.75rem;
   color: #55695e;
   font-weight: 600;
 }
@@ -624,17 +624,17 @@ export default {
 .hero-meta-row {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 0.4rem;
+  margin-top: 0.15rem;
 }
 
 .meta-item {
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   color: #4b5f54;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
   font-weight: 500;
 }
 
@@ -645,11 +645,11 @@ export default {
 
 .hero-stats {
   display: flex;
-  gap: 1.5rem;
-  padding: 0.8rem 1.5rem;
+  gap: 0.75rem;
+  padding: 0.35rem 0.75rem;
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 18px;
+  border-radius: 8px;
 }
 
 .h-stat {
@@ -659,38 +659,39 @@ export default {
 }
 
 .h-num {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: #17231c;
+  line-height: 1.1;
 }
 
 .h-num.green { color: #0f6b3b; }
 .h-num.purple { color: #512da8; }
 
 .h-label {
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 700;
   color: #6c7d73;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin-top: 0.15rem;
+  margin-top: 0.05rem;
 }
 
 /* Tabs Bar */
 .profile-tabs-bar {
   display: flex;
-  gap: 0.65rem;
+  gap: 0.35rem;
   overflow-x: auto;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.15rem;
 }
 
 .tab-btn {
   background: #ffffff;
   border: 1px solid #d9e6de;
   color: #405448;
-  padding: 0.65rem 1.2rem;
-  border-radius: 12px;
-  font-size: 0.88rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -707,14 +708,14 @@ export default {
   background: #0f6b3b;
   border-color: #0f6b3b;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(15, 107, 59, 0.2);
+  box-shadow: 0 2px 8px rgba(15, 107, 59, 0.2);
 }
 
 /* Panels */
 .tab-content-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 0.65rem;
 }
 
 @media (max-width: 840px) {
@@ -726,41 +727,41 @@ export default {
 .portal-panel {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 20px;
-  padding: 1.75rem;
-  box-shadow: 0 4px 20px rgba(15, 107, 59, 0.04);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 2px 10px rgba(15, 107, 59, 0.04);
 }
 
 .panel-title {
-  font-size: 1.15rem;
+  font-size: 0.92rem;
   font-weight: 800;
   color: #17231c;
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.45rem;
 }
 
 .panel-desc {
-  font-size: 0.88rem;
+  font-size: 0.74rem;
   color: #6c7d73;
-  margin: -0.75rem 0 1.5rem;
+  margin: -0.25rem 0 0.5rem;
 }
 
 /* Info List */
 .info-list {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.35rem;
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.3rem;
   border-bottom: 1px solid #f0f5f2;
 }
 
 .info-label {
-  font-size: 0.82rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: #6c7d73;
   text-transform: uppercase;
@@ -768,7 +769,7 @@ export default {
 }
 
 .info-value {
-  font-size: 0.92rem;
+  font-size: 0.76rem;
   color: #17231c;
   text-align: right;
 }
@@ -777,47 +778,47 @@ export default {
 .dept-box {
   background: #fbfdfc;
   border: 1px solid #e4ece7;
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
 }
 
 .dept-box-label {
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 800;
   color: #55695e;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   display: block;
 }
 
 .dept-badges-wrap {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex-wrap: wrap;
 }
 
 .dept-tag {
   background: #edf7f0;
   border: 1px solid #c2e2ce;
-  border-radius: 8px;
-  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  padding: 0.2rem 0.45rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
 .dept-code {
   background: #0f6b3b;
   color: #ffffff;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
+  padding: 0.08rem 0.25rem;
+  border-radius: 3px;
 }
 
 .dept-name {
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #0f6b3b;
 }
@@ -826,29 +827,29 @@ export default {
 .permissions-checklist {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .permission-row {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.28rem 0.45rem;
+  border-radius: 6px;
   background: #fbfdfc;
   border: 1px solid #edf3ef;
-  font-size: 0.85rem;
+  font-size: 0.74rem;
 }
 
 .perm-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  margin-right: 0.65rem;
+  margin-right: 0.45rem;
   background: #fee2e2;
   color: #991b1b;
 }
@@ -869,10 +870,10 @@ export default {
 }
 
 .perm-status-tag {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  padding: 0.15rem 0.5rem;
-  border-radius: 12px;
+  padding: 0.1rem 0.38rem;
+  border-radius: 8px;
   background: #f3f4f6;
   color: #6b7280;
 }
@@ -885,12 +886,12 @@ export default {
 /* Role Badges */
 .role-badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.66rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .role-badge.admin { background: #fee2e2; color: #991b1b; }
@@ -906,8 +907,8 @@ export default {
 .form-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 @media (max-width: 640px) {
@@ -919,20 +920,20 @@ export default {
 .form-panel label {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.8rem;
+  gap: 0.2rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: #4b5f54;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .form-panel input {
-  padding: 0.65rem 1rem;
+  padding: 0.32rem 0.55rem;
   border: 1px solid #d9e6de;
-  border-radius: 12px;
-  font-size: 0.92rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
   background: #fbfdfc;
   color: #17231c;
 }
@@ -940,19 +941,19 @@ export default {
 .form-panel input:focus {
   outline: none;
   border-color: #0f6b3b;
-  box-shadow: 0 0 0 3px rgba(15, 107, 59, 0.12);
+  box-shadow: 0 0 0 2px rgba(15, 107, 59, 0.12);
 }
 
 .btn-primary-action {
   background: #0f6b3b;
   color: #ffffff;
   border: none;
-  padding: 0.7rem 1.6rem;
-  border-radius: 12px;
+  padding: 0.32rem 0.75rem;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(15, 107, 59, 0.2);
+  box-shadow: 0 2px 8px rgba(15, 107, 59, 0.18);
   transition: all 0.2s ease;
 }
 
@@ -974,22 +975,23 @@ export default {
 
 .manager-table th {
   text-align: left;
-  padding: 0.8rem 1rem;
-  font-size: 0.74rem;
+  padding: 0.32rem 0.5rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: #6c7d73;
   border-bottom: 2px solid #edf3ef;
 }
 
 .manager-table td {
-  padding: 0.85rem 1rem;
+  padding: 0.32rem 0.5rem;
   border-bottom: 1px solid #f0f5f2;
   vertical-align: middle;
+  font-size: 0.74rem;
 }
 
 .audit-datetime {
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #17231c;
   white-space: nowrap;
@@ -998,19 +1000,19 @@ export default {
 .module-pill {
   background: #f1f5f9;
   color: #334155;
-  border-radius: 6px;
-  padding: 0.2rem 0.55rem;
-  font-size: 0.72rem;
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.66rem;
   font-weight: 700;
 }
 
 .action-pill {
   display: inline-block;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .action-pill.create,
@@ -1041,14 +1043,14 @@ export default {
 }
 
 .activity-desc {
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   color: #17231c;
 }
 
 .ip-code {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   background: #f1f5f3;
-  padding: 0.2rem 0.45rem;
+  padding: 0.1rem 0.35rem;
   border-radius: 4px;
   color: #4b5f54;
 }
@@ -1056,7 +1058,7 @@ export default {
 .btn-view-all-audit {
   color: #0f6b3b;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   text-decoration: none;
 }
 
@@ -1065,11 +1067,11 @@ export default {
 }
 
 .portal-alert {
-  padding: 0.85rem 1.25rem;
-  border-radius: 12px;
-  margin-bottom: 1.25rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 .portal-alert.success {
@@ -1086,7 +1088,8 @@ export default {
 
 .empty-state {
   text-align: center;
-  padding: 2.5rem 1rem;
+  padding: 1.5rem 1rem;
   color: #6c7d73;
+  font-size: 0.78rem;
 }
 </style>

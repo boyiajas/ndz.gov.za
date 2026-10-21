@@ -750,9 +750,10 @@ export default {
 .public-doc-link,
 .manager-button {
   border: 0;
-  border-radius: 14px;
+  border-radius: 6px;
   font-weight: 800;
-  padding: 0.7rem 1rem;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.74rem;
 }
 
 .public-doc-link {
@@ -765,10 +766,11 @@ export default {
 }
 
 .portal-alert {
-  border-radius: 16px;
-  padding: 0.9rem 1rem;
-  margin-bottom: 1rem;
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  margin-bottom: 0.5rem;
   font-weight: 700;
+  font-size: 0.75rem;
 }
 
 .portal-alert.success {
@@ -786,37 +788,37 @@ export default {
 .manager-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.4rem;
+  gap: 0.65rem;
 }
 
 .manager-panel {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 24px;
-  box-shadow: 0 18px 45px rgba(26, 35, 50, 0.06);
-  padding: 1.35rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(26, 35, 50, 0.04);
+  padding: 0.65rem 0.85rem;
 }
 
 .manager-heading {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .manager-heading p {
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.1rem;
   color: var(--primary);
   font-weight: 800;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .manager-heading h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 0.95rem;
   color: var(--text-dark);
   font-weight: 800;
 }
@@ -826,14 +828,14 @@ export default {
   background: transparent;
   color: var(--primary);
   font-weight: 800;
-  font-size: 0.82rem;
+  font-size: 0.74rem;
 }
 
 .manager-form,
 .document-form {
   display: grid;
-  gap: 0.85rem;
-  margin-bottom: 1rem;
+  gap: 0.45rem;
+  margin-bottom: 0.5rem;
 }
 
 .document-form {
@@ -844,9 +846,9 @@ export default {
 .document-form label,
 .editor-field {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.15rem;
   color: var(--text-mid);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
 }
 
@@ -858,10 +860,11 @@ export default {
 .document-form textarea {
   width: 100%;
   border: 1px solid #dbe5df;
-  border-radius: 12px;
-  padding: 0.72rem 0.8rem;
+  border-radius: 6px;
+  padding: 0.32rem 0.55rem;
   color: var(--text-dark);
   font: inherit;
+  font-size: 0.76rem;
   font-weight: 600;
   background: #fbfcfb;
 }
@@ -874,15 +877,15 @@ export default {
 .form-row {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.8rem;
+  gap: 0.5rem;
   align-items: end;
 }
 
 .check-row {
-  min-height: 44px;
+  min-height: 32px;
   display: flex !important;
   align-items: center;
-  gap: 0.45rem !important;
+  gap: 0.35rem !important;
 }
 
 .check-row input {
@@ -909,7 +912,7 @@ export default {
 
 .manager-list {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.35rem;
   max-height: 420px;
   overflow-y: auto;
 }
@@ -917,12 +920,12 @@ export default {
 .list-item {
   width: 100%;
   border: 1px solid #e4ece7;
-  border-radius: 16px;
+  border-radius: 8px;
   background: #ffffff;
-  padding: 0.8rem;
+  padding: 0.45rem 0.65rem;
   display: flex;
   justify-content: space-between;
-  gap: 0.8rem;
+  gap: 0.5rem;
   text-align: left;
 }
 
@@ -939,18 +942,19 @@ export default {
 .list-item strong {
   color: var(--text-dark);
   font-weight: 800;
+  font-size: 0.78rem;
 }
 
 .list-item small {
   color: var(--text-light);
   font-weight: 700;
-  font-size: 0.75rem;
-  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  margin-top: 0.05rem;
 }
 
 .item-actions {
   display: flex;
-  gap: 0.55rem;
+  gap: 0.35rem;
   align-items: flex-start;
   flex-wrap: wrap;
 }
@@ -959,7 +963,7 @@ export default {
 .item-actions a {
   color: var(--primary);
   font-style: normal;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 800;
 }
 
@@ -971,7 +975,7 @@ export default {
 .empty-table {
   color: var(--text-light);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.76rem;
 }
 
 .documents-table-wrap {
@@ -985,17 +989,18 @@ export default {
 
 .documents-table th {
   color: var(--text-light);
-  font-size: 0.75rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 .documents-table th,
 .documents-table td {
-  padding: 0.9rem;
+  padding: 0.32rem 0.5rem;
   border-bottom: 1px solid #edf2ee;
   text-align: left;
   vertical-align: top;
+  font-size: 0.74rem;
 }
 
 .documents-table td strong,

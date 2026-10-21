@@ -275,37 +275,37 @@ export default {
 <style scoped>
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
 }
 
 .portal-stat-card {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 20px;
-  padding: 1.25rem 1.4rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  box-shadow: 0 4px 20px rgba(15, 107, 59, 0.05);
+  gap: 0.55rem;
+  box-shadow: 0 2px 10px rgba(15, 107, 59, 0.04);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .portal-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(15, 107, 59, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(15, 107, 59, 0.08);
 }
 
 .portal-stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   background: #f0f7f3;
   color: #0f6b3b;
   display: grid;
   place-items: center;
-  font-size: 1.35rem;
+  font-size: 1rem;
   font-weight: 800;
   flex-shrink: 0;
 }
@@ -318,7 +318,7 @@ export default {
 
 .portal-stat-card strong {
   display: block;
-  font-size: 1.6rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: #17231c;
   line-height: 1.1;
@@ -327,61 +327,61 @@ export default {
 .portal-stat-card span {
   display: block;
   color: #6c7d73;
-  font-size: 0.82rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  margin-top: 0.25rem;
+  margin-top: 0.05rem;
 }
 
 .portal-content-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
+  gap: 0.65rem;
 }
 
 .activity-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 0.65rem;
 }
 
 .portal-panel {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 24px;
-  padding: 1.6rem;
-  box-shadow: 0 4px 20px rgba(15, 107, 59, 0.04);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 2px 10px rgba(15, 107, 59, 0.04);
 }
 
 .portal-panel-large {
-  min-height: 380px;
+  min-height: auto;
 }
 
 .panel-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .panel-heading p {
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.1rem;
   color: #0f6b3b;
-  font-size: 0.75rem;
+  font-size: 0.66rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
 }
 
 .panel-heading h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #17231c;
 }
 
 .panel-link {
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #0f6b3b;
   text-decoration: none;
@@ -396,33 +396,33 @@ export default {
   color: #0f6b3b;
   border: 1px solid #cce5d6;
   border-radius: 999px;
-  padding: 0.35rem 0.85rem;
-  font-size: 0.78rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.68rem;
   font-weight: 800;
 }
 
 .workspace-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .workspace-action {
   border: 1px solid #e4ece7;
-  border-radius: 18px;
-  padding: 1.1rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.5rem;
   transition: all 0.2s ease;
   background: #fafcfb;
 }
 
 .workspace-action:hover {
   border-color: #0f6b3b;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(15, 107, 59, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 107, 59, 0.08);
 }
 
 .workspace-action.primary {
@@ -440,54 +440,54 @@ export default {
 }
 
 .action-icon {
-  font-size: 1.4rem;
+  font-size: 1.05rem;
   line-height: 1;
 }
 
 .workspace-action strong {
   display: block;
-  font-size: 0.92rem;
+  font-size: 0.78rem;
   font-weight: 800;
   color: #17231c;
 }
 
 .workspace-action small {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   color: #6c7d73;
-  margin-top: 0.2rem;
+  margin-top: 0.05rem;
 }
 
 .profile-card {
   text-align: center;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
 }
 
 .profile-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: #0f6b3b;
   color: #ffffff;
   display: grid;
   place-items: center;
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  margin: 0 auto 0.9rem;
+  margin: 0 auto 0.45rem;
 }
 
 .profile-card strong {
   display: block;
-  font-size: 1.1rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: #17231c;
 }
 
 .profile-email {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   color: #6c7d73;
-  margin: 0.2rem 0 0.6rem;
+  margin: 0.05rem 0 0.35rem;
 }
 
 .profile-badge {
@@ -496,8 +496,8 @@ export default {
   color: #0f6b3b;
   border: 1px solid #c2dbcd;
   border-radius: 999px;
-  padding: 0.3rem 0.85rem;
-  font-size: 0.78rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.68rem;
   font-weight: 800;
 }
 
@@ -506,11 +506,11 @@ export default {
   background: #f8fafc;
   color: #334155;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.76rem;
+  border-radius: 6px;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  margin-top: 0.45rem;
+  margin-top: 0.25rem;
 }
 
 .profile-dept-badge.global {
@@ -520,15 +520,15 @@ export default {
 }
 
 .role-capabilities {
-  margin-top: 1.25rem;
+  margin-top: 0.65rem;
   text-align: left;
   border-top: 1px solid #edf3ef;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 }
 
 .capabilities-title {
-  margin: 0 0 0.6rem;
-  font-size: 0.72rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.66rem;
   font-weight: 800;
   text-transform: uppercase;
   color: #6c7d73;
@@ -541,15 +541,15 @@ export default {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
 .capabilities-list li {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: #94a39b;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
   font-weight: 600;
 }
 
@@ -559,7 +559,7 @@ export default {
 
 .capabilities-list li span {
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .capabilities-list li.is-active span {
@@ -572,23 +572,23 @@ export default {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.4rem;
 }
 
 .feed-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 0.9rem;
-  border-radius: 12px;
+  gap: 0.65rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
   background: #fafcfb;
   border: 1px solid #edf3ef;
 }
 
 .feed-copy strong {
   display: block;
-  font-size: 0.86rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: #17231c;
   line-height: 1.3;
@@ -596,27 +596,27 @@ export default {
 
 .feed-copy small {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: #6c7d73;
-  margin-top: 0.2rem;
+  margin-top: 0.05rem;
 }
 
 .feed-action {
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: #0f6b3b;
   text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+  border-radius: 5px;
   background: #edf6f0;
 }
 
 .status-tag {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
 }
 
 .status-tag.open {
@@ -630,10 +630,10 @@ export default {
 }
 
 .empty-feed {
-  padding: 2rem 1rem;
+  padding: 1rem 0.5rem;
   text-align: center;
   color: #94a39b;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 @media (max-width: 992px) {

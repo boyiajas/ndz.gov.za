@@ -653,15 +653,15 @@ export default {
   background: #ffffff;
   color: #0f6b3b;
   border: 1px solid #cce5d6;
-  padding: 0.65rem 1.25rem;
-  border-radius: 12px;
+  padding: 0.32rem 0.75rem;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.76rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 3px 10px rgba(15, 107, 59, 0.08);
+  gap: 0.35rem;
+  box-shadow: 0 2px 6px rgba(15, 107, 59, 0.08);
   transition: all 0.2s ease;
 }
 
@@ -673,24 +673,25 @@ export default {
 
 .stats-overview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
 }
 
 .stat-box {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 16px;
-  padding: 1.25rem;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 15px rgba(15, 107, 59, 0.03);
+  box-shadow: 0 2px 8px rgba(15, 107, 59, 0.03);
 }
 
 .stat-number {
-  font-size: 1.8rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: #17231c;
+  line-height: 1.1;
 }
 
 .stat-number.green { color: #0f6b3b; }
@@ -698,38 +699,38 @@ export default {
 .stat-number.blue { color: #0284c7; }
 
 .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.66rem;
   font-weight: 700;
   color: #6c7d73;
-  margin-top: 0.25rem;
+  margin-top: 0.05rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 /* Date Presets */
 .date-presets-bar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex-wrap: wrap;
 }
 
 .preset-label {
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: #55695e;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-right: 0.25rem;
+  letter-spacing: 0.04em;
+  margin-right: 0.15rem;
 }
 
 .preset-btn {
   background: #ffffff;
   border: 1px solid #d9e6de;
   color: #405448;
-  padding: 0.35rem 0.85rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -749,24 +750,24 @@ export default {
 
 /* Filter Controls Grid */
 .filter-panel {
-  padding: 1.25rem;
+  padding: 0.55rem 0.75rem;
 }
 
 .filter-controls-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.45rem;
 }
 
 .filter-field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.15rem;
 }
 
 .filter-field.search-field {
   grid-column: span 2;
-  min-width: 280px;
+  min-width: 220px;
 }
 
 @media (max-width: 768px) {
@@ -776,7 +777,7 @@ export default {
 }
 
 .filter-field label {
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: #55695e;
   text-transform: uppercase;
@@ -785,10 +786,10 @@ export default {
 
 .filter-field input,
 .filter-field select {
-  padding: 0.6rem 0.85rem;
+  padding: 0.3rem 0.5rem;
   border: 1px solid #d9e6de;
-  border-radius: 10px;
-  font-size: 0.85rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
   background: #fbfdfc;
   color: #17231c;
 }
@@ -797,16 +798,16 @@ export default {
 .filter-field select:focus {
   outline: none;
   border-color: #0f6b3b;
-  box-shadow: 0 0 0 3px rgba(15, 107, 59, 0.12);
+  box-shadow: 0 0 0 2px rgba(15, 107, 59, 0.12);
 }
 
 .btn-reset-filters {
   background: #f3f6f4;
   border: 1px solid #d9e6de;
   color: #55695e;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  font-size: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -826,17 +827,17 @@ export default {
 .portal-panel {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(15, 107, 59, 0.04);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 2px 10px rgba(15, 107, 59, 0.04);
 }
 
 .table-meta-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.74rem;
   color: #6c7d73;
   font-weight: 600;
 }
@@ -844,14 +845,15 @@ export default {
 .per-page-select {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .per-page-select select {
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
+  padding: 0.15rem 0.35rem;
+  border-radius: 5px;
   border: 1px solid #d9e6de;
   font-weight: 700;
+  font-size: 0.72rem;
 }
 
 .table-responsive {
@@ -865,19 +867,20 @@ export default {
 
 .manager-table th {
   text-align: left;
-  padding: 0.8rem 1rem;
-  font-size: 0.74rem;
+  padding: 0.32rem 0.5rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: #6c7d73;
   border-bottom: 2px solid #edf3ef;
   white-space: nowrap;
 }
 
 .manager-table td {
-  padding: 0.95rem 1rem;
+  padding: 0.32rem 0.5rem;
   border-bottom: 1px solid #f0f5f2;
   vertical-align: middle;
+  font-size: 0.74rem;
 }
 
 .audit-row {
@@ -891,7 +894,7 @@ export default {
 
 .audit-datetime {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #17231c;
   white-space: nowrap;
@@ -899,25 +902,25 @@ export default {
 
 .audit-timeago {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.64rem;
   color: #8fa096;
 }
 
 .actor-info {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  min-width: 170px;
+  gap: 0.45rem;
+  min-width: 140px;
 }
 
 .actor-avatar {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #edf6f0;
   color: #0f6b3b;
   font-weight: 800;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -928,7 +931,7 @@ export default {
 .actor-names {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.05rem;
 }
 
 .actor-link {
@@ -943,20 +946,20 @@ export default {
 }
 
 .actor-names strong {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: #17231c;
 }
 
 .actor-email {
-  font-size: 0.73rem;
+  font-size: 0.68rem;
   color: #6c7d73;
 }
 
 .actor-role-pill {
   display: inline-block;
-  padding: 0.1rem 0.45rem;
-  border-radius: 12px;
-  font-size: 0.68rem;
+  padding: 0.08rem 0.35rem;
+  border-radius: 10px;
+  font-size: 0.64rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -972,9 +975,9 @@ export default {
   background: #f0f7f3;
   color: #0f6b3b;
   border: 1px solid #d4e8dc;
-  border-radius: 6px;
-  padding: 0.2rem 0.55rem;
-  font-size: 0.75rem;
+  border-radius: 5px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.68rem;
   font-weight: 700;
   display: inline-block;
 }
@@ -982,20 +985,20 @@ export default {
 .module-pill {
   background: #f1f5f9;
   color: #334155;
-  border-radius: 6px;
-  padding: 0.2rem 0.55rem;
-  font-size: 0.75rem;
+  border-radius: 5px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.68rem;
   font-weight: 700;
   display: inline-block;
 }
 
 .action-pill {
   display: inline-block;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  font-size: 0.72rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+  font-size: 0.66rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
@@ -1032,8 +1035,8 @@ export default {
 }
 
 .log-description {
-  max-width: 320px;
-  font-size: 0.85rem;
+  max-width: 280px;
+  font-size: 0.74rem;
   color: #24352b;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1041,9 +1044,9 @@ export default {
 }
 
 .ip-code {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   background: #f1f5f3;
-  padding: 0.2rem 0.45rem;
+  padding: 0.1rem 0.35rem;
   border-radius: 4px;
   color: #4b5f54;
 }
@@ -1052,9 +1055,9 @@ export default {
   background: transparent;
   border: 1px solid #cce5d6;
   color: #0f6b3b;
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1075,23 +1078,23 @@ export default {
   align-items: center;
   justify-content: center;
   z-index: 1050;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .modal-sheet {
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 720px;
+  max-width: 680px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
 }
 
 .modal-sheet-header {
-  padding: 1.5rem 1.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #edf3ef;
   display: flex;
   justify-content: space-between;
@@ -1100,16 +1103,16 @@ export default {
 
 .modal-sheet-header p {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: #0f6b3b;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
 .modal-sheet-header h3 {
-  margin: 0.25rem 0 0;
-  font-size: 1.25rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #17231c;
 }
@@ -1117,77 +1120,77 @@ export default {
 .close-btn {
   background: transparent;
   border: none;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1;
   color: #8fa096;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.2rem;
 }
 
 .detail-body {
-  padding: 1.75rem;
+  padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.75rem;
 }
 
 .detail-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.45rem;
 }
 
 .detail-card {
   background: #fbfdfc;
   border: 1px solid #e4ece7;
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
   display: flex;
   flex-direction: column;
 }
 
 .detail-card .d-label {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: #6c7d73;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.3rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
 }
 
 .detail-card strong {
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   color: #17231c;
 }
 
 .detail-card small {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: #6c7d73;
 }
 
 .detail-section h4 {
-  font-size: 0.85rem;
+  font-size: 0.76rem;
   font-weight: 800;
   color: #384d41;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 0.5rem;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.35rem;
 }
 
 .description-box {
   background: #f8faf9;
   border: 1px solid #e4ece7;
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  font-size: 0.92rem;
-  line-height: 1.5;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
   color: #17231c;
 }
 
 .diff-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 @media (max-width: 640px) {
@@ -1197,9 +1200,9 @@ export default {
 }
 
 .diff-panel {
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-  font-size: 0.78rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.72rem;
 }
 
 .diff-panel.old-panel {
@@ -1215,10 +1218,10 @@ export default {
 .diff-title {
   display: block;
   font-weight: 800;
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.3rem;
 }
 
 .old-panel .diff-title { color: #991b1b; }
@@ -1235,15 +1238,15 @@ export default {
   display: block;
   background: #f8faf9;
   border: 1px solid #e4ece7;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  font-size: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
   color: #55695e;
   word-break: break-all;
 }
 
 .modal-footer-actions {
-  padding: 1.25rem 1.75rem;
+  padding: 0.65rem 1rem;
   border-top: 1px solid #edf3ef;
   display: flex;
   justify-content: flex-end;
@@ -1252,10 +1255,10 @@ export default {
 .btn-cancel {
   background: #f3f6f4;
   border: 1px solid #d9e6de;
-  padding: 0.6rem 1.4rem;
-  border-radius: 10px;
+  padding: 0.32rem 0.75rem;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   color: #384d41;
   cursor: pointer;
 }
@@ -1269,19 +1272,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  padding-top: 0.5rem;
   border-top: 1px solid #edf3ef;
 }
 
 .pg-btn {
   background: #ffffff;
   border: 1px solid #d9e6de;
-  padding: 0.4rem 0.9rem;
-  border-radius: 8px;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   cursor: pointer;
   color: #17231c;
 }
@@ -1292,14 +1295,15 @@ export default {
 }
 
 .pg-info {
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   color: #6c7d73;
   font-weight: 600;
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 1.5rem 1rem;
+  font-size: 0.78rem;
   color: #6c7d73;
 }
 
@@ -1307,20 +1311,20 @@ export default {
   background: #0f6b3b;
   color: #ffffff;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 0.32rem 0.75rem;
+  border-radius: 6px;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.74rem;
   cursor: pointer;
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .portal-alert {
-  padding: 0.85rem 1.25rem;
-  border-radius: 12px;
-  margin-bottom: 1.25rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 .portal-alert.success {

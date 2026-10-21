@@ -72,6 +72,7 @@
 <script>
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
+import '../assets/dashboard-compact.css'
 
 export default {
   name: 'DashboardLayout',
@@ -180,50 +181,51 @@ export default {
   min-height: 100vh;
   display: flex;
   background: #f3f6f4;
+  font-size: 13px;
 }
 
 .portal-sidebar {
-  width: 300px;
+  width: 240px;
   background: linear-gradient(180deg, #0f6b3b 0%, #158149 55%, #0e5634 100%);
   color: #ffffff;
-  padding: 1.2rem;
+  padding: 0.65rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   position: sticky;
   top: 0;
   min-height: 100vh;
-  box-shadow: 16px 0 45px rgba(15, 107, 59, 0.18);
+  box-shadow: 10px 0 30px rgba(15, 107, 59, 0.15);
 }
 
 .portal-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   color: #ffffff;
   font-weight: 800;
-  font-size: 1.05rem;
-  padding: 0.35rem 0.25rem 1rem;
+  font-size: 0.92rem;
+  padding: 0.2rem 0.2rem 0.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .portal-brand img {
-  width: 52px;
-  height: 52px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
   background: #ffffff;
-  border-radius: 14px;
-  padding: 0.2rem;
+  border-radius: 10px;
+  padding: 0.15rem;
 }
 
 .portal-user-card {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 18px;
-  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  padding: 0.45rem 0.65rem;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.6rem;
   text-decoration: none;
   color: #ffffff;
   cursor: pointer;
@@ -234,7 +236,7 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .portal-user-card.router-link-active {
@@ -244,14 +246,15 @@ export default {
 }
 
 .portal-avatar {
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: var(--accent);
   color: #1a2332;
   display: grid;
   place-items: center;
   font-weight: 800;
+  font-size: 0.75rem;
   flex-shrink: 0;
 }
 
@@ -262,7 +265,7 @@ export default {
 
 .portal-user-meta strong {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -272,13 +275,13 @@ export default {
 .portal-user-meta span {
   display: block;
   color: rgba(255, 255, 255, 0.75);
-  font-size: 0.78rem;
-  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  margin-top: 0.05rem;
 }
 
 .user-card-arrow {
   color: rgba(255, 255, 255, 0.45);
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   font-weight: 300;
   line-height: 1;
   transition: transform 0.2s ease, color 0.2s ease;
@@ -292,17 +295,17 @@ export default {
 .portal-nav {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.45rem;
   overflow-y: auto;
   padding-right: 0.15rem;
 }
 
 .portal-nav-group p {
-  margin: 0 0 0.45rem;
+  margin: 0 0 0.2rem;
   color: rgba(255, 255, 255, 0.58);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  font-size: 0.6rem;
   font-weight: 800;
 }
 
@@ -310,11 +313,11 @@ export default {
 .portal-nav-details summary {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.45rem;
   color: rgba(255, 255, 255, 0.86);
-  border-radius: 12px;
-  padding: 0.7rem 0.75rem;
-  font-size: 0.86rem;
+  border-radius: 8px;
+  padding: 0.38rem 0.55rem;
+  font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
@@ -329,7 +332,7 @@ export default {
 }
 
 .portal-nav-details {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
 }
 
 .portal-nav-details summary {
@@ -341,29 +344,31 @@ export default {
 }
 
 .portal-nav-child {
-  margin-left: 1rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8rem;
+  margin-left: 0.65rem;
+  padding: 0.28rem 0.5rem;
+  font-size: 0.72rem;
   font-weight: 600;
 }
 
 .portal-logout {
   margin-top: auto;
   border: 0;
-  border-radius: 14px;
-  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  padding: 0.45rem 0.75rem;
   background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
   font-weight: 800;
+  font-size: 0.76rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  cursor: pointer;
 }
 
 .portal-main {
   flex: 1;
-  padding: 2rem;
+  padding: 0.75rem 1rem;
   min-width: 0;
 }
 
@@ -371,37 +376,38 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   background:
     linear-gradient(135deg, rgba(31, 156, 88, 0.94), rgba(18, 111, 62, 0.94)),
     radial-gradient(circle at top right, rgba(252, 191, 27, 0.35), transparent 32%);
   color: #ffffff;
-  border-radius: 28px;
-  padding: 1.6rem 1.8rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 22px 55px rgba(31, 156, 88, 0.2);
+  border-radius: 14px;
+  padding: 0.65rem 1.1rem;
+  margin-bottom: 0.65rem;
+  box-shadow: 0 10px 28px rgba(31, 156, 88, 0.16);
 }
 
 .portal-eyebrow {
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.1rem;
   color: rgba(255, 255, 255, 0.72);
   text-transform: uppercase;
-  letter-spacing: 0.13em;
-  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
   font-weight: 800;
 }
 
 .portal-header h1 {
   margin: 0;
-  font-size: clamp(1.6rem, 3vw, 2.35rem);
+  font-size: clamp(1.15rem, 1.8vw, 1.35rem);
   font-weight: 800;
+  line-height: 1.2;
 }
 
 .portal-header span {
   display: block;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.94rem;
-  margin-top: 0.35rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.76rem;
+  margin-top: 0.15rem;
 }
 
 @media (max-width: 992px) {
@@ -413,17 +419,17 @@ export default {
     width: 100%;
     min-height: auto;
     position: static;
-    border-radius: 0 0 24px 24px;
+    border-radius: 0 0 16px 16px;
   }
 
   .portal-main {
-    padding: 1rem;
+    padding: 0.65rem;
   }
 
   .portal-header {
     align-items: flex-start;
     flex-direction: column;
-    border-radius: 22px;
+    border-radius: 14px;
   }
 }
 </style>

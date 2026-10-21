@@ -457,15 +457,15 @@ export default {
   background: #0f6b3b;
   color: #ffffff;
   border: 0;
-  border-radius: 12px;
-  padding: 0.65rem 1.25rem;
+  border-radius: 6px;
+  padding: 0.32rem 0.75rem;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.76rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  box-shadow: 0 4px 14px rgba(15, 107, 59, 0.25);
+  gap: 0.3rem;
+  box-shadow: 0 2px 8px rgba(15, 107, 59, 0.2);
   transition: all 0.2s ease;
 }
 
@@ -476,16 +476,16 @@ export default {
 
 .users-tabs-bar {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.35rem;
 }
 
 .tab-btn {
   border: 1px solid #d9e6de;
   background: #ffffff;
   color: #4a5c52;
-  border-radius: 12px;
-  padding: 0.65rem 1.25rem;
-  font-size: 0.88rem;
+  border-radius: 6px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -499,36 +499,36 @@ export default {
 }
 
 .filter-panel {
-  padding: 1rem 1.25rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .filter-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .search-wrap {
   flex: 1;
-  min-width: 260px;
+  min-width: 220px;
 }
 
 .search-wrap input {
   width: 100%;
-  padding: 0.65rem 1rem;
+  padding: 0.32rem 0.55rem;
   border: 1px solid #d9e6de;
-  border-radius: 12px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
   background: #fbfdfc;
 }
 
 .role-filter select {
-  padding: 0.6rem 0.9rem;
+  padding: 0.32rem 0.55rem;
   border: 1px solid #d9e6de;
-  border-radius: 10px;
-  font-size: 0.85rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
   background: #fbfdfc;
   color: #17231c;
   font-weight: 600;
@@ -537,9 +537,9 @@ export default {
 .portal-panel {
   background: #ffffff;
   border: 1px solid #e4ece7;
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(15, 107, 59, 0.04);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 2px 10px rgba(15, 107, 59, 0.04);
 }
 
 .table-responsive {
@@ -553,50 +553,51 @@ export default {
 
 .manager-table th {
   text-align: left;
-  padding: 0.8rem 1rem;
-  font-size: 0.76rem;
+  padding: 0.32rem 0.5rem;
+  font-size: 0.66rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: #6c7d73;
   border-bottom: 2px solid #edf3ef;
 }
 
 .manager-table td {
-  padding: 1rem;
+  padding: 0.32rem 0.5rem;
   border-bottom: 1px solid #f0f5f2;
   vertical-align: middle;
+  font-size: 0.74rem;
 }
 
 .user-avatar-sm {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   background: #0f6b3b;
   color: #ffffff;
   display: grid;
   place-items: center;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
 }
 
 .user-name {
   display: block;
-  font-size: 0.92rem;
+  font-size: 0.78rem;
   color: #17231c;
 }
 
 .user-email {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   color: #6c7d73;
-  margin-top: 0.15rem;
+  margin-top: 0.05rem;
 }
 
 .role-badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 12px;
+  font-size: 0.66rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -609,9 +610,9 @@ export default {
 
 .dept-badge {
   display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.78rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+  font-size: 0.66rem;
   font-weight: 700;
   background: #f0fdf4;
   color: #166534;
@@ -621,17 +622,17 @@ export default {
 .dept-badges-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .joined-date {
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   color: #4a5c52;
 }
 
 .action-buttons {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.25rem;
   justify-content: flex-end;
 }
 
@@ -650,9 +651,9 @@ export default {
   border: 1px solid #d4e3dc;
   background: #ffffff;
   color: #17231c;
-  padding: 0.3rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.78rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.7rem;
   font-weight: 700;
   text-decoration: none;
   display: inline-flex;
@@ -670,9 +671,9 @@ export default {
   border: 1px solid #c2dbcd;
   background: #f0f7f3;
   color: #0f6b3b;
-  padding: 0.3rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.78rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;
 }
@@ -681,9 +682,9 @@ export default {
   border: 1px solid #fcd2d2;
   background: #fff3f3;
   color: #d9383a;
-  padding: 0.3rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.78rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;
 }
@@ -695,8 +696,8 @@ export default {
 
 /* Matrix Layout */
 .roles-intro h3 {
-  margin: 0 0 0.4rem;
-  font-size: 1.25rem;
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #17231c;
 }
@@ -704,20 +705,20 @@ export default {
 .roles-intro p {
   margin: 0;
   color: #6c7d73;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.74rem;
+  line-height: 1.4;
 }
 
 .roles-matrix-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.65rem;
 }
 
 .role-matrix-card {
   border: 1px solid #e4ece7;
-  border-radius: 20px;
-  padding: 1.5rem;
+  border-radius: 10px;
+  padding: 0.75rem;
   background: #fafcfb;
   display: flex;
   flex-direction: column;
@@ -725,28 +726,28 @@ export default {
 
 .role-matrix-header {
   border-bottom: 1px solid #edf3ef;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .role-desc {
-  margin: 0.6rem 0 0;
-  font-size: 0.8rem;
+  margin: 0.3rem 0 0;
+  font-size: 0.72rem;
   color: #6c7d73;
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 .permissions-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .perm-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.8rem;
+  gap: 0.4rem;
+  font-size: 0.72rem;
   color: #94a39b;
 }
 
@@ -756,7 +757,7 @@ export default {
 }
 
 .perm-icon {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: 800;
   line-height: 1;
 }
@@ -775,38 +776,38 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .modal-sheet {
   background: #ffffff;
   width: 100%;
-  max-width: 550px;
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
 }
 
 .modal-sheet-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   border-bottom: 1px solid #edf3ef;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .modal-sheet-header p {
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.1rem;
   color: #0f6b3b;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .modal-sheet-header h3 {
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #17231c;
 }
@@ -814,7 +815,7 @@ export default {
 .close-btn {
   background: transparent;
   border: 0;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   line-height: 1;
   color: #6c7d73;
   cursor: pointer;
@@ -823,14 +824,14 @@ export default {
 .modal-sheet-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 0.6rem;
 }
 
 .modal-sheet-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.85rem;
+  gap: 0.2rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: #17231c;
 }
@@ -838,9 +839,9 @@ export default {
 .modal-sheet-form input,
 .modal-sheet-form select {
   border: 1px solid #d9e6de;
-  border-radius: 12px;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  padding: 0.32rem 0.55rem;
+  font-size: 0.76rem;
   background: #fbfdfc;
   color: #17231c;
 }
@@ -848,9 +849,9 @@ export default {
 .modal-footer-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 1.25rem;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding-top: 0.6rem;
   border-top: 1px solid #edf3ef;
 }
 
@@ -858,8 +859,9 @@ export default {
   border: 1px solid #d9e6de;
   background: #ffffff;
   color: #4a5c52;
-  border-radius: 12px;
-  padding: 0.65rem 1.25rem;
+  border-radius: 6px;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
 }
@@ -868,11 +870,12 @@ export default {
   background: #0f6b3b;
   color: #ffffff;
   border: 0;
-  border-radius: 12px;
-  padding: 0.65rem 1.5rem;
+  border-radius: 6px;
+  padding: 0.32rem 0.85rem;
+  font-size: 0.74rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(15, 107, 59, 0.25);
+  box-shadow: 0 2px 8px rgba(15, 107, 59, 0.2);
 }
 
 .btn-save:hover {
@@ -880,11 +883,11 @@ export default {
 }
 
 .portal-alert {
-  padding: 0.85rem 1.25rem;
-  border-radius: 12px;
-  font-size: 0.88rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
   font-weight: 600;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .portal-alert.success {
@@ -902,7 +905,8 @@ export default {
 .loading-state,
 .empty-state {
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 1.5rem 1rem;
+  font-size: 0.78rem;
   color: #6c7d73;
 }
 </style>
