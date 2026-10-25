@@ -142,6 +142,27 @@ class ProcurementTenderTest extends TestCase
             ->assertJsonPath('data.0.download_count', 14);
     }
 
+    public function test_public_can_fetch_briefing_link_documents(): void
+    {
+        ProcurementNotice::create([
+            'title' => 'Briefing link for GEOHYDROLOGICAL SPECIALIST',
+            'financial_year' => 'Current',
+            'category' => 'Briefing Link',
+            'type' => 'tender',
+            'status' => 'open',
+            'reference_no' => 'NDZ-BL-001',
+            'document_url' => '/storage/uploads/briefing_links/briefing_link_001.pdf',
+            'download_count' => 75,
+        ]);
+
+        $response = $this->getJson('/api/procurement?category=Briefing Link');
+        $response->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Briefing link for GEOHYDROLOGICAL SPECIALIST')
+            ->assertJsonPath('data.0.category', 'Briefing Link')
+            ->assertJsonPath('data.0.download_count', 75);
+    }
+
     public function test_downloading_tender_increments_download_count(): void
     {
         $notice = ProcurementNotice::create([

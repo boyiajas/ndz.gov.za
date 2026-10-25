@@ -323,6 +323,7 @@ export default {
         { id: 'bid-documents', label: 'Bid Documents', to: '/bid-documents' },
         { id: 'quote-documents', label: 'Quote Documents', to: '/quote-documents' },
         { id: 'intention-to-award', label: 'Intention To Award', to: '/intention-to-award' },
+        { id: 'briefing-link', label: 'Briefing Link', to: '/briefing-link' },
       ],
       sections: {
         'open-tenders': {
@@ -391,6 +392,14 @@ export default {
           singularTitle: 'Intention To Award',
           type: 'tender',
           category: 'Intention To Award',
+          isDirect: true,
+        },
+        'briefing-link': {
+          id: 'briefing-link',
+          title: 'Briefing Link',
+          singularTitle: 'Briefing Link',
+          type: 'tender',
+          category: 'Briefing Link',
           isDirect: true,
         },
       },
