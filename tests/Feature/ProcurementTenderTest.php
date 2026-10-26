@@ -163,6 +163,27 @@ class ProcurementTenderTest extends TestCase
             ->assertJsonPath('data.0.download_count', 75);
     }
 
+    public function test_public_can_fetch_erratum_and_addendum_documents(): void
+    {
+        ProcurementNotice::create([
+            'title' => 'ADDENDUM FOR SUPPLY AND DELIVERY OF BRUSH CUTTER',
+            'financial_year' => 'Current',
+            'category' => 'Erratum And Addendum',
+            'type' => 'tender',
+            'status' => 'open',
+            'reference_no' => 'NDZ-EA-001',
+            'document_url' => '/storage/uploads/erratum_and_addendum/erratum_addendum_001.pdf',
+            'download_count' => 8,
+        ]);
+
+        $response = $this->getJson('/api/procurement?category=Erratum And Addendum');
+        $response->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'ADDENDUM FOR SUPPLY AND DELIVERY OF BRUSH CUTTER')
+            ->assertJsonPath('data.0.category', 'Erratum And Addendum')
+            ->assertJsonPath('data.0.download_count', 8);
+    }
+
     public function test_downloading_tender_increments_download_count(): void
     {
         $notice = ProcurementNotice::create([

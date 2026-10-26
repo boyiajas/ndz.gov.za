@@ -324,6 +324,7 @@ export default {
         { id: 'quote-documents', label: 'Quote Documents', to: '/quote-documents' },
         { id: 'intention-to-award', label: 'Intention To Award', to: '/intention-to-award' },
         { id: 'briefing-link', label: 'Briefing Link', to: '/briefing-link' },
+        { id: 'erratum-and-addendum', label: 'Erratum And Addendum', to: '/erratum-and-addendum' },
       ],
       sections: {
         'open-tenders': {
@@ -400,6 +401,14 @@ export default {
           singularTitle: 'Briefing Link',
           type: 'tender',
           category: 'Briefing Link',
+          isDirect: true,
+        },
+        'erratum-and-addendum': {
+          id: 'erratum-and-addendum',
+          title: 'Erratum And Addendum',
+          singularTitle: 'Erratum And Addendum',
+          type: 'tender',
+          category: 'Erratum And Addendum',
           isDirect: true,
         },
       },

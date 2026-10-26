@@ -124,6 +124,8 @@ const routes = [
     { path: '/quote-documents', name: 'quote-documents', component: OpenTendersView },
     { path: '/intention-to-award', name: 'intention-to-award', component: OpenTendersView },
     { path: '/briefing-link', name: 'briefing-link', component: OpenTendersView },
+    { path: '/erratum-and-addendum', name: 'erratum-and-addendum', component: OpenTendersView },
+    { path: '/erratum-and-addendums', redirect: '/erratum-and-addendum' },
     { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
     { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
     {

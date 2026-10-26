@@ -234,6 +234,7 @@
                 <option value="Quote Documents">Quote Documents</option>
                 <option value="Intention To Award">Intention To Award</option>
                 <option value="Briefing Link">Briefing Link</option>
+                <option value="Erratum And Addendum">Erratum And Addendum</option>
                 <option value="Online Submission">Online Submission</option>
                 <option value="Other SCM Documents">Other SCM Documents</option>
               </select>
@@ -414,7 +415,7 @@ export default {
       return Array.from(set).sort().reverse()
     },
     availableCategories() {
-      const set = new Set(['Open Tenders', 'Bid Documents', 'Quotations', 'Quote Documents', 'Intention To Award', 'Briefing Link', 'Other SCM Documents'])
+      const set = new Set(['Open Tenders', 'Bid Documents', 'Quotations', 'Quote Documents', 'Intention To Award', 'Briefing Link', 'Erratum And Addendum', 'Other SCM Documents'])
       this.notices.forEach((n) => {
         if (n.category) set.add(n.category)
       })
@@ -434,6 +435,7 @@ export default {
         { label: 'Quote Documents', value: 'Quote Documents', count: counts['Quote Documents'] || 0 },
         { label: 'Intention To Award', value: 'Intention To Award', count: counts['Intention To Award'] || 0 },
         { label: 'Briefing Link', value: 'Briefing Link', count: counts['Briefing Link'] || 0 },
+        { label: 'Erratum And Addendum', value: 'Erratum And Addendum', count: counts['Erratum And Addendum'] || 0 },
       ]
     },
     totalPages() {
