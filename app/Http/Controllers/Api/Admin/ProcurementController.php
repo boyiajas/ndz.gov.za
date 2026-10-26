@@ -174,6 +174,21 @@ class ProcurementController extends Controller
         return response()->json(['message' => 'Procurement notice deleted successfully.']);
     }
 
+    public function closeExpired(Request $request): JsonResponse
+    {
+        $this->authorizeProcurement($request);
+
+        $job = new \App\Jobs\CloseExpiredListingsJob();
+        $result = $job->handle();
+
+        $message = "Auto-close check completed: {$result['tenders_closed']} tender(s), {$result['quotes_closed']} quote(s), and {$result['vacancies_closed']} vacancy/vacancies closed.";
+
+        return response()->json([
+            'message' => $message,
+            'data' => $result,
+        ]);
+    }
+
     private function authorizeProcurement(Request $request): void
     {
         abort_unless($request->user()?->canManageProcurement(), 403, 'Your role cannot manage tenders and quotes.');

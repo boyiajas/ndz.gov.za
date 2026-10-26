@@ -101,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
             ->only(['index', 'store', 'update', 'destroy']);
 
         // Procurement (Tenders & Quotes)
+        Route::post('procurement/close-expired', [AdminProcurementController::class, 'closeExpired']);
         Route::apiResource('procurement', AdminProcurementController::class)
             ->parameters(['procurement' => 'procurement'])
             ->only(['index', 'store', 'update', 'destroy']);

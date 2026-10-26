@@ -4,6 +4,17 @@
     subtitle="Publish municipal tenders, set categories & financial tender years, upload bid packs, and monitor citizen downloads."
   >
     <template #header-actions>
+      <button
+        type="button"
+        class="btn-secondary-action me-2"
+        :disabled="checkingExpired"
+        @click="runCloseExpired"
+        title="Check and auto-close listings whose closing date has lapsed"
+      >
+        <span v-if="checkingExpired" class="spinner-border spinner-border-sm me-1"></span>
+        <i v-else class="bi bi-clock-history me-1"></i>
+        {{ checkingExpired ? 'Checking...' : 'Check & Close Expired' }}
+      </button>
       <button type="button" class="btn-primary-action" @click="openCreateModal">
         <span>+</span> Upload Tender / Quote
       </button>
@@ -362,6 +373,7 @@ export default {
       searchQuery: '',
       loading: true,
       saving: false,
+      checkingExpired: false,
       notice: '',
       error: '',
       isModalOpen: false,
@@ -605,6 +617,21 @@ export default {
         this.error = 'Failed to delete notice.'
       }
     },
+    async runCloseExpired() {
+      this.checkingExpired = true
+      this.notice = ''
+      this.error = ''
+      try {
+        const { data } = await api.post('/api/admin/procurement/close-expired')
+        this.notice = data.message || 'Auto-close check executed successfully.'
+        await this.fetchNotices()
+        setTimeout(() => { this.notice = '' }, 5000)
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Failed to check and auto-close listings.'
+      } finally {
+        this.checkingExpired = false
+      }
+    },
     formatDate(d) {
       if (!d) return 'Not specified'
       return new Date(d).toLocaleDateString('en-ZA', {
@@ -639,6 +666,33 @@ export default {
 .btn-primary-action:hover {
   background: #0c562f;
   transform: translateY(-1px);
+}
+
+.btn-secondary-action {
+  background: #ffffff;
+  color: #1f2f4a;
+  border: 1px solid #d1d5db;
+  padding: 0.65rem 1.15rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-action:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #0f6b3b;
+  color: #0f6b3b;
+  transform: translateY(-1px);
+}
+
+.btn-secondary-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .stats-overview-grid {

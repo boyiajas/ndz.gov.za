@@ -505,6 +505,8 @@ export default {
 
           if (this.currentSection.isClosed) {
             if (n.status !== 'closed') return false
+          } else {
+            if (n.status === 'closed') return false
           }
 
           if (this.currentSection.type === 'quote') {
@@ -631,6 +633,8 @@ export default {
 
         if (this.currentSection.isClosed) {
           if (n.status !== 'closed') return false
+        } else {
+          if (n.status === 'closed') return false
         }
 
         if (this.currentSection.type === 'quote') {
