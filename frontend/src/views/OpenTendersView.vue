@@ -699,7 +699,7 @@ export default {
 
 .tenders-tabs {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: stretch;
   gap: 0;
   background: #ffffff;
@@ -710,10 +710,10 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 3.75rem;
-  padding: 1rem 1.25rem;
+  padding: 0.85rem 0.65rem;
   background: #ffffff;
   color: #1f2f4a;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 700;
   text-align: center;
   text-decoration: none;
@@ -1087,6 +1087,13 @@ export default {
   0% { transform: scale(1); }
   50% { transform: scale(1.15); }
   100% { transform: scale(1); }
+}
+
+@media (max-width: 1199.98px) {
+  .tenders-tab {
+    font-size: 0.88rem;
+    padding: 0.75rem 0.45rem;
+  }
 }
 
 @media (max-width: 991.98px) {
