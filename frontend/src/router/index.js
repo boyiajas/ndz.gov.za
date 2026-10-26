@@ -118,7 +118,7 @@ const routes = [
     { path: '/public-works', name: 'public-works', component: PublicWorksView },
     { path: '/news', name: 'news', component: NdzNewsView },
     { path: '/open-tenders', name: 'open-tenders', component: OpenTendersView },
-    { path: '/closed-tenders', name: 'closed-tenders', component: ClosedTendersView },
+    { path: '/closed-tenders', name: 'closed-tenders', component: OpenTendersView },
     { path: '/open-quotes', name: 'open-quotes', component: OpenTendersView },
     { path: '/bid-documents', name: 'bid-documents', component: OpenTendersView },
     { path: '/quote-documents', name: 'quote-documents', component: OpenTendersView },
@@ -126,7 +126,7 @@ const routes = [
     { path: '/briefing-link', name: 'briefing-link', component: OpenTendersView },
     { path: '/erratum-and-addendum', name: 'erratum-and-addendum', component: OpenTendersView },
     { path: '/erratum-and-addendums', redirect: '/erratum-and-addendum' },
-    { path: '/closed-quotes', name: 'closed-quotes', component: ClosedQuotesView },
+    { path: '/closed-quotes', name: 'closed-quotes', component: OpenTendersView },
     { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
     {
         path: '/scm-database-forms',

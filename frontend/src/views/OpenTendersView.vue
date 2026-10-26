@@ -320,6 +320,8 @@ export default {
       tabs: [
         { id: 'open-tenders', label: 'Open Tenders', to: '/open-tenders' },
         { id: 'open-quotes', label: 'Open Quotations', to: '/open-quotes' },
+        { id: 'closed-tenders', label: 'Closed Tenders', to: '/closed-tenders' },
+        { id: 'closed-quotes', label: 'Closed Quotes', to: '/closed-quotes' },
         { id: 'bid-documents', label: 'Bid Documents', to: '/bid-documents' },
         { id: 'quote-documents', label: 'Quote Documents', to: '/quote-documents' },
         { id: 'intention-to-award', label: 'Intention To Award', to: '/intention-to-award' },
@@ -332,6 +334,7 @@ export default {
           title: 'Open Tenders',
           singularTitle: 'Tenders',
           type: 'tender',
+          isClosed: false,
           category: 'Open Tenders',
           isDirect: false,
           kickerPrefix: 'Tenders',
@@ -349,11 +352,35 @@ export default {
           },
           defaultYear: '2025-2026',
         },
+        'closed-tenders': {
+          id: 'closed-tenders',
+          title: 'Closed Tenders',
+          singularTitle: 'Tenders',
+          type: 'tender',
+          isClosed: true,
+          category: 'Open Tenders',
+          isDirect: false,
+          kickerPrefix: 'Closed Tenders',
+          welcomePrefix: 'Closed Tenders Archive',
+          introText: 'This platform provides historical tender notices, closed procurement listings, and awarded bid specifications for Service Providers, Contractors, and the public.',
+          bullets: [
+            'Closed Tender Notices and Outcomes',
+            'Historical Bid Specifications and Requirements',
+            'Archived Procurement Documentation',
+          ],
+          closingText: 'For enquiries regarding past tenders or archived procurement records, please contact the Supply Chain Management unit.',
+          quickAction: {
+            text: 'Download Bid Documents',
+            to: '/bid-documents',
+          },
+          defaultYear: '2024-2025',
+        },
         'open-quotes': {
           id: 'open-quotes',
           title: 'Open Quotations',
           singularTitle: 'Quotations',
           type: 'quote',
+          isClosed: false,
           category: 'Quotations',
           isDirect: false,
           kickerPrefix: 'Quotations',
@@ -370,6 +397,29 @@ export default {
             to: '/quote-documents',
           },
           defaultYear: '2026-2027',
+        },
+        'closed-quotes': {
+          id: 'closed-quotes',
+          title: 'Closed Quotes',
+          singularTitle: 'Quotations',
+          type: 'quote',
+          isClosed: true,
+          category: 'Quotations',
+          isDirect: false,
+          kickerPrefix: 'Closed Quotations',
+          welcomePrefix: 'Closed Quotation Archive',
+          introText: 'This platform provides historical quotation notices, closed RFQs, and procurement documentation for Service Providers, Contractors, and the public.',
+          bullets: [
+            'Closed Request for Quotations (RFQs)',
+            'Historical Quote Specifications and Requirements',
+            'Archived Quotation Records',
+          ],
+          closingText: 'For enquiries regarding past quotations or archived procurement records, please contact the Supply Chain Management unit.',
+          quickAction: {
+            text: 'Download Quote Documents',
+            to: '/quote-documents',
+          },
+          defaultYear: '2024-2025',
         },
         'bid-documents': {
           id: 'bid-documents',
@@ -453,7 +503,11 @@ export default {
           const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
           if (itemYear !== targetYear) return false
 
-          if (this.currentSection.id === 'open-quotes') {
+          if (this.currentSection.isClosed) {
+            if (n.status !== 'closed') return false
+          }
+
+          if (this.currentSection.type === 'quote') {
             return n.type === 'quote' || n.category === 'Quotations' || n.category === 'Open Quotations'
           }
           return n.type === 'tender' || n.category === 'Open Tenders' || (!n.type && !n.category?.includes('Quote'))
@@ -574,7 +628,12 @@ export default {
       return this.notices.filter((n) => {
         const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
         if (itemYear !== targetYear) return false
-        if (this.currentSection.id === 'open-quotes') {
+
+        if (this.currentSection.isClosed) {
+          if (n.status !== 'closed') return false
+        }
+
+        if (this.currentSection.type === 'quote') {
           return n.type === 'quote' || n.category === 'Quotations' || n.category === 'Open Quotations'
         }
         return n.type === 'tender' || n.category === 'Open Tenders' || (!n.type && !n.category?.includes('Quote'))

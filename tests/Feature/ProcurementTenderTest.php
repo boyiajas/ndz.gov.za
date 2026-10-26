@@ -88,6 +88,33 @@ class ProcurementTenderTest extends TestCase
             ->assertJsonPath('data.0.title', 'Supply and Delivery of Brush Cutters');
     }
 
+    public function test_public_can_filter_closed_tenders_and_quotes(): void
+    {
+        ProcurementNotice::create([
+            'title' => 'Closed Tender 2024',
+            'financial_year' => '2024-2025',
+            'category' => 'Open Tenders',
+            'type' => 'tender',
+            'status' => 'closed',
+            'reference_no' => 'NDZ-TDR-CLOSED-01',
+        ]);
+
+        ProcurementNotice::create([
+            'title' => 'Open Tender 2024',
+            'financial_year' => '2024-2025',
+            'category' => 'Open Tenders',
+            'type' => 'tender',
+            'status' => 'open',
+            'reference_no' => 'NDZ-TDR-OPEN-01',
+        ]);
+
+        $response = $this->getJson('/api/procurement?financial_year=2024-2025&status=closed&type=tender');
+        $response->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Closed Tender 2024')
+            ->assertJsonPath('data.0.status', 'closed');
+    }
+
     public function test_public_can_fetch_bid_and_quote_documents(): void
     {
         ProcurementNotice::create([
