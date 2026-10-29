@@ -28,7 +28,7 @@
               <span>{{ countLabel }}</span>
               <h2>{{ category.name }}</h2>
               <div v-if="category.image_url" class="category-intro-image-wrap">
-                <img :src="formatImageUrl(category.image_url)" :alt="category.name" class="category-intro-image" />
+                <img :src="formatImageUrl(category.image_url)" :alt="category.name" class="category-intro-image" @error="handleImageError" />
               </div>
               <p v-if="category.subtitle" class="category-subtitle">{{ category.subtitle }}</p>
               <div
@@ -173,10 +173,17 @@ export default {
     },
     formatImageUrl(url) {
       if (!url) return ''
-      if (/^https?:\/\/localhost(?::80)?\/storage\//i.test(url)) {
-        return url.replace(/^https?:\/\/localhost(?::80)?/i, 'http://localhost:8001')
+      // If the URL contains a /storage/ path, extract it as root-relative so it loads from the current host/box
+      const storageMatch = url.match(/(?:\/storage\/.*)$/i)
+      if (storageMatch) {
+        return storageMatch[0]
       }
       return url
+    },
+    handleImageError(event) {
+      if (event?.target) {
+        event.target.style.display = 'none'
+      }
     },
   },
 }

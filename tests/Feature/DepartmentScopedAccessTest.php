@@ -296,4 +296,20 @@ class DepartmentScopedAccessTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure(['message', 'data']);
     }
+
+    public function test_document_category_normalizes_image_url(): void
+    {
+        $category = DocumentCategory::create([
+            'name' => 'Test Image Normalization',
+            'slug' => 'test-image-normalization',
+            'image_url' => 'http://localhost:8001/storage/uploads/documents/sample.jpg',
+            'is_active' => true,
+        ]);
+
+        $this->assertEquals('/storage/uploads/documents/sample.jpg', $category->image_url);
+
+        $response = $this->getJson('/api/document-catalog/' . $category->slug);
+        $response->assertStatus(200)
+            ->assertJsonPath('data.image_url', '/storage/uploads/documents/sample.jpg');
+    }
 }

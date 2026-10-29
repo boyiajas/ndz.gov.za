@@ -29,7 +29,8 @@ class UploadController extends Controller
         $filename = $safeBase . '-' . time() . '-' . Str::random(6) . '.' . $extension;
 
         $path = $file->storeAs("uploads/{$folder}", $filename, 'public');
-        $url = Storage::disk('public')->url($path);
+        // Return root-relative URL so uploads resolve on any domain, IP, or localhost
+        $url = '/storage/' . $path;
 
         return response()->json([
             'message' => 'File uploaded successfully.',

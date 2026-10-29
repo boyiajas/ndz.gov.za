@@ -55,11 +55,20 @@ class DocumentCategory extends Model
             return null;
         }
 
-        // If the URL was stored with http://localhost/storage (missing port), fix it
-        if (preg_match('#^http://localhost(/storage/.*)$#i', $value, $matches)) {
-            return config('app.url') . $matches[1];
+        // Normalize any absolute localhost/127.0.0.1 URLs to root-relative /storage/... path
+        if (preg_match('#^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?(/storage/.*)$#i', $value, $matches)) {
+            return $matches[1];
         }
 
         return $value;
+    }
+
+    public function setImageUrlAttribute(?string $value): void
+    {
+        if ($value && preg_match('#^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?(/storage/.*)$#i', $value, $matches)) {
+            $this->attributes['image_url'] = $matches[1];
+        } else {
+            $this->attributes['image_url'] = $value;
+        }
     }
 }
