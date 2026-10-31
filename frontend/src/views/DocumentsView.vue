@@ -248,6 +248,20 @@ const fallbackCategories = [
       { label: 'Municipal Governance Policies', slug: 'municipal-governance-policies' },
     ],
   },
+  {
+    id: '14',
+    slug: 'public-notices',
+    title: 'Public Notices',
+    subtitle: 'Official public notices, gazettes, municipal announcements, and statutory advertisements',
+    items: [],
+  },
+  {
+    id: '15',
+    slug: 'contract-reporting',
+    title: 'Contract Reporting',
+    subtitle: 'Supply chain management contract reporting, quarterly awards, and procurement disclosures',
+    items: [],
+  },
 ]
 
 export default {

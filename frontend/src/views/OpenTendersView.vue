@@ -31,7 +31,7 @@
               :key="tab.id"
               :to="tab.to"
               class="tenders-tab"
-              :class="{ 'is-active': tab.id === currentSection.id }"
+              :class="{ 'is-active': tab.id === currentSection.id || (tab.id === 'contract-reporting' && currentSection.id === 'reporting') }"
             >
               {{ tab.label }}
             </router-link>
@@ -327,6 +327,8 @@ export default {
         { id: 'intention-to-award', label: 'Intention To Award', to: '/intention-to-award' },
         { id: 'briefing-link', label: 'Briefing Link', to: '/briefing-link' },
         { id: 'erratum-and-addendum', label: 'Erratum And Addendum', to: '/erratum-and-addendum' },
+        { id: 'public-notices', label: 'Public Notices', to: '/public-notices' },
+        { id: 'contract-reporting', label: 'Reporting', to: '/contract-reporting' },
       ],
       sections: {
         'open-tenders': {
@@ -461,6 +463,30 @@ export default {
           category: 'Erratum And Addendum',
           isDirect: true,
         },
+        'public-notices': {
+          id: 'public-notices',
+          title: 'Public Notices',
+          singularTitle: 'Public Notices',
+          type: 'tender',
+          category: 'Public Notices',
+          isDirect: true,
+        },
+        'contract-reporting': {
+          id: 'contract-reporting',
+          title: 'Contract Reporting',
+          singularTitle: 'Reporting',
+          type: 'tender',
+          category: 'Reporting',
+          isDirect: true,
+        },
+        'reporting': {
+          id: 'reporting',
+          title: 'Contract Reporting',
+          singularTitle: 'Reporting',
+          type: 'tender',
+          category: 'Reporting',
+          isDirect: true,
+        },
       },
     }
   },
@@ -474,14 +500,14 @@ export default {
     directYears() {
       const set = new Set()
       this.notices.forEach((n) => {
-        if (n.category === this.currentSection.category && n.financial_year) {
+        if (this.matchesNoticeCategory(n) && n.financial_year) {
           set.add(n.financial_year.replace('/', '-'))
         }
       })
       return Array.from(set).sort().reverse()
     },
     directTotalCount() {
-      return this.notices.filter((n) => n.category === this.currentSection.category).length
+      return this.notices.filter((n) => this.matchesNoticeCategory(n)).length
     },
     filteredDocuments() {
       const q = this.searchQuery.trim().toLowerCase()
@@ -491,7 +517,7 @@ export default {
 
       if (this.isDirectListing) {
         list = this.notices.filter((n) => {
-          if (n.category !== this.currentSection.category) return false
+          if (!this.matchesNoticeCategory(n)) return false
           if (this.activeDirectYear !== 'all') {
             const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
             if (itemYear !== this.activeDirectYear.toLowerCase()) return false
@@ -646,10 +672,18 @@ export default {
         return n.type === 'tender' || n.category === 'Open Tenders' || (!n.type && !n.category?.includes('Quote'))
       }).length
     },
+    matchesNoticeCategory(n) {
+      if (!n) return false
+      const cat = this.currentSection?.category
+      if (cat === 'Reporting' || cat === 'Contract Reporting') {
+        return n.category === 'Reporting' || n.category === 'Contract Reporting'
+      }
+      return n.category === cat
+    },
     countForDirectYear(yr) {
       const target = (yr || '').toLowerCase().replace('/', '-')
       return this.notices.filter((n) => {
-        if (n.category !== this.currentSection.category) return false
+        if (!this.matchesNoticeCategory(n)) return false
         const itemYear = (n.financial_year || '').toLowerCase().replace('/', '-')
         return itemYear === target
       }).length

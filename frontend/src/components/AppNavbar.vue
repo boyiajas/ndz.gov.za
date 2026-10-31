@@ -140,7 +140,13 @@
                 </ul>
               </li>
               <li><router-link class="dropdown-item" to="/intention-to-award">INTENTION TO AWARD</router-link></li>
-              <li><router-link class="dropdown-item" to="/contract-reporting">CONTRACT REPORTING</router-link></li>
+              <li class="dropdown-submenu">
+                <a class="dropdown-item dropdown-toggle" href="#">CONTRACT REPORTING</a>
+                <ul class="dropdown-menu">
+                  <li><router-link class="dropdown-item" to="/public-notices">Public Notices</router-link></li>
+                  <li><router-link class="dropdown-item" to="/contract-reporting">Reporting</router-link></li>
+                </ul>
+              </li>
               <li>
                 <a
                   class="dropdown-item"

@@ -85,10 +85,12 @@ class DepartmentSeeder extends Seeder
             'office-of-the-municipal-manager' => 'MM',
             'pms' => 'MM',
             'mpac-reports' => 'MM',
+            'public-notices' => 'MM',
 
             // Budget & Treasury
             'budget-treasury' => 'BTO',
             'annual-reports' => 'BTO',
+            'contract-reporting' => 'BTO',
 
             // Corporate Support Services
             'corporate-services' => 'CORP',

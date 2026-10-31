@@ -141,6 +141,20 @@ class DocumentCatalogSeeder extends Seeder
                 'description' => 'Official municipal policies adopted by Council across finance, administration, infrastructure, human resources, and community governance.',
                 'items' => [],
             ],
+            [
+                'name' => 'Public Notices',
+                'slug' => 'public-notices',
+                'subtitle' => 'Official public notices, gazettes, municipal announcements, and statutory advertisements',
+                'description' => 'Official public notices, municipal announcements, public participation invitations, and statutory publications from Dr Nkosazana Dlamini-Zuma Local Municipality.',
+                'items' => [],
+            ],
+            [
+                'name' => 'Contract Reporting',
+                'slug' => 'contract-reporting',
+                'subtitle' => 'Supply chain management contract reporting, quarterly awards, and procurement disclosures',
+                'description' => 'Formal contract registers, quarterly procurement reports, contract extensions, and statutory supply chain management reporting.',
+                'items' => [],
+            ],
         ];
 
         $newSlugs = [];

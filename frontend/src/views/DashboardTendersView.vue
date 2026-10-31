@@ -246,6 +246,9 @@
                 <option value="Intention To Award">Intention To Award</option>
                 <option value="Briefing Link">Briefing Link</option>
                 <option value="Erratum And Addendum">Erratum And Addendum</option>
+                <option value="Public Notices">Public Notices</option>
+                <option value="Reporting">Reporting</option>
+                <option value="Contract Reporting">Contract Reporting</option>
                 <option value="Online Submission">Online Submission</option>
                 <option value="Other SCM Documents">Other SCM Documents</option>
               </select>
@@ -427,7 +430,7 @@ export default {
       return Array.from(set).sort().reverse()
     },
     availableCategories() {
-      const set = new Set(['Open Tenders', 'Bid Documents', 'Quotations', 'Quote Documents', 'Intention To Award', 'Briefing Link', 'Erratum And Addendum', 'Other SCM Documents'])
+      const set = new Set(['Open Tenders', 'Bid Documents', 'Quotations', 'Quote Documents', 'Intention To Award', 'Briefing Link', 'Erratum And Addendum', 'Public Notices', 'Reporting', 'Contract Reporting', 'Other SCM Documents'])
       this.notices.forEach((n) => {
         if (n.category) set.add(n.category)
       })
@@ -448,6 +451,8 @@ export default {
         { label: 'Intention To Award', value: 'Intention To Award', count: counts['Intention To Award'] || 0 },
         { label: 'Briefing Link', value: 'Briefing Link', count: counts['Briefing Link'] || 0 },
         { label: 'Erratum And Addendum', value: 'Erratum And Addendum', count: counts['Erratum And Addendum'] || 0 },
+        { label: 'Public Notices', value: 'Public Notices', count: counts['Public Notices'] || 0 },
+        { label: 'Reporting', value: 'Reporting', count: (counts['Reporting'] || 0) + (counts['Contract Reporting'] || 0) },
       ]
     },
     totalPages() {

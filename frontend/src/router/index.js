@@ -129,7 +129,10 @@ const routes = [
     { path: '/open-documents', redirect: '/quote-documents' },
     { path: '/closed-register', redirect: '/closed-tenders' },
     { path: '/closed-quotes', name: 'closed-quotes', component: OpenTendersView },
-    { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
+    { path: '/contract-reporting', name: 'contract-reporting', component: OpenTendersView },
+    { path: '/reporting', name: 'reporting', component: OpenTendersView },
+    { path: '/public-notices', name: 'public-notices', component: OpenTendersView },
+    { path: '/contract-reporting-archive', name: 'contract-reporting-archive', component: ContractReportingView },
     {
         path: '/scm-database-forms',
         name: 'scm-database-forms',

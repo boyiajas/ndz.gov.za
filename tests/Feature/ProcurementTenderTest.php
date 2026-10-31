@@ -211,6 +211,43 @@ class ProcurementTenderTest extends TestCase
             ->assertJsonPath('data.0.download_count', 8);
     }
 
+    public function test_public_can_fetch_public_notices_and_reporting_documents(): void
+    {
+        ProcurementNotice::create([
+            'title' => 'PUBLIC NOTICE - COUNCIL MEETING SCHEDULE 2026/2027',
+            'financial_year' => 'Current',
+            'category' => 'Public Notices',
+            'type' => 'tender',
+            'status' => 'open',
+            'reference_no' => 'NDZ-PN-001',
+            'document_url' => '/storage/uploads/public_notices/council_schedule.pdf',
+            'download_count' => 12,
+        ]);
+
+        ProcurementNotice::create([
+            'title' => 'CONTRACT REGISTER & AWARDS QUARTER 1',
+            'financial_year' => '2025-2026',
+            'category' => 'Reporting',
+            'type' => 'tender',
+            'status' => 'open',
+            'reference_no' => 'NDZ-REP-001',
+            'document_url' => '/storage/uploads/reporting/contract_register_q1.pdf',
+            'download_count' => 25,
+        ]);
+
+        $pn = $this->getJson('/api/procurement?category=Public Notices');
+        $pn->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'PUBLIC NOTICE - COUNCIL MEETING SCHEDULE 2026/2027')
+            ->assertJsonPath('data.0.category', 'Public Notices');
+
+        $rep = $this->getJson('/api/procurement?category=Reporting');
+        $rep->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'CONTRACT REGISTER & AWARDS QUARTER 1')
+            ->assertJsonPath('data.0.category', 'Reporting');
+    }
+
     public function test_downloading_tender_increments_download_count(): void
     {
         $notice = ProcurementNotice::create([
