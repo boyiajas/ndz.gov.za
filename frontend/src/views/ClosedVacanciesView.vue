@@ -151,6 +151,11 @@ export default {
         const q = this.searchQuery.toLowerCase()
 
         return !this.searchQuery || title.includes(q) || ref.includes(q) || dept.includes(q)
+      }).sort((a, b) => {
+        const dateA = new Date(a.closing_date || a.created_at || a.updated_at || 0).getTime()
+        const dateB = new Date(b.closing_date || b.created_at || b.updated_at || 0).getTime()
+        if (dateB !== dateA) return dateB - dateA
+        return (b.id || 0) - (a.id || 0)
       })
     },
   },

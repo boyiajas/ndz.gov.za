@@ -252,6 +252,11 @@ export default {
         const matchesQuery = !this.searchQuery || title.includes(q) || dept.includes(q) || desc.includes(q) || ref.includes(q)
         const matchesDept = !this.selectedDepartment || v.department === this.selectedDepartment
         return matchesQuery && matchesDept
+      }).sort((a, b) => {
+        const dateA = new Date(a.created_at || a.closing_date || a.updated_at || 0).getTime()
+        const dateB = new Date(b.created_at || b.closing_date || b.updated_at || 0).getTime()
+        if (dateB !== dateA) return dateB - dateA
+        return (b.id || 0) - (a.id || 0)
       })
     },
   },

@@ -526,9 +526,12 @@ export default {
       }
 
       list.sort((a, b) => {
-        const nameA = a.file_name || a.reference_no || a.title || ''
-        const nameB = b.file_name || b.reference_no || b.title || ''
-        return nameA.localeCompare(nameB, undefined, { numeric: true, sensitivity: 'base' })
+        const dateA = new Date(a.created_at || a.updated_at || a.closing_date || 0).getTime()
+        const dateB = new Date(b.created_at || b.updated_at || b.closing_date || 0).getTime()
+        if (dateB !== dateA) {
+          return dateB - dateA
+        }
+        return (b.id || 0) - (a.id || 0)
       })
 
       return list

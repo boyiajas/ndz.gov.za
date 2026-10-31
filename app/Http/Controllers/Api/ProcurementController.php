@@ -11,7 +11,7 @@ class ProcurementController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = ProcurementNotice::query()->orderByDesc('created_at');
+        $query = ProcurementNotice::query()->orderByDesc('created_at')->orderByDesc('id');
 
         if ($request->filled('type')) {
             $query->where('type', $request->query('type'));

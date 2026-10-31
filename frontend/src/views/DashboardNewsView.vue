@@ -285,6 +285,12 @@ export default {
             a.excerpt?.toLowerCase().includes(q)
         )
       }
+      list.sort((a, b) => {
+        const dateA = new Date(a.published_at || a.created_at || a.updated_at || 0).getTime()
+        const dateB = new Date(b.published_at || b.created_at || b.updated_at || 0).getTime()
+        if (dateB !== dateA) return dateB - dateA
+        return (b.id || 0) - (a.id || 0)
+      })
       this.filteredArticles = list
     },
     openCreateModal() {

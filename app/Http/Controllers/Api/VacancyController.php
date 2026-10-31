@@ -28,12 +28,8 @@ class VacancyController extends Controller
             $query->search($request->query('search'));
         }
 
-        // Sort: Open vacancies sort by closing_date asc (soonest first), closed sort by closing_date desc
-        if ($request->query('status') === Vacancy::STATUS_CLOSED) {
-            $query->orderByDesc('closing_date')->orderByDesc('created_at');
-        } else {
-            $query->orderBy('closing_date', 'asc')->orderByDesc('created_at');
-        }
+        // Sort in descending order from newest to oldest date/time
+        $query->orderByDesc('created_at')->orderByDesc('closing_date')->orderByDesc('id');
 
         $vacancies = $query->get();
 

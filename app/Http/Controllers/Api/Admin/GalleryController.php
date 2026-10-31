@@ -15,7 +15,7 @@ class GalleryController extends Controller
 
         $query = GalleryItem::query()
             ->with('creator:id,name')
-            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
             ->orderByDesc('id');
 
         if ($request->filled('category')) {

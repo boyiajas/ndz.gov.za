@@ -31,7 +31,7 @@ class VacancyController extends Controller
             $query->search($request->query('search'));
         }
 
-        $vacancies = $query->orderByDesc('created_at')->get();
+        $vacancies = $query->orderByDesc('created_at')->orderByDesc('id')->get();
 
         return response()->json([
             'data' => $vacancies,

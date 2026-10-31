@@ -35,8 +35,8 @@ class DepartmentController extends Controller
             $query->where('is_active', filter_var($request->input('is_active'), FILTER_VALIDATE_BOOLEAN));
         }
 
-        $departments = $query->orderBy('sort_order')
-            ->orderBy('name')
+        $departments = $query->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         return response()->json([

@@ -13,7 +13,7 @@ class GalleryController extends Controller
     {
         $query = GalleryItem::query()
             ->active()
-            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
             ->orderByDesc('id');
 
         if ($request->filled('category')) {

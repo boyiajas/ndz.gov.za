@@ -19,7 +19,8 @@ class UserController extends Controller
 
         $query = User::query()
             ->with(['department:id,name,code,slug', 'departments:id,name,code,slug'])
-            ->orderByDesc('created_at');
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
 
         if ($request->filled('role')) {
             $query->where('role', $request->query('role'));

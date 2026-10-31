@@ -512,6 +512,15 @@ export default {
         )
       }
 
+      list.sort((a, b) => {
+        const dateA = new Date(a.created_at || a.updated_at || a.closing_date || 0).getTime()
+        const dateB = new Date(b.created_at || b.updated_at || b.closing_date || 0).getTime()
+        if (dateB !== dateA) {
+          return dateB - dateA
+        }
+        return (b.id || 0) - (a.id || 0)
+      })
+
       this.filteredNotices = list
     },
     setCategoryFilter(val) {

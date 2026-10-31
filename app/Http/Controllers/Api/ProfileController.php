@@ -137,6 +137,7 @@ class ProfileController extends Controller
         $recentActivity = AuditLog::query()
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->take(15)
             ->get();
 

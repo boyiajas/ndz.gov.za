@@ -56,8 +56,8 @@ class DocumentController extends Controller
                 $query->whereNull('document_subcategory_id');
             })
             ->orderByDesc('published_at')
-            ->orderBy('sort_order')
-            ->orderBy('title')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         return response()->json(['data' => $documents]);

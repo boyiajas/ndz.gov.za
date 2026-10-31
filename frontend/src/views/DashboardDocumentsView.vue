@@ -571,7 +571,13 @@ export default {
           params.department_id = this.selectedDepartmentId
         }
         const { data } = await api.get('/api/admin/documents', { params })
-        this.documents = data.data || []
+        const docs = data.data || []
+        this.documents = docs.slice().sort((a, b) => {
+          const dateA = new Date(a.published_at || a.created_at || a.updated_at || 0).getTime()
+          const dateB = new Date(b.published_at || b.created_at || b.updated_at || 0).getTime()
+          if (dateB !== dateA) return dateB - dateA
+          return (b.id || 0) - (a.id || 0)
+        })
       } catch (error) {
         this.error = this.formatError(error)
       }

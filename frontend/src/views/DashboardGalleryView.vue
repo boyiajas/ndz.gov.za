@@ -202,13 +202,18 @@ export default {
       this.filterItems()
     },
     filterItems() {
-      if (this.selectedCategory === 'All') {
-        this.filteredItems = [...this.items]
-      } else {
-        this.filteredItems = this.items.filter(
-          (i) => i.category?.toLowerCase() === this.selectedCategory.toLowerCase()
-        )
-      }
+      let list = this.selectedCategory === 'All'
+        ? [...this.items]
+        : this.items.filter((i) => i.category?.toLowerCase() === this.selectedCategory.toLowerCase())
+
+      list.sort((a, b) => {
+        const dateA = new Date(a.created_at || a.updated_at || 0).getTime()
+        const dateB = new Date(b.created_at || b.updated_at || 0).getTime()
+        if (dateB !== dateA) return dateB - dateA
+        return (b.id || 0) - (a.id || 0)
+      })
+
+      this.filteredItems = list
     },
     openAddModal() {
       this.editingItemId = null

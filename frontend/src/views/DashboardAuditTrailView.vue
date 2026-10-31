@@ -492,7 +492,13 @@ export default {
 
         const { data } = await api.get('/api/admin/audit-logs', { params })
 
-        this.logs = data.data || []
+        const rawLogs = data.data || []
+        this.logs = rawLogs.slice().sort((a, b) => {
+          const dateA = new Date(a.created_at || 0).getTime()
+          const dateB = new Date(b.created_at || 0).getTime()
+          if (dateB !== dateA) return dateB - dateA
+          return (b.id || 0) - (a.id || 0)
+        })
         this.pagination = {
           current_page: data.current_page || 1,
           last_page: data.last_page || 1,

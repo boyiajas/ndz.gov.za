@@ -15,7 +15,7 @@ class ProcurementController extends Controller
     {
         $this->authorizeProcurement($request);
 
-        $query = ProcurementNotice::query()->with('creator:id,name')->orderByDesc('created_at');
+        $query = ProcurementNotice::query()->with('creator:id,name')->orderByDesc('created_at')->orderByDesc('id');
 
         if ($request->filled('type')) {
             $query->where('type', $request->query('type'));

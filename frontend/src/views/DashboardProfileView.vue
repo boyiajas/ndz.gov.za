@@ -439,7 +439,14 @@ export default {
 
         this.profile = d
         this.permissions = d.permissions || {}
-        this.recentActivity = d.recent_activity || []
+        const recent = Array.isArray(d.recent_activity) ? [...d.recent_activity] : []
+        recent.sort((a, b) => {
+          const dateA = new Date(a.created_at || 0).getTime()
+          const dateB = new Date(b.created_at || 0).getTime()
+          if (dateB !== dateA) return dateB - dateA
+          return (b.id || 0) - (a.id || 0)
+        })
+        this.recentActivity = recent
         this.stats = d.stats || {}
 
         this.editForm = {

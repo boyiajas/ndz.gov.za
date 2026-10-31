@@ -21,7 +21,8 @@ class AuditLogController extends Controller
 
         $query = AuditLog::query()
             ->with(['user:id,name,email,role', 'department:id,name,code'])
-            ->orderByDesc('created_at');
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
 
         // Department scoping for non-global managers
         $this->applyDepartmentScoping($request, $query);
@@ -121,7 +122,8 @@ class AuditLogController extends Controller
 
         $query = AuditLog::query()
             ->with(['user:id,name,email,role', 'department:id,name,code'])
-            ->orderByDesc('created_at');
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
 
         $this->applyDepartmentScoping($request, $query);
 

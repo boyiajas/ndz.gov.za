@@ -353,6 +353,12 @@ export default {
             d.description?.toLowerCase().includes(q)
         )
       }
+      list.sort((a, b) => {
+        const dateA = new Date(a.created_at || 0).getTime()
+        const dateB = new Date(b.created_at || 0).getTime()
+        if (dateB !== dateA) return dateB - dateA
+        return (b.id || 0) - (a.id || 0)
+      })
       this.filteredDepartments = list
     },
     onNameInput() {

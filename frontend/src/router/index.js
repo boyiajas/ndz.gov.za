@@ -126,6 +126,8 @@ const routes = [
     { path: '/briefing-link', name: 'briefing-link', component: OpenTendersView },
     { path: '/erratum-and-addendum', name: 'erratum-and-addendum', component: OpenTendersView },
     { path: '/erratum-and-addendums', redirect: '/erratum-and-addendum' },
+    { path: '/open-documents', redirect: '/quote-documents' },
+    { path: '/closed-register', redirect: '/closed-tenders' },
     { path: '/closed-quotes', name: 'closed-quotes', component: OpenTendersView },
     { path: '/contract-reporting', name: 'contract-reporting', component: ContractReportingView },
     {

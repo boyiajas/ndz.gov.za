@@ -119,7 +119,6 @@
                   <li><router-link class="dropdown-item" to="/briefing-link">Briefing Link</router-link></li>
                   <li><router-link class="dropdown-item" to="/erratum-and-addendum">Erratum and Addendums</router-link></li>
                   <li><router-link class="dropdown-item" to="/bid-documents">Validity Extension</router-link></li>
-                  <li><router-link class="dropdown-item" to="/closed-register">Closed Register</router-link></li>
                   <li><router-link class="dropdown-item" to="/closed-tenders">Closed Tenders</router-link></li>
                   <!-- <li><a class="dropdown-item" href="#">Tenders 2025-2026</a></li>
                   <li><a class="dropdown-item" href="#">Tenders 2024-2025</a></li>
@@ -130,7 +129,7 @@
                 <a class="dropdown-item dropdown-toggle" href="#">FORMAL QUOTE</a>
                 <ul class="dropdown-menu">
                   <li><router-link class="dropdown-item" to="/open-quotes">Open Quotes</router-link></li>
-                  <li><router-link class="dropdown-item" to="/open-documents">Open Documents</router-link></li>
+                  <li><router-link class="dropdown-item" to="/quote-documents">Quote Documents</router-link></li>
                    <li><router-link class="dropdown-item" to="/briefing-link">Briefing Link</router-link></li>
                     <li><router-link class="dropdown-item" to="/erratum-and-addendum">Erratum and Addendums</router-link></li>
                   <li><router-link class="dropdown-item" to="/bid-documents">Validity Extension</router-link></li>

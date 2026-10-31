@@ -44,8 +44,8 @@ class DocumentCatalogController extends Controller
             'directDocuments' => function ($query) {
                 $query->published()
                     ->orderByDesc('published_at')
-                    ->orderBy('sort_order')
-                    ->orderBy('title');
+                    ->orderByDesc('created_at')
+                    ->orderByDesc('id');
             },
         ]);
 
@@ -65,8 +65,8 @@ class DocumentCatalogController extends Controller
         $documents = $subcategory->documents()
             ->published()
             ->orderByDesc('published_at')
-            ->orderBy('sort_order')
-            ->orderBy('title')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         return response()->json([
